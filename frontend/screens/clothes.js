@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { url } from '../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,11 +7,11 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
-const Clothes = () => {
+const Clothes = ({navigation}) => {
 
     const [clothes, setClothes] = useState([]);
 
-  
+
 
     const fetchClothes = async () => {
         const token = await AsyncStorage.getItem('token');
@@ -33,10 +33,11 @@ const Clothes = () => {
     );
 
     const renderItem = ({ item }) => (
-       
-            <Image source={{ uri: item.image }} style={styles.image} />
-            
-      
+        <TouchableOpacity onPress={() => navigation.navigate('ClotheDetails', { item: item })}>
+            <View>
+                <Image source={{ uri: item.image }} style={styles.image} />
+            </View>
+        </TouchableOpacity>
     );
 
     return (
@@ -57,9 +58,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#FFFFFF',
     },
-    list:{
-        backgroundColor:'#FFFFFF',
-        height:'100%',
+    list: {
+        backgroundColor: '#FFFFFF',
+        height: '100%',
     },
     image: {
         width: windowWidth / 3 - 1.5,

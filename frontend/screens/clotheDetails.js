@@ -1,0 +1,66 @@
+import axios from 'axios';
+import { url } from '../api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+
+function ClotheDetails({ route, navigation }) {
+  const { item } = route.params;
+
+  const deleteClothing = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    try {
+      await axios.delete(`${url}/deleteClothing/${item._id}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+
+      navigation.goBack(); // Revenir à l'écran précédent après la suppression
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.comeBack}>
+        <Ionicons name="chevron-back-outline" size={35} color="#000000" />
+      </TouchableOpacity>
+      <Image source={{ uri: item.image }} style={{ width: 200, height: 200 }} />
+      <Text>Category: {item.category}</Text>
+      <Text>Brand: {item.brand}</Text>
+      <Text>Season: {item.season}</Text>
+      <Text>Tags: {item.tags}</Text>
+      <TouchableOpacity onPress={deleteClothing} style={styles.deleteButton}>
+        <Text style={styles.deleteButtonText}>Supprimer</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF'
+  },
+  comeBack: {
+    position: 'absolute',
+    top: 80,
+    left: 10
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    marginTop: 20,
+    borderRadius: 5,
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
+
+
+export default ClotheDetails;

@@ -32,7 +32,7 @@ router.post('/addClothing', authenticate, upload.single('image'), async (req, re
             if (err) {
                 console.error("Failed to delete local image:" + err);
             } else {
-                console.log('successfully deleted local image');
+                console.log('Fichier local supprimé avec succès !');
             }
         });
 
@@ -50,6 +50,22 @@ router.get('/clothes', authenticate, async (req, res) => {
         res.send(user.clothes);
     } catch (error) {
         res.status(500).send({ error: 'Une erreur est survenue en récupérant les vêtements.' });
+    }
+});
+
+router.delete('/deleteClothing/:id', authenticate, async (req, res) => {
+    try {
+        // Supprimer le vêtement de la collection 'clothes'
+        await Clothing.findByIdAndDelete(req.params.id);
+
+        // Supprimer la référence au vêtement dans l'objet utilisateur
+        req.user.clothes.pull(req.params.id);
+        await req.user.save();
+
+        res.status(201).send();
+        console.log('Vêtement supprimé avec succès !')
+    } catch (error) {
+        res.status(500).send({ error: 'Une erreur est survenue lors de la suppression du vêtement.' });
     }
 });
 

@@ -12,6 +12,7 @@ import Home from './screens/home';
 import Profile from './screens/profile';
 import Social from './screens/social';
 import AddItem from './screens/addItem';
+import ClotheDetails from './screens/clotheDetails'
 
 
 const Stack = createStackNavigator();
@@ -37,6 +38,7 @@ export default function App() {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
         <Stack.Screen name="AddItem" component={AddItem} />
+        <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
       </Stack.Navigator>
       <StatusBar style="auto" />
 
