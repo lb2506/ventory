@@ -33,13 +33,10 @@ const Clothes = () => {
     );
 
     const renderItem = ({ item }) => (
-        <View style={styles.imageContainer}>
+       
             <Image source={{ uri: item.image }} style={styles.image} />
-            {/* <Text>{item.brand}</Text>
-            <Text>{item.category}</Text>
-            <Text>{item.season}</Text>
-            <Text>{item.tags}</Text> */}
-        </View>
+            
+      
     );
 
     return (
@@ -60,17 +57,14 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#FFFFFF',
     },
-    imageContainer: {
-        width: windowWidth / 3,
-        margin: 0.5,
-    },
     list:{
         backgroundColor:'#FFFFFF',
         height:'100%',
     },
     image: {
-        width: windowWidth / 3 - 1,
-        height: windowWidth / 3 - 1,
+        width: windowWidth / 3 - 1.5,
+        height: windowWidth / 3 - 1.5,
+        margin: 0.75,
     }
 })
 

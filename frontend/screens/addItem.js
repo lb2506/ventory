@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import axios from 'axios';
 import { url } from '../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const AddItem = ({ route }) => {
     const { imageUri } = route.params;
@@ -24,9 +25,16 @@ const AddItem = ({ route }) => {
         const token = await AsyncStorage.getItem('token');
 
         try {
+
+            const manipResult = await ImageManipulator.manipulateAsync(
+                imageUri,
+                [{ resize: { width: 720, height: 960 } }],
+                { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+            );
+
             let formData = new FormData();
             formData.append('image', {
-                uri: imageUri,
+                uri:  manipResult.uri,
                 type: 'image/jpeg',
                 name: 'image.jpg',
             });

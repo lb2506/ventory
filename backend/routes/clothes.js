@@ -6,15 +6,13 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const router = express.Router();
 const authenticate = require('../middleware/auth')
+const fs = require('fs'); // import fs module
 
 router.post('/addClothing', authenticate, upload.single('image'), async (req, res) => {
     try {
         const uploadedResponse = await cloudinary.uploader.upload(req.file.path, {
             upload_preset: 'ventory',
             format: 'webp',
-            quality: 80, 
-            width: 720,
-            height: 960,
         });
 
         const clothing = new Clothing({
@@ -29,6 +27,14 @@ router.post('/addClothing', authenticate, upload.single('image'), async (req, re
 
         req.user.clothes.push(clothing._id);
         await req.user.save();
+
+        fs.unlink(req.file.path, (err) => { // remove the file
+            if (err) {
+                console.error("Failed to delete local image:" + err);
+            } else {
+                console.log('successfully deleted local image');
+            }
+        });
 
 
         res.status(201).send(clothing);
