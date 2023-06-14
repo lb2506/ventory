@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const Register = () => {
+    const [pseudo, setPseudo] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -21,6 +22,12 @@ const Register = () => {
     const navigation = useNavigation();
 
     const handleSubmit = async () => {
+
+
+        if (pseudo.length === 0) {
+            Alert.alert('Erreur', 'Veuillez choisir un pseudo');
+            return;
+        }
 
         if (firstName.length === 0 || lastName.length === 0) {
             Alert.alert('Erreur', 'Remplir le prénom et le nom');
@@ -49,18 +56,14 @@ const Register = () => {
         }
 
         try {
-            const response = await axios.post(`${url}/register`, { email, password, firstName, lastName });
+            const response = await axios.post(`${url}/register`, { email : email.toLowerCase(), password, firstName, lastName, pseudo });
             await AsyncStorage.setItem('token', response.data.token);
             navigation.navigate('HomeTabs');
         } catch (error) {
 
             if (error.response && error.response.data && error.response.data.error) {
                 setErrorMessage(error.response.data.error);
-                setEmail('');
-                setPassword('');
-                setConfirmPassword('');
-                setFirstName('');
-                setLastName('');
+                setTermsAccepted(false)
             } else {
                 setErrorMessage('Une erreur est survenue lors de la connexion, veuillez essayer à nouveau');
             }
@@ -75,6 +78,7 @@ const Register = () => {
             <TouchableOpacity onPress={() => navigation.navigate('OpenScreen')} style={styles.comeBack}>
                 <Ionicons name="chevron-back-outline" size={35} color="#000000" />
             </TouchableOpacity>
+            <Input placeholder="Pseudo" value={pseudo} onChangeText={setPseudo} />
             <Input placeholder="Prénom" value={firstName} onChangeText={setFirstName} />
             <Input placeholder="Nom" value={lastName} onChangeText={setLastName} />
             <Input placeholder="Adresse e-mail" value={email} onChangeText={setEmail} />

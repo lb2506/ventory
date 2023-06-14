@@ -16,7 +16,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const Profile = () => {
 
-    const [firstName, setFirstName] = useState('');
+    const [pseudo, setPseudo] = useState('');
     const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
     const openBottomSheet = () => {
         setBottomSheetVisible(true);
@@ -28,7 +28,8 @@ const Profile = () => {
                 const token = await AsyncStorage.getItem('token');
                 if (token) {
                     const decoded = jwt_decode(token);
-                    setFirstName(decoded.firstName);
+                    setPseudo(decoded.pseudo);
+                    console.log(decoded);
                 }
             } catch (error) {
                 console.log(error);
@@ -40,7 +41,7 @@ const Profile = () => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>{firstName}</Text>
+                <Text style={styles.title}>{pseudo}</Text>
                 <LogoutBoutton />
                 <AddItemsButton onPress={openBottomSheet}/>
             </View>
