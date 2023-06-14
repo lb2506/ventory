@@ -4,20 +4,23 @@ import jwt_decode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
+
 import LogoutBoutton from '../components/logoutButton';
+import AddItemsButton from '../components/addItemsButton';
+import ModalAddClothe from '../components/modalAddClothe';
 
 import Clothes from './clothes';
 import Outfits from './outfits';
 
-import ModalAddItem from '../components/modalAddItem'
-import { useNavigationState } from '@react-navigation/native';
-
 const Tab = createMaterialTopTabNavigator();
 
 const Profile = () => {
-    const navigationState = useNavigationState((state) => state);
-    const [firstName, setFirstName] = useState('');
 
+    const [firstName, setFirstName] = useState('');
+    const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+    const openBottomSheet = () => {
+        setBottomSheetVisible(true);
+      };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -39,25 +42,24 @@ const Profile = () => {
             <View style={styles.header}>
                 <Text style={styles.title}>{firstName}</Text>
                 <LogoutBoutton />
+                <AddItemsButton onPress={openBottomSheet}/>
             </View>
             <Tab.Navigator
                 screenOptions={{
                     "tabBarActiveTintColor": "black",
                     "tabBarInactiveTintColor": "gray",
                     "tabBarIndicatorStyle": {
-                      "backgroundColor": "black",
+                        "backgroundColor": "black",
                     },
                     "tabBarStyle": {
-                      "backgroundColor": "#fff"
+                        "backgroundColor": "#fff"
                     }
-                  }}
+                }}
             >
                 <Tab.Screen name="Mes vêtements" component={Clothes} />
                 <Tab.Screen name="Mes ensembles" component={Outfits} />
             </Tab.Navigator>
-         
-            <ModalAddItem navigationState={navigationState} />
-         
+            <ModalAddClothe visible={bottomSheetVisible} setVisible={setBottomSheetVisible}/>
         </View>
     )
 }
@@ -75,6 +77,23 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 25,
         fontWeight: 'bold'
+    },
+    button: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    bottomNavigationView: {
+        backgroundColor: '#fff',
+        width: '100%',
+        height: 250,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 20,
+        marginBottom: 20,
+        textAlign: 'center',
     },
 })
 

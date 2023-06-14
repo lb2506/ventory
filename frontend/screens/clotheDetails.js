@@ -15,7 +15,7 @@ function ClotheDetails({ route, navigation }) {
         headers: { 'Authorization': `Bearer ${token}` },
       });
 
-      navigation.goBack(); // Revenir à l'écran précédent après la suppression
+      navigation.goBack();
     } catch (error) {
       console.error(error);
     }

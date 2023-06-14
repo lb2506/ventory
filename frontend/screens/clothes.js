@@ -11,8 +11,6 @@ const Clothes = ({navigation}) => {
 
     const [clothes, setClothes] = useState([]);
 
-
-
     const fetchClothes = async () => {
         const token = await AsyncStorage.getItem('token');
         try {
@@ -48,10 +46,10 @@ const Clothes = ({navigation}) => {
                 keyExtractor={item => item._id}
                 numColumns={3}
                 style={styles.list}
+                showsVerticalScrollIndicator={false}
             />
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({
@@ -68,6 +66,5 @@ const styles = StyleSheet.create({
         margin: 0.75,
     }
 })
-
 
 export default Clothes

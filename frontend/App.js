@@ -11,8 +11,10 @@ import Register from './screens/register';
 import Home from './screens/home';
 import Profile from './screens/profile';
 import Social from './screens/social';
-import AddItem from './screens/addItem';
+import AddClothe from './screens/addClothe';
 import ClotheDetails from './screens/clotheDetails'
+import WorkSpace from './screens/workSpace';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 const Stack = createStackNavigator();
@@ -21,8 +23,9 @@ const Tab = createBottomTabNavigator();
 
 function HomeTabs() {
   return (
-    <Tab.Navigator initialRouteName="SplashScreen" screenOptions={{headerShown : false}}>
+    <Tab.Navigator initialRouteName="SplashScreen" screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Social" component={Social} />
+      <Tab.Screen name="WorkSpace" component={WorkSpace} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
@@ -30,18 +33,19 @@ function HomeTabs() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="SplashScreen" screenOptions={{headerShown : false}}>
-        <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        <Stack.Screen name="OpenScreen" component={OpenScreen} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
-        <Stack.Screen name="AddItem" component={AddItem} />
-        <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
-      </Stack.Navigator>
-      <StatusBar style="auto" />
-
-    </NavigationContainer>
+    <GestureHandlerRootView style={{flex:1}}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="SplashScreen" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
+          <Stack.Screen name="OpenScreen" component={OpenScreen} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
+          <Stack.Screen name="AddClothe" component={AddClothe} />
+          <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
+        </Stack.Navigator>
+        <StatusBar style="auto" />
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }

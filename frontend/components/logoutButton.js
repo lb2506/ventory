@@ -17,7 +17,7 @@ const LogoutBoutton = () => {
 
     return (
         <TouchableOpacity onPress={logOut} style={styles.container}>
-                <FontAwesome5 name="power-off" size={20} color="#000000" />
+                <FontAwesome5 name="power-off" size={25} color="#000000" />
         </TouchableOpacity>
     )
 }
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         position: 'absolute',
-        right: 30,
+        right: 15,
         height:30
     }
 })
