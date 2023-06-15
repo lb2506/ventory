@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ProfileSearchClothes = ({ route }) => {
+const SearchedProfileClothes = ({ route }) => {
     const navigation = useNavigation();
     const [clothes, setClothes] = useState([]);
 
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ProfileSearchClothes;
+export default SearchedProfileClothes;

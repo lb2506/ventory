@@ -11,7 +11,7 @@ const SEARCH_STATUS = {
   COMPLETED: 'completed'
 }
 
-const Social = () => {
+const SocialScreen = () => {
   const navigation = useNavigation();
 
   const [searchText, setSearchText] = useState('');
@@ -167,4 +167,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Social;
+export default SocialScreen;
