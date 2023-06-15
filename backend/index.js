@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const registerRoutes = require('./routes/register')
 const loginRoutes = require('./routes/login')
 const clothesRouter = require('./routes/clothes');
+const usersRouter = require('./routes/users')
 
 
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use('/', registerRoutes);
 app.use('/', loginRoutes);
 app.use('/', clothesRouter);
+app.use('/', usersRouter);
 
 
 

@@ -1,41 +1,38 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import { url } from '../api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 const windowWidth = Dimensions.get('window').width;
 
-const Clothes = ({navigation}) => {
-
+const SearchedProfileClothes = ({ route }) => {
+    const navigation = useNavigation();
     const [clothes, setClothes] = useState([]);
 
     const fetchClothes = async () => {
-        const token = await AsyncStorage.getItem('token');
-        try {
-            const response = await axios.get(`${url}/clothes`, {
-                headers: { 'Authorization': `Bearer ${token}` },
-            });
 
+        try {
+            const response = await axios.get(`${url}/user/clothes/${route.params.userId}`);
             setClothes(response.data);
         } catch (error) {
             console.error(error);
         }
     };
 
-    useFocusEffect(
-        useCallback(() => {
-            fetchClothes();
-        }, [fetchClothes])
-    );
+    useEffect(() => {
+        fetchClothes();
+    }, []);
+
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('ClotheDetails', { item: item })}>
+        // <TouchableOpacity onPress={() => navigation.navigate('ClotheDetails', { item: item })}>
             <View>
-                <Image source={{ uri: item.image }} style={styles.image} />
+                <Image source={{ uri: item }} style={styles.image} />
             </View>
-        </TouchableOpacity>
+        // </TouchableOpacity>
     );
 
     return (
@@ -67,4 +64,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Clothes
+export default SearchedProfileClothes;

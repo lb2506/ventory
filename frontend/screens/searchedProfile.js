@@ -1,49 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import jwt_decode from 'jwt-decode';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { url } from '../api';
+import axios from 'axios';
 
 import LogoutBoutton from '../components/logoutButton';
-import AddItemsButton from '../components/addItemsButton';
-import ModalAddClothe from '../components/modalAddClothe';
-
-import ProfileClothes from './ProfileClothes';
-import ProfileOutfits from './ProfileOutfits';
+import SearchedProfileClothes from './searchedProfileClothes';
+import SearchedProfileOutfits from './searchedProfileOutfits';
 
 const Tab = createMaterialTopTabNavigator();
 
-const Profile = () => {
+const SearchedProfile = () => {
+    const navigation = useNavigation();
+    const route = useRoute();
 
-    const [pseudo, setPseudo] = useState('');
-    const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
-    const openBottomSheet = () => {
-        setBottomSheetVisible(true);
-      };
+    const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchUserData = async () => {
             try {
-                const token = await AsyncStorage.getItem('token');
-                if (token) {
-                    const decoded = jwt_decode(token);
-                    setPseudo(decoded.pseudo);
-                }
+                const response = await axios.get(`${url}/user/${route.params.userId}`);
+                setUserData(response.data);
             } catch (error) {
                 console.log(error);
             }
         };
-        fetchUser();
+        fetchUserData();
     }, []);
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>{pseudo}</Text>
+                <Text style={styles.title}>{userData && userData.pseudo}</Text>
                 <LogoutBoutton />
-                <AddItemsButton onPress={openBottomSheet}/>
             </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Social')} style={styles.comeBack}>
+                    <Ionicons name="chevron-back-outline" size={35} color="#000000" />
+                </TouchableOpacity>
             <Tab.Navigator
                 screenOptions={{
                     "tabBarActiveTintColor": "black",
@@ -56,10 +51,9 @@ const Profile = () => {
                     }
                 }}
             >
-                <Tab.Screen name="Mes vêtements" component={ProfileClothes} />
-                <Tab.Screen name="Mes ensembles" component={ProfileOutfits} />
+                <Tab.Screen name="Vêtements" component={SearchedProfileClothes} initialParams={{userId : route.params.userId}}/>
+                <Tab.Screen name="Ensembles" component={SearchedProfileOutfits} initialParams={{userId : route.params.userId}}/>
             </Tab.Navigator>
-            <ModalAddClothe visible={bottomSheetVisible} setVisible={setBottomSheetVisible}/>
         </View>
     )
 }
@@ -70,14 +64,18 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFFFF'
     },
+    comeBack: {
+        position: 'absolute',
+        top: 80,
+        left: 10
+    },
     header: {
         display: 'flex',
-        alignItems: 'flex-start',
+        alignItems: 'center',
     },
     title: {
         fontSize: 25,
-        fontWeight: 'bold',
-        marginLeft: 10
+        fontWeight: 'bold'
     },
     button: {
         display: 'flex',
@@ -98,4 +96,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Profile;
+export default SearchedProfile;

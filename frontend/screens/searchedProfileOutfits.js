@@ -2,14 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 
-const Outfits = () => {
+const SearchedProfileOutfits = () => {
     return (
         <View style={styles.container}>
             
         </View>
     )
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -27,4 +26,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Outfits
+export default SearchedProfileOutfits;

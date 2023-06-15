@@ -23,7 +23,7 @@ function ClotheDetails({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.comeBack}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
         <Ionicons name="chevron-back-outline" size={35} color="#000000" />
       </TouchableOpacity>
       <Image source={{ uri: item.image }} style={{ width: 200, height: 200 }} />
