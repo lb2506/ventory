@@ -4,16 +4,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import SplashScreen from './screens/splashScreen';
-import OpenScreen from './screens/openScreen';
-import Login from './screens/login';
-import Register from './screens/register';
-import Profile from './screens/profile';
-import Social from './screens/social';
-import AddClothe from './screens/addClothe';
-import ClotheDetails from './screens/clotheDetails'
-import WorkSpace from './screens/workSpace';
-import SearchedProfile from './screens/searchedProfile';
+import SplashScreen from './screens/SplashScreen';
+import OpenScreen from './screens/OpenScreen';
+import Login from './screens/Login';
+import Register from './screens/Register';
+import Profile from './screens/Profile';
+import Social from './screens/Social';
+import AddClothe from './screens/AddClothe';
+import ClotheDetails from './screens/ClotheDetails'
+import WorkSpace from './screens/WorkSpace';
+import SearchedProfile from './screens/SearchedProfile';
 
 
 const Stack = createStackNavigator();

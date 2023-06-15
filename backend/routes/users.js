@@ -2,7 +2,7 @@ const User = require('../models/user');
 const express = require('express');
 const router = express.Router();
 
-// Recherche d'utilisateurs via la barre de recherche (social)
+// Recherche d'utilisateurs via la barre de recherche (Social)
 
 router.get('/search', async (req, res) => {
   const searchQuery = req.query.q;

@@ -13,7 +13,6 @@
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@gorhom/bottom-sheet": "^4.4.7",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/material-top-tabs": "^6.6.2",

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, TextInput, FlatList, Button, Keyboard, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { url } from '../api';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 
 const SEARCHING_DELAY = 0; // en millisecondes
@@ -73,6 +73,11 @@ const Social = () => {
     navigation.navigate('SearchedProfile', { userId: userId });
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      setSearchBarFocused(false);
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

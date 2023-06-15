@@ -7,8 +7,8 @@ import { url } from '../api';
 import axios from 'axios';
 
 import LogoutBoutton from '../components/logoutButton';
-import SearchedProfileClothes from './searchedProfileClothes';
-import SearchedProfileOutfits from './searchedProfileOutfits';
+import SearchedProfileClothes from './SearchedProfileClothes';
+import SearchedProfileOutfits from './SearchedProfileOutfits';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -54,7 +54,7 @@ const SearchedProfile = () => {
                 <Tab.Screen name="Vêtements" component={SearchedProfileClothes} initialParams={{userId : route.params.userId}}/>
                 <Tab.Screen name="Ensembles" component={SearchedProfileOutfits} initialParams={{userId : route.params.userId}}/>
             </Tab.Navigator>
-        </View>
+        </View> 
     )
 }
 
