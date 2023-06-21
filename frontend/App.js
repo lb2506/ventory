@@ -14,6 +14,8 @@ import AddClothe from './screens/AddClothe';
 import ClotheDetails from './screens/ClotheDetails'
 import WorkSpace from './screens/WorkSpace';
 import SearchedProfile from './screens/SearchedProfile';
+import FollowersList from './screens/FollowersList';
+import FollowingList from './screens/FollowingList';
 
 
 const Stack = createStackNavigator();
@@ -42,6 +44,8 @@ export default function App() {
           <Stack.Screen name="AddClothe" component={AddClothe} />
           <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
           <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
+          <Stack.Screen name="FollowersList" component={FollowersList} />
+          <Stack.Screen name="FollowingList" component={FollowingList} />
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>

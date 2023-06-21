@@ -21,6 +21,10 @@ const clothingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    date: { 
+        type: Date, 
+        default: Date.now 
+    },
 });
 
 const Clothing = mongoose.model('Clothing', clothingSchema);

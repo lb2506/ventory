@@ -7,7 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ProfileClothes = ({navigation}) => {
+const ProfileClothes = ({ navigation }) => {
 
     const [clothes, setClothes] = useState([]);
 
@@ -17,8 +17,8 @@ const ProfileClothes = ({navigation}) => {
             const response = await axios.get(`${url}/clothes`, {
                 headers: { 'Authorization': `Bearer ${token}` },
             });
-
-            setClothes(response.data);
+            const sortedClothes = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+            setClothes(sortedClothes);
         } catch (error) {
             console.error(error);
         }

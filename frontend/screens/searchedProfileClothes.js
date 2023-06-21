@@ -16,7 +16,8 @@ const SearchedProfileClothes = ({ route }) => {
 
         try {
             const response = await axios.get(`${url}/user/clothes/${route.params.userId}`);
-            setClothes(response.data);
+            const sortedClothes = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+            setClothes(sortedClothes);
         } catch (error) {
             console.error(error);
         }
