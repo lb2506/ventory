@@ -109,7 +109,7 @@ const AddItemsScreen = () => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const listVetementsId = selectedClothe.map((clothe) => clothe._id);
-    console.log("listVetementsId: ", listVetementsId);
+    const strVetementsId = listVetementsId.join(",");    // console.log("listVetementsId: ", listVetementsId);
     const token = await AsyncStorage.getItem("token");
     try {
       const manipResult = await ImageManipulator.manipulateAsync(imageUri, [{ resize: { width: 720, height: 960 } }], {
@@ -127,8 +127,8 @@ const AddItemsScreen = () => {
       formData.append("category", valueCat);
       formData.append("season", valueSeason);
       formData.append("tags", tags);
-      formData.append("vetements", listVetementsId);
-
+      formData.append("vetements", strVetementsId);
+      
       await axios.post(`${url}/addOutfit`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -184,9 +184,9 @@ const AddItemsScreen = () => {
               })}
             </View>
             <View style={styles.addPictures}>
-              <TouchableOpacity style={styles.addButton} onPress={pickImage}>
+              {/* <TouchableOpacity style={styles.addButton} onPress={pickImage}>
                 <Text style={styles.option}>Phototèque</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity style={styles.addButton} onPress={toggleBottomSheet}>
                 <Text style={styles.option}>Vêtements du profil</Text>
               </TouchableOpacity>

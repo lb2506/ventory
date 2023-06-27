@@ -8,6 +8,10 @@ const upload = multer({ dest: "uploads/" });
 const router = express.Router();
 const authenticate = require("../middleware/auth");
 const fs = require("fs"); // import fs module
+const mongoose = require("mongoose");
+const { ObjectId } = require('mongoose').Types;
+
+
 
 router.post("/addClothing", authenticate, upload.single("image"), async (req, res) => {
   try {
@@ -77,17 +81,20 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
       format: "webp",
     });
 
+    const clothingIds = req.body.vetements.split(",").map(id => new ObjectId(id));
+    console.log("clothingIds: ", clothingIds);
+
     const outfit = new Outfit({
       image: uploadedResponse.secure_url,
       name: req.body.name || "",
       category: req.body.category || "",
       season: req.body.season || "",
       tags: req.body.tags || [],
-      vetements: Array.isArray(req.body.vetements) ? req.body.vetements.map((id) => mongoose.Types.ObjectId(id)) : [],
+      vetements: clothingIds,
     });
-    console.log("outfit: ", outfit);
+    console.log("outfit before save: ", outfit);
     await outfit.save();
-    console.log("outfit: ", outfit);
+    console.log("outfit after save: ", outfit);
 
     req.user.outfits.push(outfit._id);
     await req.user.save();
@@ -104,8 +111,10 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
     res.status(201).send(outfit);
     console.log("Outfit ajouté avec succès !");
   } catch (error) {
+    console.error("Error: ", error);
     res.status(400).send(error);
   }
+
 });
 
 module.exports = router;
