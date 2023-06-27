@@ -24,6 +24,7 @@ const Social = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
 
   const [newsFeed, setNewsFeed] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchCurrentUserId = async () => {
@@ -43,13 +44,15 @@ const Social = () => {
 
   const fetchNewsFeed = async () => {
     try {
-      const response = await axios.get(`${url}/user/feed/${currentUserId}`);
-      const sortedNewsFeed = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const response = await axios.get(`${url}/user/feed/${currentUserId}?limit=5&page=${page}`);
+      const sortedNewsFeed = [...newsFeed, ...response.data];
       setNewsFeed(sortedNewsFeed);
+      setPage(page + 1);
     } catch (error) {
       console.log(error);
     }
   };
+
 
 
   const handleSearch = useCallback(async () => {
@@ -117,6 +120,8 @@ const Social = () => {
     useCallback(() => {
       setSearchBarFocused(false);
       if (currentUserId) {
+        setPage(1);
+        setNewsFeed([]);
         fetchNewsFeed();
       }
     }, [currentUserId])
@@ -158,12 +163,14 @@ const Social = () => {
         <FlatList
           data={newsFeed}
           keyExtractor={(item) => item.image}
+          onEndReached={fetchNewsFeed}
+          onEndReachedThreshold={0.5} // adjust as necessary
           renderItem={renderNewsFeedItem}
-          removeClippedSubviews={true} // Unmount components when outside of window 
-          initialNumToRender={10} // Reduce initial render amount
-          maxToRenderPerBatch={10} // Increase time between renders
-          updateCellsBatchingPeriod={100} // Increase time between renders
-          windowSize={7} // Reduce the window size
+          removeClippedSubviews={true}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={100}
+          windowSize={7}
         />
       )}
     </View>

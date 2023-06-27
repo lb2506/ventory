@@ -147,6 +147,8 @@ router.put('/user/:userId/follow', async (req, res) => {
 
 router.get('/user/feed/:userId', async (req, res) => {
   const userId = req.params.userId;
+  const limit = parseInt(req.query.limit) || 5;
+  const page = parseInt(req.query.page) || 1;
 
   try {
     const user = await User.findById(userId);
@@ -158,12 +160,15 @@ router.get('/user/feed/:userId', async (req, res) => {
       followedUser.clothes.forEach(clothe => feed.push({ userId: followedUser._id, pseudo: followedUser.pseudo, image: clothe.image, date: clothe.date }));
     }
 
-    // Trier par date descendante pour obtenir les plus récentes en premier
+    // Trier les posts par date (plus récent au plus ancien)
     feed.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    res.send(feed);
+    // Pagination pour le lazy load
+    const result = feed.slice((page - 1) * limit, page * limit);
+
+    res.send(result);
   } catch (error) {
-    res.status(500).send({ error: 'Une erreur est survenue en récupérant le fil d\'actualité.' });
+    res.status(500).send({ error: 'An error occurred while fetching the feed.' });
   }
 });
 
