@@ -12,7 +12,7 @@ router.post('/login', async (req, res) => {
 
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (!isMatch) throw new Error();
-    const token = jwt.sign({ _id: user._id.toString(), pseudo: user.pseudo}, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign({ _id: user._id.toString(), pseudo: user.pseudo, following: user.following, followers: user.followers}, process.env.JWT_SECRET_KEY);
     res.send({ user, token });
   } catch (error) {
     res.status(401).send({ error: `Utilisateur inexistant, veuillez réessayer` });

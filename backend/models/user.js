@@ -8,7 +8,9 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   clothes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Clothing" }],
-  outfits: [{ type: mongoose.Schema.Types.ObjectId, ref: "Outfit" }],
+  outfits: [[{ type: mongoose.Schema.Types.ObjectId, ref: "Clothing" }]],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 // hacher le mot de passe avant de l'enregistrer

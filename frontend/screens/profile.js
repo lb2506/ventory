@@ -1,44 +1,62 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import jwt_decode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { url } from "../api";
+import axios from "axios";
 
 import LogoutBoutton from "../components/logoutButton";
 import AddItemsButton from "../components/addItemsButton";
 import ModalAddClothe from "../components/modalAddClothe";
 
-import ProfileClothes from "./profileClothes";
-import ProfileOutfits from "./profileOutfits";
+import ProfileClothes from "./ProfileClothes";
+import ProfileOutfits from "./ProfileOutfits";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
 
 const Profile = () => {
-  const [pseudo, setPseudo] = useState("");
+  const navigation = useNavigation();
+
+  const [userData, setUserData] = useState({});
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+
   const openBottomSheet = () => {
     setBottomSheetVisible(true);
   };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        if (token) {
-          const decoded = jwt_decode(token);
-          setPseudo(decoded.pseudo);
-        }
-      } catch (error) {
-        console.log(error);
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        const decoded = jwt_decode(token);
+        const response = await axios.get(`${url}/user/${decoded._id}`);
+        setUserData(response.data);
       }
-    };
-    fetchUser();
-  }, []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>{pseudo}</Text>
+        <Text style={styles.title}>{userData.pseudo}</Text>
+        <View style={styles.followersFollowingContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate("FollowersList", { userId: userData._id })}>
+            <Text>{userData && userData.followers ? userData.followers.length : 0} follower(s)</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("FollowingList", { userId: userData._id })}>
+            <Text>{userData && userData.following ? userData.following.length : 0} suivie(s)</Text>
+          </TouchableOpacity>
+        </View>
         <LogoutBoutton />
         <AddItemsButton onPress={openBottomSheet} />
       </View>
@@ -93,6 +111,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
     textAlign: "center",
+  },
+  followersFollowingContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "40%",
+    margin: 10,
   },
 });
 

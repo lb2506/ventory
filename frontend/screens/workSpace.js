@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Overlay } from "@rneui/base";
 import { ListItem } from "@rneui/themed";
 import { BottomSheet } from "react-native-btr";
-import ProfileClothes from "./profileClothes";
+import ProfileClothes from "./ProfileClothes";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImageManipulator from "expo-image-manipulator";

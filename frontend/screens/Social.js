@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, View, TextInput, FlatList, Button, Keyboard, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, FlatList, Button, Keyboard, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import { url } from '../api';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from 'jwt-decode';
+
 
 
 const SEARCHING_DELAY = 0; // en millisecondes
@@ -18,6 +21,39 @@ const Social = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState(SEARCH_STATUS.DEFAULT);
   const [isSearchBarFocused, setSearchBarFocused] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  const [newsFeed, setNewsFeed] = useState([]);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    const fetchCurrentUserId = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          const decoded = jwt_decode(token);
+          setCurrentUserId(decoded._id);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCurrentUserId();
+  }, []);
+
+  const fetchNewsFeed = async () => {
+    try {
+      const response = await axios.get(`${url}/user/feed/${currentUserId}?limit=5&page=${page}`);
+      const sortedNewsFeed = [...newsFeed, ...response.data];
+      setNewsFeed(sortedNewsFeed);
+      setPage(page + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
 
   const handleSearch = useCallback(async () => {
 
@@ -36,7 +72,7 @@ const Social = () => {
 
     try {
       const response = await axios.get(`${url}/search?q=${searchText}`);
-      setSearchResults(response.data);
+      setSearchResults(response.data.filter(user => user._id !== currentUserId));
       setSearchStatus(SEARCH_STATUS.COMPLETED);
     } catch (error) {
       console.log(error);
@@ -69,9 +105,27 @@ const Social = () => {
     );
   }
 
+  const renderNewsFeedItem = ({ item }) => (
+    <View style={styles.newsFeedItem}>
+      <Text style={styles.newsFeedText}>{item.pseudo}</Text>
+      <Image style={styles.newsFeedImage} source={{ uri: item.image }} />
+    </View>
+  );
+
   const handleUserClick = (userId) => {
     navigation.navigate('SearchedProfile', { userId: userId });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setSearchBarFocused(false);
+      if (currentUserId) {
+        setPage(1);
+        setNewsFeed([]);
+        fetchNewsFeed();
+      }
+    }, [currentUserId])
+  );
 
 
   return (
@@ -105,6 +159,20 @@ const Social = () => {
         {listContent()}
 
       </View>
+      {!isSearchBarFocused && (
+        <FlatList
+          data={newsFeed}
+          keyExtractor={(item) => item.image}
+          onEndReached={fetchNewsFeed}
+          onEndReachedThreshold={0.5} // adjust as necessary
+          renderItem={renderNewsFeedItem}
+          removeClippedSubviews={true}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={100}
+          windowSize={7}
+        />
+      )}
     </View>
   );
 }
@@ -159,6 +227,20 @@ const styles = StyleSheet.create({
   },
   listText: {
     fontSize: 18
+  },
+  newsFeedItem: {
+    margin: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingBottom: 10,
+  },
+  newsFeedText: {
+    fontSize: 18,
+  },
+  newsFeedImage: {
+    width: '100%',
+    aspectRatio: 1 / 1,
+    marginTop: 10,
   },
 })
 

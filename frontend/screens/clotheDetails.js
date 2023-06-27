@@ -3,6 +3,7 @@ import { url } from '../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import { format } from 'date-fns';
 
 function ClotheDetails({ route, navigation }) {
   const { item } = route.params;
@@ -31,6 +32,7 @@ function ClotheDetails({ route, navigation }) {
       <Text>Brand: {item.brand}</Text>
       <Text>Season: {item.season}</Text>
       <Text>Tags: {item.tags}</Text>
+      <Text>Date: {format(new Date(item.date), 'dd/MM/yyyy')}</Text>
       <TouchableOpacity onPress={deleteClothing} style={styles.deleteButton}>
         <Text style={styles.deleteButtonText}>Supprimer</Text>
       </TouchableOpacity>
