@@ -41,7 +41,7 @@ const AddItem = ({ route }) => {
       formData.append("season", season);
       formData.append("tags", tags);
 
-      await axios.post(`${url}/addClothing`, formData, {
+      await axios.post(`${url}/addClothe`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

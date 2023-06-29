@@ -8,11 +8,11 @@ import { format } from 'date-fns';
 function ClotheDetails({ route, navigation }) {
   const { item } = route.params;
 
-  const deleteClothing = async () => {
+  const deleteClothe = async () => {
     const token = await AsyncStorage.getItem('token');
 
     try {
-      await axios.delete(`${url}/deleteClothing/${item._id}`, {
+      await axios.delete(`${url}/deleteClothe/${item._id}`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
 
@@ -33,7 +33,7 @@ function ClotheDetails({ route, navigation }) {
       <Text>Season: {item.season}</Text>
       <Text>Tags: {item.tags}</Text>
       <Text>Date: {format(new Date(item.date), 'dd/MM/yyyy')}</Text>
-      <TouchableOpacity onPress={deleteClothing} style={styles.deleteButton}>
+      <TouchableOpacity onPress={deleteClothe} style={styles.deleteButton}>
         <Text style={styles.deleteButtonText}>Supprimer</Text>
       </TouchableOpacity>
     </View>

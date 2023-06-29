@@ -1,5 +1,5 @@
 const express = require("express");
-const Clothing = require("../models/clothing");
+const Clothe = require("../models/clothe");
 const Outfit = require("../models/outfit");
 const User = require("../models/user");
 const cloudinary = require("../cloudinary");
@@ -13,14 +13,14 @@ const { ObjectId } = require('mongoose').Types;
 
 
 
-router.post("/addClothing", authenticate, upload.single("image"), async (req, res) => {
+router.post("/addClothe", authenticate, upload.single("image"), async (req, res) => {
   try {
     const uploadedResponse = await cloudinary.uploader.upload(req.file.path, {
       upload_preset: "ventory",
       format: "webp",
     });
 
-    const clothing = new Clothing({
+    const clothe = new Clothe({
       image: uploadedResponse.secure_url,
       brand: req.body.brand,
       category: req.body.category,
@@ -28,9 +28,9 @@ router.post("/addClothing", authenticate, upload.single("image"), async (req, re
       tags: req.body.tags,
     });
 
-    await clothing.save();
+    await clothe.save();
 
-    req.user.clothes.push(clothing._id);
+    req.user.clothes.push(clothe._id);
     await req.user.save();
 
     fs.unlink(req.file.path, (err) => {
@@ -42,7 +42,7 @@ router.post("/addClothing", authenticate, upload.single("image"), async (req, re
       }
     });
 
-    res.status(201).send(clothing);
+    res.status(201).send(clothe);
     console.log("Vêtement ajouté avec succès !");
   } catch (error) {
     res.status(400).send(error);
@@ -58,10 +58,10 @@ router.get("/clothes", authenticate, async (req, res) => {
   }
 });
 
-router.delete("/deleteClothing/:id", authenticate, async (req, res) => {
+router.delete("/deleteClothe/:id", authenticate, async (req, res) => {
   try {
     // Supprimer le vêtement de la collection 'clothes'
-    await Clothing.findByIdAndDelete(req.params.id);
+    await Clothe.findByIdAndDelete(req.params.id);
 
     // Supprimer la référence au vêtement dans l'objet utilisateur
     req.user.clothes.pull(req.params.id);
@@ -81,8 +81,8 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
       format: "webp",
     });
 
-    const clothingIds = req.body.vetements.split(",").map(id => new ObjectId(id));
-    console.log("clothingIds: ", clothingIds);
+    const clotheIds = req.body.vetements.split(",").map(id => new ObjectId(id));
+    console.log("clotheIds: ", clotheIds);
 
     const outfit = new Outfit({
       image: uploadedResponse.secure_url,
@@ -90,7 +90,7 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
       category: req.body.category || "",
       season: req.body.season || "",
       tags: req.body.tags || [],
-      vetements: clothingIds,
+      vetements: clotheIds,
     });
     console.log("outfit before save: ", outfit);
     await outfit.save();
@@ -116,5 +116,7 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
   }
 
 });
+
+
 
 module.exports = router;

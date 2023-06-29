@@ -1,26 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, Image, StyleSheet, Text, View, Dimensions, TouchableOpacity, Button, Modal, TouchableHighlight, ScrollView } from "react-native";
+import React, { useState, useCallback } from "react";
+import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity, ScrollView, Text, Button, StatusBar } from "react-native";
 import axios from "axios";
 import { url } from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import Modal from "react-native-modal";
 
 const windowWidth = Dimensions.get("window").width;
 
 const ProfileClothes = ({ navigation, ...props }) => {
   const [clothes, setClothes] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [seasons, setSeasons] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
-  const [selectedSeasons, setSelectedSeasons] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [isCategoriesModalVisible, setCategoriesModalVisible] = useState(false);
-  const [isBrandsModalVisible, setBrandsModalVisible] = useState(false);
-  const [isSeasonsModalVisible, setSeasonsModalVisible] = useState(false);
-  const [isTagsModalVisible, setTagsModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
 
   const fetchClothes = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -30,10 +25,6 @@ const ProfileClothes = ({ navigation, ...props }) => {
       });
       const sortedClothes = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setClothes(sortedClothes);
-      setCategories(['All', ...new Set(sortedClothes.map(clothe => clothe.category))]);
-      setBrands(['All', ...new Set(sortedClothes.map(clothe => clothe.brand))]);
-      setSeasons(['All', ...new Set(sortedClothes.map(clothe => clothe.season))]);
-      setTags(['All', ...new Set(sortedClothes.flatMap(clothe => clothe.tags))]);
     } catch (error) {
       console.error(error);
     }
@@ -43,66 +34,6 @@ const ProfileClothes = ({ navigation, ...props }) => {
     useCallback(() => {
       fetchClothes();
     }, [])
-  );
-
-  const filterByCategory = (category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter(c => c !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
-  };
-
-  const filterByBrand = (brand) => {
-    if (selectedBrands.includes(brand)) {
-      setSelectedBrands(selectedBrands.filter(b => b !== brand));
-    } else {
-      setSelectedBrands([...selectedBrands, brand]);
-    }
-  };
-
-  const filterBySeason = (season) => {
-    if (selectedSeasons.includes(season)) {
-      setSelectedSeasons(selectedSeasons.filter(s => s !== season));
-    } else {
-      setSelectedSeasons([...selectedSeasons, season]);
-    }
-  };
-
-  const filterByTag = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter(t => t !== tag));
-    } else {
-      setSelectedTags([...selectedTags, tag]);
-    }
-  };
-
-  const renderFilterModal = (filterItems, selectedItems, filterByItem, isModalVisible, setModalVisible) => (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={isModalVisible}
-      onRequestClose={() => setModalVisible(false)}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          {filterItems.map((item, index) => (
-            <TouchableHighlight
-              key={index}
-              onPress={() => filterByItem(item)}
-              underlayColor="#DDDDDD"
-              style={selectedItems.includes(item) ? styles.selectedItem : {}}
-            >
-              <Text style={styles.label}>{item}</Text>
-            </TouchableHighlight>
-          ))}
-          <Button
-            title='Done'
-            onPress={() => setModalVisible(false)}
-          />
-        </View>
-      </View>
-    </Modal>
   );
 
   const renderItem = ({ item }) => (
@@ -134,40 +65,58 @@ const ProfileClothes = ({ navigation, ...props }) => {
 
   return (
     <View style={props.isCreation ? [styles.container, styles.selectContainer] : styles.container}>
-      <ScrollView horizontal={true} style={styles.scrollContainer}>
-        <View style={styles.buttonContainer}>
-          <Button
-            title='Categories'
-            onPress={() => setCategoriesModalVisible(true)}
-            color="black"
-            style={styles.button}
-          />
-          <Button
-            title='Brands'
-            onPress={() => setBrandsModalVisible(true)}
-            color="black"
-            style={styles.button}
-          />
-          <Button
-            title='Seasons'
-            onPress={() => setSeasonsModalVisible(true)}
-            color="black"
-            style={styles.button}
-          />
-          <Button
-            title='Tags'
-            onPress={() => setTagsModalVisible(true)}
-            color="black"
-            style={styles.button}
-          />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.filtersContainer}>
+          <TouchableOpacity
+            style={styles.filtersButton}
+            onPress={toggleModal}
+          >
+            <Text style={styles.filtersText}>Catégories</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filtersButton}
+            onPress={toggleModal}
+          >
+            <Text style={styles.filtersText}>Marques</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filtersButton}
+            onPress={toggleModal}
+          >
+            <Text style={styles.filtersText}>Saisons</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filtersButton}
+            onPress={toggleModal}
+          >
+            <Text style={styles.filtersText}>Tags</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      {renderFilterModal(categories, selectedCategories, filterByCategory, isCategoriesModalVisible, setCategoriesModalVisible)}
-      {renderFilterModal(brands, selectedBrands, filterByBrand, isBrandsModalVisible, setBrandsModalVisible)}
-      {renderFilterModal(seasons, selectedSeasons, filterBySeason, isSeasonsModalVisible, setSeasonsModalVisible)}
-      {renderFilterModal(tags, selectedTags, filterByTag, isTagsModalVisible, setTagsModalVisible)}
+      
+      <Modal
+        onBackdropPress={toggleModal}
+        onBackButtonPress={toggleModal}
+        isVisible={isModalVisible}
+        swipeDirection="down"
+        onSwipeComplete={toggleModal}
+        // animationIn="bounceInUp"
+        // animationOut="bounceOutDown"
+        animationInTiming={200}
+        animationOutTiming={100}
+        backdropTransitionInTiming={300}
+        backdropTransitionOutTiming={200}
+        style={styles.modal}
+      >
+        <View style={styles.modalContent}>
+          <View style={styles.center}>
+            <View style={styles.barIcon} />
+            <Text style={styles.text}>Affichage des filtres</Text>
+          </View>
+        </View>
+      </Modal>
       <FlatList
-        data={selectedCategories.includes('All') || selectedCategories.length === 0 ? clothes : clothes.filter(clothe => selectedCategories.includes(clothe.category))}
+        data={clothes}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         numColumns={3}
@@ -177,6 +126,7 @@ const ProfileClothes = ({ navigation, ...props }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -198,42 +148,56 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "black",
   },
-  label: {
-    margin: 8,
+  filtersContainer: {
+    flexDirection: 'row'
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: 'rgba(0, 0, 0, 0.4)'
-  },
-  modalView: {
-    width: '100%',
-    backgroundColor: "white",
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  selectedItem: {
-    backgroundColor: '#DDDDDD',
-  },
-  scrollContainer: {
-    maxHeight: 50,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-  },
-  button: {
+
+  filtersButton: {
     borderColor: 'black',
     borderWidth: 1,
-    margin: 5,
+    marginRight: 10,
+    marginLeft: 1,
+    marginVertical: 10,
+    padding: 5,
+    height: 30,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    paddingTop: 12,
+    paddingHorizontal: 12,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    minHeight: 400,
+    paddingBottom: 20,
+  },
+  center: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  barIcon: {
+    width: 60,
+    height: 5,
+    backgroundColor: "#bbb",
+    borderRadius: 3,
+  },
+  text: {
+    color: "#bbb",
+    fontSize: 24,
+    marginTop: 100,
+  },
+  btnContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 500,
   },
 });
 

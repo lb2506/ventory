@@ -1,12 +1,12 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Modal, Text } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons';
 
-const AddItemsButton = ({ onPress }) => {
+const SettingsBoutton = ({ onPress }) => {
 
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
-            <FontAwesome5 name="plus-square" size={25} color="#000000" />
+            <FontAwesome5 name="ellipsis-v" size={25} color="#000000" />
         </TouchableOpacity>
     )
 }
@@ -17,10 +17,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        right: 90,
-        height: 30
-    }
+        right: 25,
+        height: 30,
+        width: 40
+    },
+
 })
 
-
-export default AddItemsButton;
+export default SettingsBoutton;

@@ -8,7 +8,6 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
 
-import LogoutBoutton from '../components/logoutButton';
 import SearchedProfileClothes from './SearchedProfileClothes';
 import SearchedProfileOutfits from './SearchedProfileOutfits';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -77,7 +76,6 @@ const SearchedProfile = () => {
                 <TouchableOpacity style={styles.followButton} onPress={handleFollow}>
                     <Text style={styles.followButtonText}>{isFollowing ? 'Ne plus suivre' : 'Suivre'}</Text>
                 </TouchableOpacity>
-                <LogoutBoutton />
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('Social')} style={styles.comeBack}>
                 <Ionicons name="chevron-back-outline" size={35} color="#000000" />

@@ -73,6 +73,7 @@ const ModalAddClothe = ({ visible, setVisible }) => {
                         Prendre une photo
                     </Text>
                 </TouchableOpacity>
+                <View style={styles.line} />
                 <TouchableOpacity style={styles.textContainer} onPress={pickImage}>
                     <Text style={styles.text}>
                         Importer une photo
@@ -87,22 +88,29 @@ const styles = StyleSheet.create({
     bottomNavigationView: {
         backgroundColor: '#FFFFFF',
         width: '100%',
-        height: 200,
         alignItems: 'center',
         justifyContent: 'center',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        paddingBottom: 50,
+        paddingBottom: 15,
     },
     text: {
-        fontSize: 20,
-        textAlign: 'center',
-        padding: 25,
+        color: "black",
+        textAlign: "center",
+        fontSize:17
+    },
+    line: {
+        height: 1,
+        width: '100%',
+        backgroundColor: 'black'
     },
     textContainer: {
-        borderBottomWidth: 1,
-        borderBottomColor: 'black',
         width: '100%',
+        height: 70,
+        justifyContent: 'center',
+        backgroundColor: "#FFFFFF",
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
 });
 

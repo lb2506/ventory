@@ -6,9 +6,10 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { url } from "../api";
 import axios from "axios";
 
-import LogoutBoutton from "../components/logoutButton";
+import SettingsBoutton from "../components/settingsButton";
 import AddItemsButton from "../components/addItemsButton";
 import ModalAddClothe from "../components/modalAddClothe";
+import ModalSettings from "../components/modalSettings"
 
 import ProfileClothes from "./ProfileClothes";
 import ProfileOutfits from "./ProfileOutfits";
@@ -20,10 +21,16 @@ const Profile = () => {
   const navigation = useNavigation();
 
   const [userData, setUserData] = useState({});
-  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
+  const [bottomSettingsSheetVisible, setBottomSettingsSheetVisible] = useState(false);
 
-  const openBottomSheet = () => {
-    setBottomSheetVisible(true);
+
+  const openBottomAddClotheSheet = () => {
+    setBottomAddClotheSheetVisible(true);
+  };
+
+  const openBottomSettingslotheSheet = () => {
+    setBottomSettingsSheetVisible(true);
   };
 
   const fetchUserData = async () => {
@@ -57,8 +64,8 @@ const Profile = () => {
             <Text>{userData && userData.following ? userData.following.length : 0} suivie(s)</Text>
           </TouchableOpacity>
         </View>
-        <LogoutBoutton />
-        <AddItemsButton onPress={openBottomSheet} />
+        <SettingsBoutton onPress={openBottomSettingslotheSheet}/>
+        <AddItemsButton onPress={openBottomAddClotheSheet} />
       </View>
       <Tab.Navigator
         screenOptions={{
@@ -75,7 +82,8 @@ const Profile = () => {
         <Tab.Screen name="Mes vêtements" component={ProfileClothes} />
         <Tab.Screen name="Mes ensembles" component={ProfileOutfits} />
       </Tab.Navigator>
-      <ModalAddClothe visible={bottomSheetVisible} setVisible={setBottomSheetVisible} />
+      <ModalAddClothe visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} />
+      <ModalSettings visible={bottomSettingsSheetVisible} setVisible={setBottomSettingsSheetVisible}/>
     </View>
   );
 };

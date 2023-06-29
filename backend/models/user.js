@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  clothes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Clothing" }],
+  clothes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Clothe" }],
   outfits: [{ type: mongoose.Schema.Types.ObjectId, ref: "Outfit" }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],

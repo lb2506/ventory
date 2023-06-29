@@ -109,7 +109,7 @@ const AddItemsScreen = () => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const listVetementsId = selectedClothe.map((clothe) => clothe._id);
-    const strVetementsId = listVetementsId.join(",");    // console.log("listVetementsId: ", listVetementsId);
+    const strVetementsId = listVetementsId.join(",");  
     const token = await AsyncStorage.getItem("token");
     try {
       const manipResult = await ImageManipulator.manipulateAsync(imageUri, [{ resize: { width: 720, height: 960 } }], {
@@ -128,7 +128,7 @@ const AddItemsScreen = () => {
       formData.append("season", valueSeason);
       formData.append("tags", tags);
       formData.append("vetements", strVetementsId);
-      
+
       await axios.post(`${url}/addOutfit`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",

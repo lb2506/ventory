@@ -18,7 +18,7 @@ const outfitSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  vetements: [{ type: mongoose.Schema.Types.ObjectId, ref: "Clothing" }],
+  vetements: [{ type: mongoose.Schema.Types.ObjectId, ref: "Clothe" }],
 });
 
 const Outfit = mongoose.model("Outfit", outfitSchema);
