@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity, ScrollView, Text, Button, StatusBar } from "react-native";
+import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity, ScrollView, Text } from "react-native";
 import axios from "axios";
 import { url } from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,7 +15,6 @@ const ProfileClothes = ({ navigation, ...props }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
 
   const fetchClothes = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -100,12 +99,10 @@ const ProfileClothes = ({ navigation, ...props }) => {
         isVisible={isModalVisible}
         swipeDirection="down"
         onSwipeComplete={toggleModal}
-        // animationIn="bounceInUp"
-        // animationOut="bounceOutDown"
         animationInTiming={200}
-        animationOutTiming={100}
+        animationOutTiming={500}
         backdropTransitionInTiming={300}
-        backdropTransitionOutTiming={200}
+        backdropTransitionOutTiming={500}
         style={styles.modal}
       >
         <View style={styles.modalContent}>

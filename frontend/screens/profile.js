@@ -7,8 +7,6 @@ import { url } from "../api";
 import axios from "axios";
 
 import SettingsBoutton from "../components/settingsButton";
-import AddItemsButton from "../components/addItemsButton";
-import ModalAddClothe from "../components/modalAddClothe";
 import ModalSettings from "../components/modalSettings"
 
 import ProfileClothes from "./ProfileClothes";
@@ -21,13 +19,7 @@ const Profile = () => {
   const navigation = useNavigation();
 
   const [userData, setUserData] = useState({});
-  const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
   const [bottomSettingsSheetVisible, setBottomSettingsSheetVisible] = useState(false);
-
-
-  const openBottomAddClotheSheet = () => {
-    setBottomAddClotheSheetVisible(true);
-  };
 
   const openBottomSettingslotheSheet = () => {
     setBottomSettingsSheetVisible(true);
@@ -65,7 +57,6 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
         <SettingsBoutton onPress={openBottomSettingslotheSheet}/>
-        <AddItemsButton onPress={openBottomAddClotheSheet} />
       </View>
       <Tab.Navigator
         screenOptions={{
@@ -82,7 +73,6 @@ const Profile = () => {
         <Tab.Screen name="Mes vêtements" component={ProfileClothes} />
         <Tab.Screen name="Mes ensembles" component={ProfileOutfits} />
       </Tab.Navigator>
-      <ModalAddClothe visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} />
       <ModalSettings visible={bottomSettingsSheetVisible} setVisible={setBottomSettingsSheetVisible}/>
     </View>
   );
@@ -90,13 +80,14 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 80,
     flex: 1,
     backgroundColor: "#FFFFFF",
   },
   header: {
     display: "flex",
     alignItems: "flex-start",
+    paddingTop: 60,
+    paddingBottom:20
   },
   title: {
     fontSize: 25,
@@ -125,6 +116,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "40%",
     margin: 10,
+    marginTop:20
   },
 });
 

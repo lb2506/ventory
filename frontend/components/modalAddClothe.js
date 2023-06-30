@@ -1,8 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { BottomSheet } from 'react-native-btr';
 import * as ImagePicker from 'expo-image-picker';
+import Modal from "react-native-modal";
+
 
 const ModalAddClothe = ({ visible, setVisible }) => {
 
@@ -11,6 +12,10 @@ const ModalAddClothe = ({ visible, setVisible }) => {
     const [imageUri, setImageUri] = useState(null);
 
     const toggleBottomNavigationView = () => {
+        setVisible(!visible);
+    };
+
+    const toggleModal = () => {
         setVisible(!visible);
     };
 
@@ -62,12 +67,22 @@ const ModalAddClothe = ({ visible, setVisible }) => {
         }
     };
     return (
-        <BottomSheet
-            visible={visible}
-            onBackButtonPress={toggleBottomNavigationView}
-            onBackdropPress={toggleBottomNavigationView}
+        <Modal
+            onBackdropPress={toggleModal}
+            onBackButtonPress={toggleModal}
+            isVisible={visible}
+            swipeDirection="down"
+            onSwipeComplete={toggleModal}
+            animationInTiming={200}
+            animationOutTiming={500}
+            backdropTransitionInTiming={300}
+            backdropTransitionOutTiming={500}
+            style={styles.modal}
         >
             <View style={styles.bottomNavigationView}>
+                <View style={styles.center}>
+                    <View style={styles.barIcon} />
+                </View>
                 <TouchableOpacity style={styles.textContainer} onPress={openCamera}>
                     <Text style={styles.text}>
                         Prendre une photo
@@ -80,7 +95,7 @@ const ModalAddClothe = ({ visible, setVisible }) => {
                     </Text>
                 </TouchableOpacity>
             </View>
-        </BottomSheet>
+        </Modal>
     );
 };
 
@@ -92,28 +107,43 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        paddingBottom: 15,
+        paddingBottom: 40
+    },
+    modal: {
+        justifyContent: "flex-end",
+        margin: 0,
+    },
+    center: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    barIcon: {
+        width: 60,
+        height: 5,
+        backgroundColor: "#bbb",
+        borderRadius: 3,
+        marginTop: 12,
+        marginBottom: 12,
     },
     text: {
         color: "black",
         textAlign: "center",
-        fontSize:17
+        fontSize:17,
     },
     line: {
         height: 1,
-        width: '100%',
-        backgroundColor: 'black'
+        width: '90%',
+        backgroundColor: '#bbb'
     },
     textContainer: {
         width: '100%',
-        height: 70,
         justifyContent: 'center',
         backgroundColor: "#FFFFFF",
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        paddingVertical:20,
     },
 });
-
-
 
 export default ModalAddClothe;

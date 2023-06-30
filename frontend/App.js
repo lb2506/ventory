@@ -16,6 +16,8 @@ import WorkSpace from './screens/WorkSpace';
 import SearchedProfile from './screens/SearchedProfile';
 import FollowersList from './screens/FollowersList';
 import FollowingList from './screens/FollowingList';
+import CreateOutfit from './screens/CreateOutfit';
+import Settings from './screens/Settings';
 
 
 const Stack = createStackNavigator();
@@ -46,6 +48,8 @@ export default function App() {
           <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
           <Stack.Screen name="FollowersList" component={FollowersList} />
           <Stack.Screen name="FollowingList" component={FollowingList} />
+          <Stack.Screen name="CreateOutfit" component={CreateOutfit} />
+          <Stack.Screen name="Settings" component={Settings} />
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>

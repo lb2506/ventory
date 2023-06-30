@@ -67,7 +67,7 @@ const AddItem = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")} style={styles.comeBack}>
+        <TouchableOpacity onPress={() => navigation.navigate("WorkSpace")} style={styles.comeBack}>
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
         <Text style={styles.title}>Ajout d'un vêtement</Text>
@@ -78,7 +78,6 @@ const AddItem = ({ route }) => {
         <TextInput style={styles.input} onChangeText={setCategory} value={category} placeholder="Catégorie" />
         <TextInput style={styles.input} onChangeText={setSeason} value={season} placeholder="Saison" />
         <TextInput style={styles.input} onChangeText={setTags} value={tags} placeholder="Tags" />
-
         <TouchableOpacity onPress={handleSubmit} style={isValid ? styles.submitButton : styles.disabledButton} disabled={!isValid}>
           <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Valider"}</Text>
         </TouchableOpacity>
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   header: {
-    paddingTop: 80,
+    paddingTop: 60,
     alignItems: "center",
     paddingBottom: 20,
   },
@@ -104,12 +103,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 400,
     resizeMode: "contain",
-    marginTop: 20,
+    marginTop: 0,
     marginBottom: 20,
   },
   comeBack: {
     position: "absolute",
-    top: 77,
+    top: 57,
     left: 10,
   },
   input: {

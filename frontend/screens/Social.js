@@ -106,8 +106,9 @@ const Social = () => {
   }
 
   const renderNewsFeedItem = ({ item }) => (
+
     <View style={styles.newsFeedItem}>
-      <Text style={styles.newsFeedText}>{item.pseudo}</Text>
+      <Text style={styles.newsFeedText} onPress={() => handleUserClick(item.userId)}>{item.pseudo}</Text>
       <Image style={styles.newsFeedImage} source={{ uri: item.image }} />
     </View>
   );
@@ -179,13 +180,14 @@ const Social = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 80,
     backgroundColor: '#FFFFFF',
     flex: 1
   },
   header: {
     display: 'flex',
     alignItems: 'center',
+    paddingTop: 60,
+    
   },
   title: {
     fontSize: 25,
@@ -236,6 +238,7 @@ const styles = StyleSheet.create({
   },
   newsFeedText: {
     fontSize: 18,
+    alignSelf:'flex-start'
   },
   newsFeedImage: {
     width: '100%',

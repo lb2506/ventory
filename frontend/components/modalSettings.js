@@ -1,16 +1,14 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { BottomSheet } from 'react-native-btr';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useNavigation } from "@react-navigation/native";
+import Modal from "react-native-modal";
 
 const ModalAddClothe = ({ visible, setVisible }) => {
-
-
     const navigation = useNavigation();
-  
-    const toggleBottomNavigationView = () => {
+
+    const toggleModal = () => {
         setVisible(!visible);
     };
 
@@ -23,16 +21,31 @@ const ModalAddClothe = ({ visible, setVisible }) => {
         });
     }
 
+    const handleNavigate = () => {
+        toggleModal();
+        navigation.navigate("Settings")
+    }
+
     return (
-        <BottomSheet
-            visible={visible}
-            onBackButtonPress={toggleBottomNavigationView}
-            onBackdropPress={toggleBottomNavigationView}
+        <Modal
+            onBackdropPress={toggleModal}
+            onBackButtonPress={toggleModal}
+            isVisible={visible}
+            swipeDirection="down"
+            onSwipeComplete={toggleModal}
+            animationInTiming={200}
+            animationOutTiming={500}
+            backdropTransitionInTiming={300}
+            backdropTransitionOutTiming={500}
+            style={styles.modal}
         >
             <View style={styles.bottomNavigationView}>
-                <TouchableOpacity style={styles.textContainer}>
+                <View style={styles.center}>
+                    <View style={styles.barIcon} />
+                </View>
+                <TouchableOpacity style={styles.textContainer} onPress={() => handleNavigate()}>
                     <Text style={styles.text}>
-                        Réglages
+                        Paramètres
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.line} />
@@ -42,7 +55,7 @@ const ModalAddClothe = ({ visible, setVisible }) => {
                     </Text>
                 </TouchableOpacity>
             </View>
-        </BottomSheet>
+        </Modal>
     );
 };
 
@@ -54,25 +67,42 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        paddingBottom: 15,
+        paddingBottom: 40
+    },
+    modal: {
+        justifyContent: "flex-end",
+        margin: 0,
+    },
+    center: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    barIcon: {
+        width: 60,
+        height: 5,
+        backgroundColor: "#bbb",
+        borderRadius: 3,
+        marginTop: 12,
+        marginBottom: 12,
     },
     text: {
         color: "black",
         textAlign: "center",
-        fontSize:17
+        fontSize: 17,
     },
     line: {
         height: 1,
-        width: '100%',
-        backgroundColor: 'black'
+        width: '90%',
+        backgroundColor: '#bbb'
     },
     textContainer: {
         width: '100%',
-        height: 70,
         justifyContent: 'center',
         backgroundColor: "#FFFFFF",
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        paddingVertical: 20,
     },
 });
 
