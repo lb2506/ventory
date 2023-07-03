@@ -9,8 +9,6 @@ import List from "../components/list";
 import Tags from "../components/tags";
 import ModalAddClothe from "../components/modalAddClothe";
 import * as ImageManipulator from "expo-image-manipulator";
-import ProfileClothes from "./ProfileClothes";
-import { BottomSheet } from "react-native-btr";
 const windowWidth = Dimensions.get("window").width;
 
 function ClotheDetails({ route, navigation }) {

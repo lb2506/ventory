@@ -29,7 +29,7 @@ const ModalAddClothe = (props) => {
         });
         toggleBottomNavigationView();
         if (!image.canceled) {
-          if (image.assets && image.assets.length > 0) {
+          if (image.assets && image.assets.length > 0 && props.isOutfitImage == true) {
             props.setImage(image.assets[0].uri);
           }
           if (props.isOutfitImage !== true) {
@@ -57,7 +57,7 @@ const ModalAddClothe = (props) => {
       });
 
       if (!result.canceled) {
-        if (result.assets && result.assets.length > 0) {
+        if (result.assets && result.assets.length > 0 && props.isOutfitImage == true) {
           props.setImage(result.assets[0].uri);
         }
         if (props.isOutfitImage !== true) {

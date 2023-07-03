@@ -10,6 +10,7 @@ const WorkSpace = () => {
   const openBottomAddClotheSheet = () => {
     setBottomAddClotheSheetVisible(true);
   };
+  const handleImage = (value) => {};
 
   return (
     <View style={styles.container}>
@@ -24,7 +25,12 @@ const WorkSpace = () => {
           <Text style={styles.submitText}>Ajouter un vêtement</Text>
         </TouchableOpacity>
       </ImageBackground>
-      <ModalAddClothe visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} />
+      <ModalAddClothe
+        visible={bottomAddClotheSheetVisible}
+        setVisible={setBottomAddClotheSheetVisible}
+        isOutfitImage={false}
+        setImage={handleImage}
+      />
     </View>
   );
 };
