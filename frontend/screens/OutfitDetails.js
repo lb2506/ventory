@@ -13,14 +13,16 @@ import ProfileClothes from "./ProfileClothes";
 import { BottomSheet } from "react-native-btr";
 const windowWidth = Dimensions.get("window").width;
 
-function ClotheDetails({ route, navigation }) {
+function OutfitDetails({ route, navigation }) {
   const { item } = route.params;
 
   const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
-  const [brand, setBrand] = useState(item.brand);
+  const [visibleBottomSheet, setVisibleBottomSheet] = useState(false);
   const [update, setUpdate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState(item.image);
+  const [clothes, setClothes] = useState(item.vetements);
+  const [outfitName, setOutfitName] = useState(item.name);
   const [tags, setTags] = useState(item.tags);
   const [tagsArray, setTagsArray] = useState([item.tags]);
   const [valueCat, setValueCat] = useState(item.category);
@@ -41,6 +43,10 @@ function ClotheDetails({ route, navigation }) {
     { label: "Autre", value: "Autre" },
   ]);
 
+  const openBottomAddClotheSheet = () => {
+    setBottomAddClotheSheetVisible(true);
+  };
+
   const handleValueCat = (value) => {
     setValueCat(value);
   };
@@ -50,15 +56,18 @@ function ClotheDetails({ route, navigation }) {
   const handleImage = (value) => {
     setImage(value);
   };
-  const openBottomAddClotheSheet = () => {
-    setBottomAddClotheSheetVisible(true);
+  const toggleBottomSheet = () => {
+    setVisibleBottomSheet(!visibleBottomSheet);
+  };
+  const handleSelectedClotheChange = (selectedClothe) => {
+    setClothes(selectedClothe);
   };
 
-  const deleteClothe = async () => {
+  const deleteOutfit = async () => {
     const token = await AsyncStorage.getItem("token");
 
     try {
-      await axios.delete(`${url}/deleteClothe/${item._id}`, {
+      await axios.delete(`${url}/deleteOutfit/${item._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -69,16 +78,24 @@ function ClotheDetails({ route, navigation }) {
   };
 
   useEffect(() => {
-    if (valueCat != item.category || valueSeason != item.season || tagsArray != item.tags || image != item.image || brand != item.brand) {
+    if (
+      valueCat != item.category ||
+      valueSeason != item.season ||
+      tagsArray != item.tags ||
+      outfitName != item.name ||
+      image != item.image ||
+      clothes != item.vetements
+    ) {
       setUpdate(true);
     } else {
       setUpdate(false);
     }
-  }, [valueCat, valueSeason, tagsArray, image, brand]);
+  }, [valueCat, valueSeason, tagsArray, outfitName, image, clothes]);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-
+    const listVetementsId = clothes.map((clothe) => clothe._id);
+    const strVetementsId = listVetementsId.join(",");
     const token = await AsyncStorage.getItem("token");
     try {
       let formData = new FormData();
@@ -93,12 +110,13 @@ function ClotheDetails({ route, navigation }) {
           name: "image.jpg",
         });
       }
-      formData.append("brand", brand);
+      formData.append("name", outfitName);
       formData.append("category", valueCat);
       formData.append("season", valueSeason);
       formData.append("tags", tags);
+      formData.append("vetements", strVetementsId);
 
-      await axios.post(`${url}/updateClothe/${item._id}`, formData, {
+      await axios.post(`${url}/updateOutfit/${item._id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -127,8 +145,36 @@ function ClotheDetails({ route, navigation }) {
         </View>
         <View style={styles.containerInputs}>
           <View style={styles.inputs}>
-            <Text style={styles.titleInput}>Marque:</Text>
-            <TextInput style={{ height: 50, borderWidth: 1, paddingLeft: 15 }} onChangeText={(text) => setBrand(text)} value={brand} />
+            <Text style={styles.titleInput}>Vêtements:</Text>
+            <View style={styles.ClothesContainer}>
+              {clothes.map((clothe) => {
+                return <Image key={clothe._id} source={{ uri: clothe.image }} style={styles.Clothe} />;
+              })}
+              <TouchableOpacity onPress={toggleBottomSheet}>
+                <View style={styles.ModifyClothe}>
+                  <Text style={{ color: "white" }}>Modifier</Text>
+                </View>
+              </TouchableOpacity>
+              <BottomSheet visible={visibleBottomSheet} onBackButtonPress={toggleBottomSheet} onBackdropPress={toggleBottomSheet}>
+                <View style={styles.bottomNavigationView}>
+                  <Text style={styles.title}>Selectionnez vos vêtements</Text>
+                  <ProfileClothes isCreation={true} selectedClothe={clothes} setSelectedClothe={handleSelectedClotheChange} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      toggleBottomSheet();
+                    }}
+                    style={clothes.length > 0 ? styles.submitButton : styles.disabledButton}
+                    disabled={clothes.length > 0 ? false : true}
+                  >
+                    <Text style={clothes.length > 0 ? styles.submitText : styles.disabledSubmitText}>Valider</Text>
+                  </TouchableOpacity>
+                </View>
+              </BottomSheet>
+            </View>
+          </View>
+          <View style={styles.inputs}>
+            <Text style={styles.titleInput}>Nom de l'outfit:</Text>
+            <TextInput style={{ height: 50, borderWidth: 1, paddingLeft: 15 }} onChangeText={(text) => setOutfitName(text)} value={outfitName} />
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Catégorie:</Text>
@@ -148,7 +194,7 @@ function ClotheDetails({ route, navigation }) {
               <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Enregistrer"}</Text>
             </TouchableOpacity>
           ) : null}
-          <TouchableOpacity onPress={deleteClothe} style={styles.submitButton}>
+          <TouchableOpacity onPress={deleteOutfit} style={styles.submitButton}>
             <Text style={styles.submitText}>Supprimer</Text>
           </TouchableOpacity>
         </View>
@@ -249,4 +295,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ClotheDetails;
+export default OutfitDetails;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
+import List from "../components/list";
+import Tags from "../components/tags";
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, Image, ScrollView } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
-import { Overlay } from "@rneui/base";
-import { ListItem } from "@rneui/themed";
 import { BottomSheet } from "react-native-btr";
 import ProfileClothes from "./ProfileClothes";
 import { useNavigation } from "@react-navigation/native";
@@ -22,11 +22,8 @@ const CreateOutfit = () => {
   const [outfitName, setOutfitName] = useState("");
   const [tags, setTags] = useState("");
   const [tagsArray, setTagsArray] = useState([]);
-  const [openCat, setOpenCat] = useState(false);
-  const [openSeason, setOpenSeason] = useState(false);
   const [valueCat, setValueCat] = useState("");
   const [valueSeason, setValueSeason] = useState("");
-  const [visible, setVisible] = useState(false);
   const [visibleBottomSheet, setVisibleBottomSheet] = useState(false);
   const [itemsCat, setItemsCat] = useState([
     { label: "Casual", value: "Casual" },
@@ -41,15 +38,26 @@ const CreateOutfit = () => {
     { label: "Printemps", value: "Printemps" },
     { label: "Été", value: "Été" },
     { label: "Automne", value: "Automne" },
+    { label: "Autre", value: "Autre" },
   ]);
 
   const handleSelectedClotheChange = (selectedClothe) => {
     setSelectedClothe(selectedClothe);
   };
 
-  const toggleOverlay = () => {
-    setVisible(!visible);
+  const handleValueCat = (value) => {
+    setValueCat(value);
   };
+  const handleValueSeason = (value) => {
+    setValueSeason(value);
+  };
+  const handleTag = (value) => {
+    setTags(value);
+  };
+  const handleTagsArray = (value) => {
+    setTagsArray(value);
+  };
+
   const toggleBottomSheet = () => {
     setVisibleBottomSheet(!visibleBottomSheet);
   };
@@ -144,10 +152,6 @@ const CreateOutfit = () => {
     }
   };
 
-  const vetements = selectedClothe.map((clothe) => {
-    return clothe._id + " ,";
-  });
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -180,7 +184,7 @@ const CreateOutfit = () => {
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Vêtements:</Text>
-            { }
+            {}
             <View style={styles.selectedClothesContainer}>
               {selectedClothe.map((clothe) => {
                 return <Image key={clothe._id} source={{ uri: clothe.image }} style={styles.selectedClothe} />;
@@ -197,7 +201,6 @@ const CreateOutfit = () => {
             <BottomSheet visible={visibleBottomSheet} onBackButtonPress={toggleBottomSheet} onBackdropPress={toggleBottomSheet}>
               <View style={styles.bottomNavigationView}>
                 <Text style={styles.title}>Selectionnez vos vêtements</Text>
-                <Text>{selectedClothe.length > 0 ? vetements : null}</Text>
                 <ProfileClothes isCreation={true} selectedClothe={selectedClothe} setSelectedClothe={handleSelectedClotheChange} />
                 <TouchableOpacity
                   onPress={() => {
@@ -217,92 +220,15 @@ const CreateOutfit = () => {
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Catégorie:</Text>
-            <ListItem.Accordion
-              style={styles.listItem}
-              content={
-                <>
-                  <ListItem.Content>
-                    <ListItem.Title>{valueCat}</ListItem.Title>
-                  </ListItem.Content>
-                </>
-              }
-              isExpanded={openCat}
-              onPress={() => {
-                setOpenCat(!openCat);
-              }}
-            >
-              {itemsCat.map((l, i) => (
-                <ListItem
-                  key={i}
-                  onPress={() => {
-                    setValueCat(l.label), setOpenCat(!openCat);
-                  }}
-                  bottomDivider
-                >
-                  <ListItem.Content>
-                    <ListItem.Title>{l.label}</ListItem.Title>
-                  </ListItem.Content>
-                </ListItem>
-              ))}
-            </ListItem.Accordion>
+            <List value={valueCat} setValue={handleValueCat} items={itemsCat} />
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Saison:</Text>
-            <ListItem.Accordion
-              style={styles.listItem}
-              content={
-                <>
-                  <ListItem.Content>
-                    <ListItem.Title>{valueSeason}</ListItem.Title>
-                  </ListItem.Content>
-                </>
-              }
-              isExpanded={openSeason}
-              onPress={() => {
-                setOpenSeason(!openSeason);
-              }}
-            >
-              {itemsSeason.map((l, i) => (
-                <ListItem
-                  key={i}
-                  onPress={() => {
-                    setValueSeason(l.label), setOpenSeason(!openSeason);
-                  }}
-                  bottomDivider
-                >
-                  <ListItem.Content>
-                    <ListItem.Title>{l.label}</ListItem.Title>
-                  </ListItem.Content>
-                </ListItem>
-              ))}
-            </ListItem.Accordion>
+            <List value={valueSeason} setValue={handleValueSeason} items={itemsSeason} />
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Tags:</Text>
-            <TouchableOpacity onPress={toggleOverlay}>
-              <View style={{ justifyContent: "center", borderWidth: 1, height: 50 }}>
-                <Text style={{ paddingLeft: 15 }}>{tagsArray.join(" ")}</Text>
-              </View>
-            </TouchableOpacity>
-            <Overlay isVisible={visible} overlayStyle={[{ backgroundColor: "white", height: "20%", width: "70%" }]} onBackdropPress={toggleOverlay}>
-              <View style={{ alignItems: "center", justifyContent: "center", height: "100%" }}>
-                <Text style={styles.title}>Ajouter un tag</Text>
-                <View style={{ flexDirection: "row", height: "50%", alignItems: "center", justifyContent: "center" }}>
-                  <TextInput onChangeText={(val) => setTags(val)} style={{ padding: 10, width: "60%", borderWidth: 1 }}></TextInput>
-                  {tags ? (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setTagsArray((list) => [...list, tags]), setVisible(!visible);
-                      }}
-                    >
-                      <View style={{ padding: 3, border: "solid", borderWidth: 1, backgroundColor: "black", cursor: "pointer" }}>
-                        <Ionicons name="save-outline" size={30} color="white"></Ionicons>
-                      </View>
-                    </TouchableOpacity>
-                  ) : null}
-                </View>
-              </View>
-            </Overlay>
+            <Tags tags={tags} setTags={handleTag} tagsArray={tagsArray} setTagsArray={handleTagsArray} />
           </View>
           <TouchableOpacity onPress={handleSubmit} style={isValid ? styles.submitButton : styles.disabledButton} disabled={!isValid}>
             <Text style={isValid ? styles.submitText : styles.disabledSubmitText}>{isSubmitting ? "En cours..." : "Valider"}</Text>
@@ -315,12 +241,8 @@ const CreateOutfit = () => {
 
 const styles = StyleSheet.create({
   container: {
-
     backgroundColor: "#FFFFFF",
     flex: 1,
-  },
-  listItem: {
-    borderWidth: 1,
   },
   containerInputs: {
     marginTop: 50,
@@ -331,7 +253,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     paddingTop: 60,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   comeBack: {
     position: "absolute",

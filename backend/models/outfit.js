@@ -19,6 +19,10 @@ const outfitSchema = new mongoose.Schema({
     required: false,
   },
   vetements: [{ type: mongoose.Schema.Types.ObjectId, ref: "Clothe" }],
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Outfit = mongoose.model("Outfit", outfitSchema);

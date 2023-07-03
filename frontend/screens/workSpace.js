@@ -11,18 +11,17 @@ const WorkSpace = () => {
     setBottomAddClotheSheetVisible(true);
   };
 
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Atelier de création</Text>
       </View>
-      <ImageBackground source={require('../assets/23.webp')} resizeMode='cover' style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CreateOutfit")}>
-          <Text style={styles.buttonText}>Créer un outfit</Text>
+      <ImageBackground source={require("../assets/23.webp")} resizeMode="cover" style={styles.buttonsContainer}>
+        <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate("CreateOutfit")}>
+          <Text style={styles.submitText}>Créer un outfit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={openBottomAddClotheSheet}>
-          <Text style={styles.buttonText}>Ajouter un vêtement</Text>
+        <TouchableOpacity style={styles.submitButton} onPress={openBottomAddClotheSheet}>
+          <Text style={styles.submitText}>Ajouter un vêtement</Text>
         </TouchableOpacity>
       </ImageBackground>
       <ModalAddClothe visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} />
@@ -39,34 +38,34 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     paddingTop: 60,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   title: {
     fontSize: 25,
     fontWeight: "bold",
   },
-  buttonsContainer:{
-    flex:1,
-    alignItems:'center',
-    justifyContent:'center',
-    width: '130%',
-    position: 'relative',
-    right: '15%',
+  buttonsContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "130%",
+    position: "relative",
+    right: "15%",
   },
-  button:{
-    backgroundColor:'black',
-    width:'50%',
-    alignItems:'center',
-    marginVertical:15,
-    paddingHorizontal:20,
-    paddingVertical:20,
-    borderRadius:10
+  submitButton: {
+    backgroundColor: "black",
+    padding: 15,
+    alignSelf: "center",
+    alignItems: "center",
+    width: "60%",
+    marginTop: 20,
+    marginBottom: 50,
   },
-  buttonText:{
-    color:'white',
-    fontSize:15,
-    fontWeight:'bold'
-  }
+  submitText: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    textAlign: "center",
+  },
 });
 
 export default WorkSpace;
