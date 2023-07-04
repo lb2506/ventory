@@ -5,15 +5,16 @@ import { url } from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Modal from "react-native-modal";
+import ListFilterClothes from "../components/listFilterClothes";
 
 const windowWidth = Dimensions.get("window").width;
 
 const ProfileClothes = ({ navigation, ...props }) => {
   const [clothes, setClothes] = useState([]);
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [listClothesShowed, setlistClothesShowed] = useState([]);
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  const handleSetClothes = (clothes) => {
+    setlistClothesShowed(clothes);
   };
 
   const fetchClothes = async () => {
@@ -24,6 +25,7 @@ const ProfileClothes = ({ navigation, ...props }) => {
       });
       const sortedClothes = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setClothes(sortedClothes);
+      setlistClothesShowed(sortedClothes);
     } catch (error) {
       console.error(error);
     }
@@ -64,56 +66,9 @@ const ProfileClothes = ({ navigation, ...props }) => {
 
   return (
     <View style={props.isCreation ? [styles.container, styles.selectContainer] : styles.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={styles.filtersContainer}>
-          <TouchableOpacity
-            style={styles.filtersButton}
-            onPress={toggleModal}
-          >
-            <Text style={styles.filtersText}>Catégories</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.filtersButton}
-            onPress={toggleModal}
-          >
-            <Text style={styles.filtersText}>Marques</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.filtersButton}
-            onPress={toggleModal}
-          >
-            <Text style={styles.filtersText}>Saisons</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.filtersButton}
-            onPress={toggleModal}
-          >
-            <Text style={styles.filtersText}>Tags</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      
-      <Modal
-        onBackdropPress={toggleModal}
-        onBackButtonPress={toggleModal}
-        isVisible={isModalVisible}
-        swipeDirection="down"
-        onSwipeComplete={toggleModal}
-        animationInTiming={200}
-        animationOutTiming={500}
-        backdropTransitionInTiming={300}
-        backdropTransitionOutTiming={500}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          <View style={styles.center}>
-            <View style={styles.barIcon} />
-            <Text style={styles.text}>Affichage des filtres</Text>
-          </View>
-        </View>
-      </Modal>
+      <ListFilterClothes listClothesShowed={listClothesShowed} clothes={clothes} setListClothesShowed={handleSetClothes} />
       <FlatList
-        data={clothes}
+        data={listClothesShowed}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         numColumns={3}
@@ -123,7 +78,6 @@ const ProfileClothes = ({ navigation, ...props }) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -146,20 +100,20 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
   filtersContainer: {
-    flexDirection: 'row'
+    flexDirection: "row",
   },
 
   filtersButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     marginRight: 10,
     marginLeft: 1,
     marginVertical: 10,
     padding: 5,
     height: 30,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modal: {
     justifyContent: "flex-end",
