@@ -1,11 +1,26 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+const listItems = [
+    { title: "Informations du profil", screen: "InfosProfileSettings" },
+    { title: "À propos", screen: "About" },
+    { title: "Conditions générales d'utilisation", screen: "Terms" }
+]
 
 const Settings = () => {
     const navigation = useNavigation()
+
+    const ListItem = ({ item }) => (
+        <TouchableOpacity 
+            style={styles.listItem}
+            onPress={() => navigation.navigate(item.screen)}
+        >
+            <Text style={styles.listItemText}>{item.title}</Text>
+            <Ionicons name="chevron-forward-outline" size={25} color="#000000" />
+        </TouchableOpacity>
+    )
     
     return (
         <View style={styles.container}>
@@ -15,6 +30,11 @@ const Settings = () => {
                 </TouchableOpacity>
                 <Text style={styles.title}>Paramètres</Text>
             </View>
+            <FlatList
+                data={listItems}
+                renderItem={ListItem}
+                keyExtractor={(item) => item.title}
+            />
         </View>
     )
 }
@@ -26,9 +46,11 @@ const styles = StyleSheet.create({
     },
     header: {
         display: "flex",
+        flexDirection: "row",
         alignItems: "center",
         paddingTop: 60,
-        paddingBottom: 20
+        paddingBottom: 20,
+        justifyContent:'center'
     },
     title: {
         fontSize: 25,
@@ -38,6 +60,17 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 57,
         left: 10,
+    },
+    listItem: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: "#D3D3D3",
+    },
+    listItemText: {
+        fontSize: 18,
     },
 })
 

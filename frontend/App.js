@@ -19,6 +19,7 @@ import FollowersList from "./screens/FollowersList";
 import FollowingList from "./screens/FollowingList";
 import CreateOutfit from "./screens/CreateOutfit";
 import Settings from "./screens/Settings";
+import InfosProfileSettings from "./screens/InfosProfileSettings";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,6 +51,8 @@ export default function App() {
         <Stack.Screen name="FollowingList" component={FollowingList} />
         <Stack.Screen name="CreateOutfit" component={CreateOutfit} />
         <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="InfosProfileSettings" component={InfosProfileSettings} />
+
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

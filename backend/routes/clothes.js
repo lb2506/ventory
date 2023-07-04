@@ -115,10 +115,10 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
 
     const outfit = new Outfit({
       image: uploadedResponse.secure_url,
-      name: req.body.name || "",
-      category: req.body.category || "",
-      season: req.body.season || "",
-      tags: req.body.tags || [],
+      name: req.body.name,
+      category: req.body.category,
+      season: req.body.season,
+      tags: req.body.tags,
       vetements: clotheIds,
     });
 

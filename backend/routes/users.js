@@ -40,7 +40,7 @@ router.get('/user/:userId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
-    return res.json({ _id: user._id, pseudo: user.pseudo, following: user.following, followers: user.followers });
+    return res.json({ _id: user._id, pseudo: user.pseudo, following: user.following, followers: user.followers, firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone });
   } catch (error) {
     return res.status(500).json({ error: 'Erreur de serveur' });
   }
@@ -169,6 +169,33 @@ router.get('/user/feed/:userId', async (req, res) => {
     res.send(result);
   } catch (error) {
     res.status(500).send({ error: 'An error occurred while fetching the feed.' });
+  }
+});
+
+// Modifier les informations d'un utilisateur
+router.put('/user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  const { pseudo, firstName, lastName, email, phone, password } = req.body;
+
+  try {
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+
+    if (pseudo) user.pseudo = pseudo;
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (email) user.email = email;
+    if (phone) user.phone = phone;
+    if (password) user.password = password;
+
+
+    await user.save();
+    return res.json({ message: 'Informations mises à jour avec succès' });
+
+  } catch (error) {
+    return res.status(500).json({ error: 'Erreur de serveur' });
   }
 });
 

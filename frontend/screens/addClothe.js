@@ -10,7 +10,7 @@ import ModalAddClothe from "../components/modalAddClothe";
 import * as ImageManipulator from "expo-image-manipulator";
 const windowWidth = Dimensions.get("window").width;
 
-const AddItem = ({ route, navigation }) => {
+const AddClothe = ({ route, navigation }) => {
   const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
   const [image, setImage] = useState(route.params.imageUri);
   const [brand, setBrand] = useState("");
@@ -225,4 +225,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddItem;
+export default AddClothe;

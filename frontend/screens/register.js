@@ -14,6 +14,7 @@ const Register = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
@@ -40,6 +41,11 @@ const Register = () => {
             return;
         }
 
+        if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+            Alert.alert('Erreur', 'Le numéro de téléphone doit contenir 10 chiffres.');
+            return;
+        }
+
         if (password.length < 6) {
             Alert.alert('Erreur', 'Le mot de passe doit contenir au moins 6 caractères.');
             return;
@@ -56,7 +62,7 @@ const Register = () => {
         }
 
         try {
-            const response = await axios.post(`${url}/register`, { email : email.toLowerCase(), password, firstName, lastName, pseudo });
+            const response = await axios.post(`${url}/register`, { email: email.toLowerCase(), password, firstName, lastName, pseudo, phone });
             await AsyncStorage.setItem('token', response.data.token);
             navigation.navigate('HomeTabs');
         } catch (error) {
@@ -78,49 +84,53 @@ const Register = () => {
             <TouchableOpacity onPress={() => navigation.navigate('OpenScreen')} style={styles.comeBack}>
                 <Ionicons name="chevron-back-outline" size={35} color="#000000" />
             </TouchableOpacity>
-            <Input placeholder="Pseudo" value={pseudo} onChangeText={setPseudo} />
-            <Input placeholder="Prénom" value={firstName} onChangeText={setFirstName} />
-            <Input placeholder="Nom" value={lastName} onChangeText={setLastName} />
-            <Input placeholder="Adresse e-mail" value={email} onChangeText={setEmail} />
-            <Input placeholder="Mot de passe" value={password} onChangeText={setPassword} secureTextEntry />
-            <Input placeholder="Confirmer le mot de passe" value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry />
-            <View style={styles.terms}>
-                <Switch style={{ marginRight: 10 }} value={termsAccepted} onValueChange={setTermsAccepted} />
-                <Text>J'accepte les conditions d'utilisation et de confidentialité.</Text>
+            <View style={styles.formContainer}>
+                <Input placeholder="Pseudo" value={pseudo} onChangeText={setPseudo} />
+                <Input placeholder="Prénom" value={firstName} onChangeText={setFirstName} />
+                <Input placeholder="Nom" value={lastName} onChangeText={setLastName} />
+                <Input placeholder="Adresse e-mail" value={email} onChangeText={setEmail} />
+                <Input placeholder="Téléphone" value={phone} onChangeText={setPhone} />
+                <Input placeholder="Mot de passe" value={password} onChangeText={setPassword} secureTextEntry />
+                <Input placeholder="Confirmer le mot de passe" value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry />
+                <View style={styles.terms}>
+                    <Switch style={{ marginRight: 10 }} value={termsAccepted} onValueChange={setTermsAccepted} />
+                    <Text>J'accepte les conditions d'utilisation et de confidentialité.</Text>
+                </View>
+                {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
+                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+                    <Text style={styles.buttonText}>Continuer</Text>
+                </TouchableOpacity>
             </View>
-            {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
-            <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                <Text style={styles.buttonText}>Continuer</Text>
-            </TouchableOpacity>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#FFFF',
-        paddingLeft: 20,
-        paddingRight: 20,
+        backgroundColor: "#FFFFFF",
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     header: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 80,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        paddingTop: 60,
+        paddingBottom: 20,
+        justifyContent: 'center'
     },
     title: {
         fontSize: 25,
-        fontWeight: 'bold',
-
+        fontWeight: "bold",
     },
     comeBack: {
-        position: 'absolute',
-        top: 80,
-        left: 10
+        position: "absolute",
+        top: 57,
+        left: 10,
+    },
+    formContainer:{
+        width:'100%',
+        alignItems:'center',
+        paddingHorizontal:20
     },
     terms: {
         flexDirection: 'row',
@@ -134,7 +144,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         alignItems: 'center',
-        width: '100%'
+        width: '80%'
     },
     buttonText: {
         color: 'white',
