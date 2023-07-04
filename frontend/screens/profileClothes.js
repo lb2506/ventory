@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Modal from "react-native-modal";
 import ListFilterClothes from "../components/listFilterClothes";
+import SkeletonClotheOutfit from "../components/skeletonClotheOutfit";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -67,6 +68,7 @@ const ProfileClothes = ({ navigation, ...props }) => {
   return (
     <View style={props.isCreation ? [styles.container, styles.selectContainer] : styles.container}>
       <ListFilterClothes listClothesShowed={listClothesShowed} clothes={clothes} setListClothesShowed={handleSetClothes} />
+      {listClothesShowed.length === 0 && <SkeletonClotheOutfit />}
       <FlatList
         data={listClothesShowed}
         renderItem={renderItem}

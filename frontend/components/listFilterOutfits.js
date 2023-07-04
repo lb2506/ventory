@@ -81,7 +81,7 @@ const ListFilterOutfits = (props) => {
   return (
     <>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={styles.filtersContainer}>
+        <View style={props.listOutfitsShowed.length === 0 ? styles.filtersContainerSkeleton : styles.filtersContainer}>
           <TouchableOpacity
             style={isCategoryFilter ? styles.filtersButtonSelected : styles.filtersButton}
             onPress={() => {
@@ -171,6 +171,10 @@ const ListFilterOutfits = (props) => {
 const styles = StyleSheet.create({
   filtersContainer: {
     flexDirection: "row",
+  },
+  filtersContainerSkeleton: {
+    flexDirection: "row",
+    marginBottom: 40,
   },
 
   filtersButton: {
