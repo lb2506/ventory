@@ -1,23 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, View, TextInput, FlatList, Button, Keyboard, TouchableOpacity, Image } from 'react-native';
-import axios from 'axios';
-import { url } from '../api';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwt_decode from 'jwt-decode';
-
-
+import React, { useState, useEffect, useCallback } from "react";
+import { StyleSheet, Text, View, TextInput, FlatList, Button, Keyboard, TouchableOpacity, Image } from "react-native";
+import axios from "axios";
+import { url } from "../api";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwt_decode from "jwt-decode";
+import SkeletonSearchBar from "../components/skeletonSearchBar";
+import SkeletonAvatarPseudo from "../components/skeletonAvatarPseudo";
+import SkeletonSocialPost from "../components/skeletonSocialPost";
 
 const SEARCHING_DELAY = 0; // en millisecondes
 const SEARCH_STATUS = {
-  DEFAULT: 'default',
-  COMPLETED: 'completed'
-}
+  DEFAULT: "default",
+  COMPLETED: "completed",
+};
 
 const Social = () => {
   const navigation = useNavigation();
 
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState(SEARCH_STATUS.DEFAULT);
   const [isSearchBarFocused, setSearchBarFocused] = useState(false);
@@ -29,7 +30,7 @@ const Social = () => {
   useEffect(() => {
     const fetchCurrentUserId = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
+        const token = await AsyncStorage.getItem("token");
         if (token) {
           const decoded = jwt_decode(token);
           setCurrentUserId(decoded._id);
@@ -53,18 +54,15 @@ const Social = () => {
     }
   };
 
-
-
   const handleSearch = useCallback(async () => {
-
     if (!isSearchBarFocused) {
       setSearchResults([]);
-      setSearchText('');
+      setSearchText("");
       setSearchStatus(SEARCH_STATUS.DEFAULT);
       return;
     }
 
-    if (searchText.trim() === '') {
+    if (searchText.trim() === "") {
       setSearchResults([]);
       setSearchStatus(SEARCH_STATUS.DEFAULT);
       return;
@@ -72,7 +70,7 @@ const Social = () => {
 
     try {
       const response = await axios.get(`${url}/search?q=${searchText}`);
-      setSearchResults(response.data.filter(user => user._id !== currentUserId));
+      setSearchResults(response.data.filter((user) => user._id !== currentUserId));
       setSearchStatus(SEARCH_STATUS.COMPLETED);
     } catch (error) {
       console.log(error);
@@ -85,7 +83,6 @@ const Social = () => {
   }, [searchText, handleSearch]);
 
   const listContent = () => {
-
     if (searchStatus === SEARCH_STATUS.COMPLETED && searchResults.length === 0) {
       return <Text style={styles.noResults}>Aucun résultat</Text>;
     }
@@ -93,28 +90,31 @@ const Social = () => {
     return (
       <FlatList
         data={searchResults}
-        keyExtractor={item => item._id}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleUserClick(item._id)}>
             <View style={styles.listItem}>
-              <Text style={styles.listText}>{item.firstName} {item.lastName} {item.pseudo}</Text>
+              <Text style={styles.listText}>
+                {item.firstName} {item.lastName} {item.pseudo}
+              </Text>
             </View>
           </TouchableOpacity>
         )}
       />
     );
-  }
+  };
 
   const renderNewsFeedItem = ({ item }) => (
-
     <View style={styles.newsFeedItem}>
-      <Text style={styles.newsFeedText} onPress={() => handleUserClick(item.userId)}>{item.pseudo}</Text>
+      <Text style={styles.newsFeedText} onPress={() => handleUserClick(item.userId)}>
+        {item.pseudo}
+      </Text>
       <Image style={styles.newsFeedImage} source={{ uri: item.image }} />
     </View>
   );
 
   const handleUserClick = (userId) => {
-    navigation.navigate('SearchedProfile', { userId: userId });
+    navigation.navigate("SearchedProfile", { userId: userId });
   };
 
   useFocusEffect(
@@ -128,7 +128,6 @@ const Social = () => {
     }, [currentUserId])
   );
 
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -141,15 +140,15 @@ const Social = () => {
             style={styles.searchBar}
             value={searchText}
             onChangeText={setSearchText}
-            placeholder="Rechercher..."
+            placeholder="Rechercher un compte..."
             onFocus={() => setSearchBarFocused(true)}
-
           />
           {isSearchBarFocused && (
             <Button
+              color="black"
               title="Annuler"
               onPress={() => {
-                setSearchText('');
+                setSearchText("");
                 setSearchBarFocused(false);
                 Keyboard.dismiss();
               }}
@@ -158,93 +157,102 @@ const Social = () => {
         </View>
 
         {listContent()}
-
       </View>
       {!isSearchBarFocused && (
-        <FlatList
-          data={newsFeed}
-          keyExtractor={(item) => item.image}
-          onEndReached={fetchNewsFeed}
-          onEndReachedThreshold={0.5} // adjust as necessary
-          renderItem={renderNewsFeedItem}
-          removeClippedSubviews={true}
-          initialNumToRender={2}
-          maxToRenderPerBatch={2}
-          updateCellsBatchingPeriod={100}
-          windowSize={7}
-        />
+        <>
+          {newsFeed.length === 0 && (
+            <>
+              <SkeletonAvatarPseudo />
+              <SkeletonSocialPost />
+              <SkeletonAvatarPseudo />
+              <SkeletonSocialPost />
+              <SkeletonAvatarPseudo />
+              <SkeletonSocialPost />
+            </>
+          )}
+          <FlatList
+            data={newsFeed}
+            keyExtractor={(item) => item.image}
+            onEndReached={fetchNewsFeed}
+            onEndReachedThreshold={0.5} // adjust as necessary
+            renderItem={renderNewsFeedItem}
+            removeClippedSubviews={true}
+            initialNumToRender={2}
+            maxToRenderPerBatch={2}
+            updateCellsBatchingPeriod={100}
+            windowSize={7}
+          />
+        </>
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
-    flex: 1
+    backgroundColor: "#FFFFFF",
+    flex: 1,
   },
   header: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     paddingTop: 60,
-    
   },
   title: {
     fontSize: 25,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   searchBar: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     paddingLeft: 10,
     margin: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   searchContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
   },
   searchContainerExpanded: {
     flex: 1,
   },
   searchBarContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     margin: 10,
   },
   searchBar: {
-    height: 40,
-    borderColor: 'gray',
+    height: 50,
+    borderColor: "black",
     borderWidth: 1,
     paddingLeft: 10,
-    borderRadius: 10,
     flex: 1,
     marginRight: 10,
   },
   listItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
   },
   listText: {
-    fontSize: 18
+    fontSize: 18,
   },
   newsFeedItem: {
     margin: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
     paddingBottom: 10,
   },
   newsFeedText: {
     fontSize: 18,
-    alignSelf:'flex-start'
+    alignSelf: "flex-start",
   },
   newsFeedImage: {
-    width: '100%',
+    width: "100%",
     aspectRatio: 1 / 1,
     marginTop: 10,
   },
-})
+});
 
 export default Social;

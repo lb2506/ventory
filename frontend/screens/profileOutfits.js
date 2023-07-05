@@ -5,14 +5,16 @@ import { url } from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Modal from "react-native-modal";
+import ListFilterOutfits from "../components/listFilterOutfits";
+import SkeletonClotheOutfit from "../components/skeletonClotheOutfit";
 const windowWidth = Dimensions.get("window").width;
 
 const ProfileOutfits = ({ navigation }) => {
   const [outfits, setOutfits] = useState([]);
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [listOutfitsShowed, setListOutfitsShowed] = useState([]);
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  const handleSetOutfits = (outfits) => {
+    setListOutfitsShowed(outfits);
   };
 
   const fetchOutfits = async () => {
@@ -23,6 +25,7 @@ const ProfileOutfits = ({ navigation }) => {
       });
       const sortedOutfits = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setOutfits(sortedOutfits);
+      setListOutfitsShowed(sortedOutfits);
     } catch (error) {
       console.error(error);
     }
@@ -48,44 +51,10 @@ const ProfileOutfits = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={styles.filtersContainer}>
-          <TouchableOpacity style={styles.filtersButton} onPress={toggleModal}>
-            <Text style={styles.filtersText}>Catégories</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.filtersButton} onPress={toggleModal}>
-            <Text style={styles.filtersText}>Marques</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.filtersButton} onPress={toggleModal}>
-            <Text style={styles.filtersText}>Saisons</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.filtersButton} onPress={toggleModal}>
-            <Text style={styles.filtersText}>Tags</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      <Modal
-        onBackdropPress={toggleModal}
-        onBackButtonPress={toggleModal}
-        isVisible={isModalVisible}
-        swipeDirection="down"
-        onSwipeComplete={toggleModal}
-        animationInTiming={200}
-        animationOutTiming={500}
-        backdropTransitionInTiming={300}
-        backdropTransitionOutTiming={500}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          <View style={styles.center}>
-            <View style={styles.barIcon} />
-            <Text style={styles.text}>Affichage des filtres</Text>
-          </View>
-        </View>
-      </Modal>
+      <ListFilterOutfits outfits={outfits} listOutfitsShowed={listOutfitsShowed} setListOutfitsShowed={handleSetOutfits} />
+      {listOutfitsShowed.length === 0 && <SkeletonClotheOutfit />}
       <FlatList
-        data={outfits}
+        data={listOutfitsShowed}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         numColumns={3}
