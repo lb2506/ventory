@@ -24,6 +24,7 @@ const Social = () => {
   const [isSearchBarFocused, setSearchBarFocused] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [isFetched, setIsFetched] = useState(false);
 
   const [newsFeed, setNewsFeed] = useState([]);
   const [page, setPage] = useState(1);
@@ -52,6 +53,7 @@ const Social = () => {
       setNewsFeed(sortedNewsFeed);
       setRefreshing(false);
       setPage(page + 1);
+      setIsFetched(true);
     } catch (error) {
       console.log(error);
     }
@@ -163,7 +165,7 @@ const Social = () => {
       </View>
       {!isSearchBarFocused && (
         <>
-          {newsFeed.length === 0 && (
+          {newsFeed.length === 0 && !isFetched ? (
             <>
               <SkeletonAvatarPseudo />
               <SkeletonSocialPost />
@@ -172,7 +174,12 @@ const Social = () => {
               <SkeletonAvatarPseudo />
               <SkeletonSocialPost />
             </>
-          )}
+          ) : null}
+          {newsFeed.length === 0 && isFetched ? (
+            <Text style={styles.textNoFollowing}>
+              Il semble que vous ne suivez encore aucun compte. Commencez à suivre des comptes pour que leur dernières actualitées apparaissent ici.
+            </Text>
+          ) : null}
           <FlatList
             data={newsFeed}
             keyExtractor={(item) => item.image}
@@ -256,6 +263,10 @@ const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 1 / 1,
     marginTop: 10,
+  },
+  textNoFollowing: {
+    margin: 20,
+    fontSize: 18,
   },
 });
 

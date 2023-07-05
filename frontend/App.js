@@ -30,6 +30,11 @@ function HomeTabs() {
     <Tab.Navigator
       initialRouteName="SplashScreen"
       screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#000000",
+        tabBarInactiveTintColor: "#A9A9A9",
+        tabBarActiveBackgroundColor: "#FFFFFF",
+        tabBarInactiveBackgroundColor: "#FFFFFF",
+        tabBarShowLabel: false,
         headerShown: false,
         unmountOnBlur: true,
         tabBarIcon: ({ color }) => {
@@ -44,13 +49,6 @@ function HomeTabs() {
           return <Ionicons name={iconName} size={35} color={color} />;
         },
       })}
-      tabBarOptions={{
-        activeTintColor: "#000000",
-        inactiveTintColor: "#A9A9A9",
-        activeBackgroundColor: "#FFFFFF",
-        inactiveBackgroundColor: "#FFFFFF",
-        showLabel: false,
-      }}
     >
       <Tab.Screen name="Social" component={Social} />
       <Tab.Screen name="WorkSpace" component={WorkSpace} />
