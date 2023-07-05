@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity, ScrollView, Text } from "react-native";
 import axios from "axios";
 import { url } from "../api";
@@ -31,11 +31,9 @@ const ProfileOutfits = ({ navigation }) => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchOutfits();
-    }, [])
-  );
+  useEffect(() => {
+    fetchOutfits();
+  }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
