@@ -132,7 +132,7 @@ const Social = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Social</Text>
+        <Text style={styles.title}>Ventory</Text>
       </View>
 
       <View style={[styles.searchContainer, isSearchBarFocused && styles.searchContainerExpanded]}>
