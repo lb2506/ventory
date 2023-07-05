@@ -7,11 +7,12 @@ import { url } from "../api";
 import axios from "axios";
 
 import SettingsBoutton from "../components/settingsButton";
-import ModalSettings from "../components/modalSettings"
+import ModalSettings from "../components/modalSettings";
 
 import ProfileClothes from "./ProfileClothes";
 import ProfileOutfits from "./ProfileOutfits";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -56,7 +57,9 @@ const Profile = () => {
             <Text>{userData && userData.following ? userData.following.length : 0} suivie(s)</Text>
           </TouchableOpacity>
         </View>
-        <SettingsBoutton onPress={openBottomSettingslotheSheet}/>
+        <TouchableOpacity onPress={openBottomSettingslotheSheet} style={styles.settingButton}>
+          <Ionicons name="settings-sharp" size={24} color="black" />
+        </TouchableOpacity>
       </View>
       <Tab.Navigator
         screenOptions={{
@@ -73,7 +76,7 @@ const Profile = () => {
         <Tab.Screen name="Mes vêtements" component={ProfileClothes} />
         <Tab.Screen name="Mes ensembles" component={ProfileOutfits} />
       </Tab.Navigator>
-      <ModalSettings visible={bottomSettingsSheetVisible} setVisible={setBottomSettingsSheetVisible}/>
+      <ModalSettings visible={bottomSettingsSheetVisible} setVisible={setBottomSettingsSheetVisible} />
     </View>
   );
 };
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "flex-start",
     paddingTop: 60,
-    paddingBottom:20
+    paddingBottom: 20,
   },
   title: {
     fontSize: 25,
@@ -116,7 +119,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "40%",
     margin: 10,
-    marginTop:20
+    marginTop: 20,
+  },
+  settingButton: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    right: 25,
+    height: 30,
+    width: 40,
+    marginTop: 60,
   },
 });
 

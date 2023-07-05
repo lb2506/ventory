@@ -14,9 +14,6 @@ const WorkSpace = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Atelier de création</Text>
-      </View>
       <ImageBackground source={require("../assets/23.webp")} resizeMode="cover" style={styles.buttonsContainer}>
         <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate("CreateOutfit")}>
           <Text style={styles.submitText}>Créer un outfit</Text>

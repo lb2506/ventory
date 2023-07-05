@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, Text, View, TextInput, FlatList, Button, Keyboard, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TextInput, FlatList, Button, Keyboard, TouchableOpacity, Image, RefreshControl } from "react-native";
 import axios from "axios";
 import { url } from "../api";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -23,6 +23,7 @@ const Social = () => {
   const [searchStatus, setSearchStatus] = useState(SEARCH_STATUS.DEFAULT);
   const [isSearchBarFocused, setSearchBarFocused] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [newsFeed, setNewsFeed] = useState([]);
   const [page, setPage] = useState(1);
@@ -45,9 +46,11 @@ const Social = () => {
 
   const fetchNewsFeed = async () => {
     try {
+      setRefreshing(true);
       const response = await axios.get(`${url}/user/feed/${currentUserId}?limit=5&page=${page}`);
       const sortedNewsFeed = [...newsFeed, ...response.data];
       setNewsFeed(sortedNewsFeed);
+      setRefreshing(false);
       setPage(page + 1);
     } catch (error) {
       console.log(error);
@@ -131,7 +134,7 @@ const Social = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Social</Text>
+        <Text style={styles.title}>VENTORY</Text>
       </View>
 
       <View style={[styles.searchContainer, isSearchBarFocused && styles.searchContainerExpanded]}>
@@ -181,6 +184,7 @@ const Social = () => {
             maxToRenderPerBatch={2}
             updateCellsBatchingPeriod={100}
             windowSize={7}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchNewsFeed} />}
           />
         </>
       )}
@@ -195,8 +199,8 @@ const styles = StyleSheet.create({
   },
   header: {
     display: "flex",
-    alignItems: "center",
     paddingTop: 60,
+    marginLeft: 20,
   },
   title: {
     fontSize: 25,
