@@ -74,7 +74,7 @@ const Profile = () => {
         }}
       >
         <Tab.Screen name="Mes vêtements" component={ProfileClothes} />
-        <Tab.Screen name="Mes ensembles" component={ProfileOutfits} />
+        <Tab.Screen name="Mes outfits" component={ProfileOutfits} />
       </Tab.Navigator>
       <ModalSettings visible={bottomSettingsSheetVisible} setVisible={setBottomSettingsSheetVisible} />
     </View>

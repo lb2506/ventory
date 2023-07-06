@@ -12,6 +12,7 @@ const windowWidth = Dimensions.get("window").width;
 const ProfileOutfits = ({ navigation }) => {
   const [outfits, setOutfits] = useState([]);
   const [listOutfitsShowed, setListOutfitsShowed] = useState([]);
+  const [isFetched, setIsFetched] = useState(false);
 
   const handleSetOutfits = (outfits) => {
     setListOutfitsShowed(outfits);
@@ -26,6 +27,7 @@ const ProfileOutfits = ({ navigation }) => {
       const sortedOutfits = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setOutfits(sortedOutfits);
       setListOutfitsShowed(sortedOutfits);
+      setIsFetched(true);
     } catch (error) {
       console.error(error);
     }
@@ -46,11 +48,13 @@ const ProfileOutfits = ({ navigation }) => {
       </View>
     </TouchableOpacity>
   );
-
   return (
     <View style={styles.container}>
-      <ListFilterOutfits outfits={outfits} listOutfitsShowed={listOutfitsShowed} setListOutfitsShowed={handleSetOutfits} />
-      {listOutfitsShowed.length === 0 && <SkeletonClotheOutfit />}
+      {listOutfitsShowed.length === 0 && (
+        <ListFilterOutfits outfits={outfits} listOutfitsShowed={listOutfitsShowed} setListOutfitsShowed={handleSetOutfits} />
+      )}
+      {listOutfitsShowed.length === 0 && !isFetched && <SkeletonClotheOutfit />}
+      {listOutfitsShowed.length === 0 && isFetched && <Text style={styles.noOutfitsText}>Vous n'avez pas encore créé d'outfits.</Text>}
       <FlatList
         data={listOutfitsShowed}
         renderItem={renderItem}
@@ -133,6 +137,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 500,
+  },
+  noOutfitsText: {
+    fontSize: 24,
+    marginTop: 20,
+    marginLeft: 20,
   },
 });
 
