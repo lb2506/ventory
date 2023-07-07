@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import ModalAddClothe from "../components/modalAddClothe";
+import ModalAddPicture from "../components/modalAddPicture";
 
 const WorkSpace = () => {
   const navigation = useNavigation();
@@ -10,14 +10,15 @@ const WorkSpace = () => {
   const openBottomAddClotheSheet = () => {
     setBottomAddClotheSheetVisible(true);
   };
-  const handleImage = (value) => {};
+  const handleImage = (value) => { };
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Atelier de création</Text>
-      </View>
+    
       <ImageBackground source={require("../assets/23.webp")} resizeMode="cover" style={styles.buttonsContainer}>
+        <View style={styles.header}>
+        {/* <Text style={styles.title}>Atelier de création</Text> */}
+      </View>
         <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate("CreateOutfit")}>
           <Text style={styles.submitText}>Créer un outfit</Text>
         </TouchableOpacity>
@@ -25,7 +26,7 @@ const WorkSpace = () => {
           <Text style={styles.submitText}>Ajouter un vêtement</Text>
         </TouchableOpacity>
       </ImageBackground>
-      <ModalAddClothe
+      <ModalAddPicture
         visible={bottomAddClotheSheetVisible}
         setVisible={setBottomAddClotheSheetVisible}
         isOutfitImage={false}
@@ -64,8 +65,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     width: "60%",
-    marginTop: 20,
-    marginBottom: 50,
+    marginVertical: 30
   },
   submitText: {
     color: "#FFFFFF",

@@ -1,6 +1,12 @@
 const User = require('../models/user');
 const express = require('express');
 const router = express.Router();
+const authenticate = require("../middleware/auth");
+const cloudinary = require("../cloudinary");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+const fs = require("fs"); // import fs module
+
 
 // Recherche d'utilisateurs via la barre de recherche (Social)
 
@@ -14,9 +20,7 @@ router.get('/search', async (req, res) => {
   try {
     const users = await User.find({
       $or: [
-        { pseudo: new RegExp(searchQuery, 'i') },
-        { firstName: new RegExp(searchQuery, 'i') },
-        { lastName: new RegExp(searchQuery, 'i') },
+        { pseudo: new RegExp(searchQuery, 'i') }
       ],
     });
 
@@ -40,7 +44,7 @@ router.get('/user/:userId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
-    return res.json({ _id: user._id, pseudo: user.pseudo, following: user.following, followers: user.followers, firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone });
+    return res.json({ _id: user._id, pseudo: user.pseudo, following: user.following, followers: user.followers, firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone, profilePicture: user.profilePicture });
   } catch (error) {
     return res.status(500).json({ error: 'Erreur de serveur' });
   }
@@ -157,7 +161,7 @@ router.get('/user/feed/:userId', async (req, res) => {
 
     for (let i = 0; i < followingUsers.length; i++) {
       const followedUser = await User.findById(followingUsers[i]).populate('clothes');
-      followedUser.clothes.forEach(clothe => feed.push({ userId: followedUser._id, pseudo: followedUser.pseudo, image: clothe.image, date: clothe.date }));
+      followedUser.clothes.forEach(clothe => feed.push({ userId: followedUser._id, pseudo: followedUser.pseudo, profilePicture: followedUser.profilePicture, image: clothe.image, date: clothe.date }));
     }
 
     // Trier les posts par date (plus récent au plus ancien)
@@ -173,28 +177,42 @@ router.get('/user/feed/:userId', async (req, res) => {
 });
 
 // Modifier les informations d'un utilisateur
-router.put('/user/:userId', async (req, res) => {
+router.put('/user/:userId', authenticate, upload.single('profilePicture'), async (req, res) => {
   const userId = req.params.userId;
-  const { pseudo, firstName, lastName, email, phone, password } = req.body;
-
   try {
     let user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
 
-    if (pseudo) user.pseudo = pseudo;
-    if (firstName) user.firstName = firstName;
-    if (lastName) user.lastName = lastName;
-    if (email) user.email = email;
-    if (phone) user.phone = phone;
-    if (password) user.password = password;
+    // Uploader l'image sur cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      upload_preset: 'ventory',
+      format: 'webp',
+    });
 
+    // Supprimer le fichier image après l'upload
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error("Failed to delete local image:" + err);
+      } else {
+        console.log("Fichier local supprimé avec succès !");
+      }
+    });
+
+    // Enregistrer l'URL de l'image dans le profil utilisateur
+    if (result.secure_url) user.profilePicture = result.secure_url;
+    if (req.body.pseudo) user.pseudo = req.body.pseudo;
+    if (req.body.firstName) user.firstName = req.body.firstName;
+    if (req.body.lastName) user.lastName = req.body.lastName;
+    if (req.body.email) user.email = req.body.email;
+    if (req.body.phone) user.phone = req.body.phone;
+    if (req.body.password) user.password = req.body.password;
 
     await user.save();
     return res.json({ message: 'Informations mises à jour avec succès' });
-
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: 'Erreur de serveur' });
   }
 });

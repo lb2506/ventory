@@ -6,7 +6,7 @@ import { View, Image, Text, TextInput, StyleSheet, TouchableOpacity, Dimensions,
 import { Ionicons } from "@expo/vector-icons";
 import List from "../components/list";
 import Tags from "../components/tags";
-import ModalAddClothe from "../components/modalAddClothe";
+import ModalAddPicture from "../components/modalAddPicture";
 import * as ImageManipulator from "expo-image-manipulator";
 const windowWidth = Dimensions.get("window").width;
 
@@ -129,7 +129,7 @@ const AddClothe = ({ route, navigation }) => {
           ) : null}
         </View>
       </ScrollView>
-      <ModalAddClothe visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} isOutfitImage={true} setImage={handleImage} />
+      <ModalAddPicture visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} isOutfitImage={true} setImage={handleImage} />
     </View>
   );
 };

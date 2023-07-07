@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import List from "../components/list";
 import Tags from "../components/tags";
-import ModalAddClothe from "../components/modalAddClothe";
+import ModalAddPicture from "../components/modalAddPicture";
 import * as ImageManipulator from "expo-image-manipulator";
 import ProfileClothes from "./ProfileClothes";
 import { BottomSheet } from "react-native-btr";
@@ -199,7 +199,7 @@ function OutfitDetails({ route, navigation }) {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <ModalAddClothe visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} isOutfitImage={true} setImage={handleImage} />
+      <ModalAddPicture visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} isOutfitImage={true} setImage={handleImage} />
     </View>
   );
 }

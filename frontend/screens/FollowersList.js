@@ -4,6 +4,7 @@ import axios from 'axios';
 import { url } from '../api';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import PhotoPseudo from '../components/photoPseudo';
 
 
 const FollowersList = ({ route }) => {
@@ -26,7 +27,7 @@ const FollowersList = ({ route }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
                     <Ionicons name="chevron-back-outline" size={35} color="#000000" />
                 </TouchableOpacity>
                 <Text style={styles.title}>Follower(s)</Text>
@@ -36,7 +37,15 @@ const FollowersList = ({ route }) => {
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <View style={styles.listItem}>
-                        <Text style={styles.listText}>{item.pseudo}</Text>
+                        <Text >
+                            <PhotoPseudo
+                                pictureSize={50}
+                                pseudoSize={15}
+                                pseudoName={item.pseudo}
+                                pictureUrl={item.profilePicture}
+                                pseudoVisible={true}
+                            />
+                        </Text>
                     </View>
                 )}
             />

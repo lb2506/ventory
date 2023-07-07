@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         right: 25,
         height: 30,
         width: 40,
-        marginTop:60
+        marginTop:75
     },
 
 })

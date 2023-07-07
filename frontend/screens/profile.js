@@ -11,6 +11,7 @@ import ModalSettings from "../components/modalSettings"
 
 import ProfileClothes from "./ProfileClothes";
 import ProfileOutfits from "./ProfileOutfits";
+import PhotoPseudo from "../components/photoPseudo";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
@@ -47,16 +48,24 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>{userData.pseudo}</Text>
+        <PhotoPseudo
+          pictureSize={70}
+          pseudoSize={20}
+          pseudoName={userData.pseudo}
+          pictureUrl={userData.profilePicture}
+          pseudoVisible={true}
+        />
         <View style={styles.followersFollowingContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("FollowersList", { userId: userData._id })}>
-            <Text>{userData && userData.followers ? userData.followers.length : 0} follower(s)</Text>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowersList", { userId: userData._id })}>
+            <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
+            <Text style={styles.text}>followers</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("FollowingList", { userId: userData._id })}>
-            <Text>{userData && userData.following ? userData.following.length : 0} suivie(s)</Text>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowingList", { userId: userData._id })}>
+            <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
+            <Text style={styles.text}>suivies</Text>
           </TouchableOpacity>
         </View>
-        <SettingsBoutton onPress={openBottomSettingslotheSheet}/>
+        <SettingsBoutton onPress={openBottomSettingslotheSheet} />
       </View>
       <Tab.Navigator
         screenOptions={{
@@ -73,7 +82,7 @@ const Profile = () => {
         <Tab.Screen name="Mes vêtements" component={ProfileClothes} />
         <Tab.Screen name="Mes ensembles" component={ProfileOutfits} />
       </Tab.Navigator>
-      <ModalSettings visible={bottomSettingsSheetVisible} setVisible={setBottomSettingsSheetVisible}/>
+      <ModalSettings visible={bottomSettingsSheetVisible} setVisible={setBottomSettingsSheetVisible} />
     </View>
   );
 };
@@ -87,7 +96,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "flex-start",
     paddingTop: 60,
-    paddingBottom:20
+    paddingBottom: 20,
   },
   title: {
     fontSize: 25,
@@ -95,9 +104,17 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   button: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    marginHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  number: {
+    fontSize: 17,
+    marginHorizontal: 4,
+    fontWeight: '500'
+  },
+  text: {
+    fontSize: 15,
   },
   bottomNavigationView: {
     backgroundColor: "#fff",
@@ -106,17 +123,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  text: {
-    fontSize: 20,
-    marginBottom: 20,
-    textAlign: "center",
-  },
   followersFollowingContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "40%",
-    margin: 10,
-    marginTop:20
+    width: '100%',
+    marginTop: 20,
+    justifyContent: 'center'
   },
 });
 

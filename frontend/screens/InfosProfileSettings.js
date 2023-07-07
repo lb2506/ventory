@@ -6,8 +6,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import axios from "axios";
 import { url } from "../api";
+import * as ImageManipulator from "expo-image-manipulator";
 
-const InfosProfileSettings = () => {
+
+import PhotoPseudo from "../components/photoPseudo";
+import ModalAddPicture from "../components/modalAddPicture";
+
+
+
+const InfosProfileSettings = ({route}) => {
     const navigation = useNavigation()
 
     const [pseudo, setPseudo] = useState("")
@@ -19,6 +26,21 @@ const InfosProfileSettings = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userData, setUserData] = useState(null);
+    const [profilePicture, setProfilePicture] = useState(null);
+    const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
+
+
+    
+    const openBottomAddClotheSheet = () => {
+        setBottomAddClotheSheetVisible(true);
+    };
+
+    useEffect(() => {
+        if (route.params?.imageUri) {
+            setProfilePicture(route.params.imageUri);
+        }
+    }, [route.params?.imageUri]);
+
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -28,6 +50,7 @@ const InfosProfileSettings = () => {
                     const decoded = jwt_decode(token);
                     const response = await axios.get(`${url}/user/${decoded._id}`);
                     setUserData(response.data);
+                    setProfilePicture(response.data.profilePicture)
                     setPseudo(response.data.pseudo);
                     setLastName(response.data.lastName);
                     setFirstName(response.data.firstName);
@@ -65,25 +88,33 @@ const InfosProfileSettings = () => {
         try {
             const token = await AsyncStorage.getItem("token");
             if (token) {
+                const manipResult = await ImageManipulator.manipulateAsync(profilePicture, [{ resize: { width: 360, height: 480 } }], {
+                    compress: 0.5,
+                    format: ImageManipulator.SaveFormat.JPEG,
+                });
+        
+                let formData = new FormData();
+                formData.append("profilePicture", {
+                    uri: manipResult.uri,
+                    type: "image/jpeg",
+                    name: "profile.jpg",
+                });
+        
+                formData.append("pseudo", pseudo);
+                formData.append("firstName", firstName);
+                formData.append("lastName", lastName);
+                formData.append("email", email);
+                formData.append("phone", phone);
+                formData.append("password", password);
+        
                 const decoded = jwt_decode(token);
-                const response = await axios.put(`${url}/user/${decoded._id}`, {
-                    pseudo,
-                    firstName,
-                    lastName,
-                    email,
-                    phone,
-                    password
-                }, {
+                await axios.put(`${url}/user/${decoded._id}`, formData, {
                     headers: {
+                        'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
                     }
                 });
-                // Mettre à jour l'état avec les nouvelles informations de l'utilisateur
-                setUserData(response.data);
-                setIsSubmitting(false);
                 navigation.goBack()
-                // Redirection vers un autre écran ou affichage d'un message de succès
             }
         } catch (error) {
             console.log(error);
@@ -99,6 +130,20 @@ const InfosProfileSettings = () => {
                     <Ionicons name="chevron-back-outline" size={35} color="#000000" />
                 </TouchableOpacity>
                 <Text style={styles.title}>Informations du profil</Text>
+            </View>
+            <View style={styles.photoPseudo}>
+                <PhotoPseudo
+                    pictureSize={150}
+                    pseudoSize={20}
+                    pseudoName={userData?.pseudo}
+                    pictureUrl={profilePicture}
+                    pseudoVisible={false}
+                />
+                <TouchableOpacity style={styles.editIconContainer}>
+                    <View  style={styles.editIcon} >
+                        <Ionicons name="add-outline" size={19} color="#FFFFFF" onPress={openBottomAddClotheSheet}/>
+                    </View>
+                </TouchableOpacity>
             </View>
             <View style={styles.formContainer}>
                 <TextInput
@@ -153,6 +198,12 @@ const InfosProfileSettings = () => {
                     <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Valider"}</Text>
                 </TouchableOpacity>
             </View>
+            <ModalAddPicture
+                visible={bottomAddClotheSheetVisible}
+                setVisible={setBottomAddClotheSheetVisible}
+                isOutfitImage={true}
+                isProfilePicture={true}
+            />
         </View>
     )
 }
@@ -167,7 +218,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         paddingTop: 60,
-        paddingBottom: 20,
+        paddingBottom: 50,
         justifyContent: 'center'
     },
     title: {
@@ -178,6 +229,21 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 57,
         left: 10,
+    },
+    photoPseudo: {
+        alignItems: 'center',
+    },
+    editIconContainer: {
+        position: "absolute",
+        bottom: 5,
+    },
+    editIcon: {
+        backgroundColor: "black",
+        borderRadius: 20,
+        width: 30,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center",
     },
     formContainer: {
         padding: 20,

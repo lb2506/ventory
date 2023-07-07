@@ -4,9 +4,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Modal from "react-native-modal";
 
-const ModalAddClothe = (props) => {
+const modalAddPicture = (props) => {
+
+  
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
+
 
   const toggleBottomNavigationView = () => {
     props.setVisible(!props.visible);
@@ -29,11 +32,15 @@ const ModalAddClothe = (props) => {
         });
         toggleBottomNavigationView();
         if (!image.canceled) {
-          if (image.assets && image.assets.length > 0 && props.isOutfitImage == true) {
+          if (image.assets && image.assets.length > 0 && props.isOutfitImage === true && props.isProfilePicture === false) {
             props.setImage(image.assets[0].uri);
           }
           if (props.isOutfitImage !== true) {
             navigation.navigate("AddClothe", { imageUri: image.assets[0].uri });
+          }
+
+          if (props.isProfilePicture === true) {
+            navigation.navigate("InfosProfileSettings", { imageUri: image.assets[0].uri })
           }
         }
       } else {
@@ -57,11 +64,15 @@ const ModalAddClothe = (props) => {
       });
 
       if (!result.canceled) {
-        if (result.assets && result.assets.length > 0 && props.isOutfitImage == true) {
+        if (result.assets && result.assets.length > 0 && props.isOutfitImage === true && props.isProfilePicture === false ){
           props.setImage(result.assets[0].uri);
         }
         if (props.isOutfitImage !== true) {
           navigation.navigate("AddClothe", { imageUri: result.assets[0].uri });
+        }
+
+        if (props.isProfilePicture === true) {
+          navigation.navigate("InfosProfileSettings", { imageUri: result.assets[0].uri })
         }
       }
       toggleBottomNavigationView();
@@ -143,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ModalAddClothe;
+export default modalAddPicture;

@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import Modal from "react-native-modal";
 
-const ModalAddClothe = ({ visible, setVisible }) => {
+const modalAddPicture = ({ visible, setVisible }) => {
     const navigation = useNavigation();
 
     const toggleModal = () => {
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
 
 
 
-export default ModalAddClothe;
+export default modalAddPicture;

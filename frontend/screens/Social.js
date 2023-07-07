@@ -8,6 +8,7 @@ import jwt_decode from "jwt-decode";
 import SkeletonSearchBar from "../components/skeletonSearchBar";
 import SkeletonAvatarPseudo from "../components/skeletonAvatarPseudo";
 import SkeletonSocialPost from "../components/skeletonSocialPost";
+import PhotoPseudo from "../components/photoPseudo";
 
 const SEARCHING_DELAY = 0; // en millisecondes
 const SEARCH_STATUS = {
@@ -95,7 +96,13 @@ const Social = () => {
           <TouchableOpacity onPress={() => handleUserClick(item._id)}>
             <View style={styles.listItem}>
               <Text style={styles.listText}>
-                {item.firstName} {item.lastName} {item.pseudo}
+                <PhotoPseudo
+                  pictureSize={40}
+                  pseudoSize={14}
+                  pseudoName={item.pseudo}
+                  pictureUrl={item.profilePicture}
+                  pseudoVisible={true}
+                />
               </Text>
             </View>
           </TouchableOpacity>
@@ -107,7 +114,13 @@ const Social = () => {
   const renderNewsFeedItem = ({ item }) => (
     <View style={styles.newsFeedItem}>
       <Text style={styles.newsFeedText} onPress={() => handleUserClick(item.userId)}>
-        {item.pseudo}
+        <PhotoPseudo
+          pictureSize={40}
+          pseudoSize={14}
+          pseudoName={item.pseudo}
+          pictureUrl={item.profilePicture}
+          pseudoVisible={true}
+        />
       </Text>
       <Image style={styles.newsFeedImage} source={{ uri: item.image }} />
     </View>
@@ -118,8 +131,10 @@ const Social = () => {
   };
 
   useFocusEffect(
+    
     useCallback(() => {
-      setSearchBarFocused(false);
+      setSearchBarFocused(false)
+      setSearchText("");
       if (currentUserId) {
         setPage(1);
         setNewsFeed([]);
@@ -127,6 +142,7 @@ const Social = () => {
       }
     }, [currentUserId])
   );
+
 
   return (
     <View style={styles.container}>
@@ -238,15 +254,19 @@ const styles = StyleSheet.create({
   listText: {
     fontSize: 18,
   },
+  noResults: {
+    paddingLeft: 10,
+    fontStyle: 'italic',
+    color: '#bbb'
+  },
   newsFeedItem: {
-    margin: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    marginVertical: 10,
     paddingBottom: 10,
   },
   newsFeedText: {
     fontSize: 18,
     alignSelf: "flex-start",
+    marginLeft: 10
   },
   newsFeedImage: {
     width: "100%",

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { View, Text, TouchableOpacity, Alert, StyleSheet, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, StyleSheet, Switch, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { url } from '../api';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImageManipulator from "expo-image-manipulator";
+import PhotoPseudo from '../components/photoPseudo';
+import ModalAddPicture from "../components/modalAddPicture";
+
 
 
 
@@ -19,6 +23,10 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
+    const [profilePicture, setProfilePicture] = useState('/Users/leo/Desktop/Clients/ventory/frontend/assets/avatar.png');
+
+
 
     const navigation = useNavigation();
 
@@ -62,11 +70,33 @@ const Register = () => {
         }
 
         try {
-            const response = await axios.post(`${url}/register`, { email: email.toLowerCase(), password, firstName, lastName, pseudo, phone });
+            const manipResult = await ImageManipulator.manipulateAsync(profilePicture, [{ resize: { width: 360, height: 480 } }], {
+                compress: 0.5,
+                format: ImageManipulator.SaveFormat.JPEG,
+            });
+    
+            let formData = new FormData();
+            formData.append("profilePicture", {
+                uri: manipResult.uri,
+                type: "image/jpeg",
+                name: "profile.jpg",
+            });
+    
+            formData.append("pseudo", pseudo);
+            formData.append("firstName", firstName);
+            formData.append("lastName", lastName);
+            formData.append("email", email.toLowerCase());
+            formData.append("phone", phone);
+            formData.append("password", password);
+    
+            const response = await axios.post(`${url}/register`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
             await AsyncStorage.setItem('token', response.data.token);
             navigation.navigate('HomeTabs');
         } catch (error) {
-
             if (error.response && error.response.data && error.response.data.error) {
                 setErrorMessage(error.response.data.error);
                 setTermsAccepted(false)
@@ -76,6 +106,14 @@ const Register = () => {
         }
     };
 
+    const openBottomAddClotheSheet = () => {
+        setBottomAddClotheSheetVisible(true);
+    };
+
+    const handleImage = (value) => {
+        setProfilePicture(value);
+      };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -84,7 +122,21 @@ const Register = () => {
             <TouchableOpacity onPress={() => navigation.navigate('OpenScreen')} style={styles.comeBack}>
                 <Ionicons name="chevron-back-outline" size={35} color="#000000" />
             </TouchableOpacity>
-            <View style={styles.formContainer}>
+            <ScrollView contentContainerStyle={styles.formContainer}>
+                <View style={styles.photoPseudo}>
+                    <PhotoPseudo
+                        pictureSize={150}
+                        pseudoSize={20}
+                        // pseudoName={userData?.pseudo}
+                        pictureUrl={profilePicture}
+                        pseudoVisible={false}
+                    />
+                    <TouchableOpacity style={styles.editIconContainer}>
+                        <View style={styles.editIcon} >
+                            <Ionicons name="add-outline" size={19} color="#FFFFFF" onPress={openBottomAddClotheSheet} />
+                        </View>
+                    </TouchableOpacity>
+                </View>
                 <Input placeholder="Pseudo" value={pseudo} onChangeText={setPseudo} />
                 <Input placeholder="Prénom" value={firstName} onChangeText={setFirstName} />
                 <Input placeholder="Nom" value={lastName} onChangeText={setLastName} />
@@ -100,7 +152,14 @@ const Register = () => {
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Continuer</Text>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
+            <ModalAddPicture
+                visible={bottomAddClotheSheetVisible}
+                setVisible={setBottomAddClotheSheetVisible}
+                isOutfitImage={true}
+                isProfilePicture={false}
+                setImage={handleImage}
+            />
         </View>
     );
 };
@@ -109,6 +168,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#FFFFFF",
         flex: 1,
+       
     },
     header: {
         display: "flex",
@@ -127,16 +187,17 @@ const styles = StyleSheet.create({
         top: 57,
         left: 10,
     },
-    formContainer:{
-        width:'100%',
-        alignItems:'center',
-        paddingHorizontal:20
+    formContainer: {
+        width: '100%',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingBottom:50
     },
     terms: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 50,
-        marginTop: 50,
+        marginTop: 20,
         width: '100%'
     },
     button: {
@@ -152,6 +213,22 @@ const styles = StyleSheet.create({
     },
     error: {
         color: 'red',
+    },
+    photoPseudo: {
+        alignItems: 'center',
+        marginVertical: 30
+    },
+    editIconContainer: {
+        position: "absolute",
+        bottom: 5,
+    },
+    editIcon: {
+        backgroundColor: "black",
+        borderRadius: 20,
+        width: 30,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center",
     },
 });
 

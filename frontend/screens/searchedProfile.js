@@ -10,6 +10,7 @@ import jwt_decode from 'jwt-decode';
 
 import SearchedProfileClothes from './SearchedProfileClothes';
 import SearchedProfileOutfits from './SearchedProfileOutfits';
+import PhotoPseudo from '../components/photoPseudo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createMaterialTopTabNavigator();
@@ -65,13 +66,24 @@ const SearchedProfile = () => {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.title}>{userData && userData.pseudo}</Text>
-                <View style={styles.followersFollowingContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('FollowersList', { userId: userData._id })}>
-                        <Text>{userData && userData.followers ? userData.followers.length : 0} follower(s)</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('FollowingList', { userId: userData._id })}>
-                        <Text>{userData && userData.following ? userData.following.length : 0} suivie(s)</Text>
-                    </TouchableOpacity>
+                <View style={styles.pseudoFollowContainer}>
+                    <PhotoPseudo
+                        pictureSize={70}
+                        pseudoSize={20}
+                        pseudoName={userData?.pseudo}
+                        pictureUrl={userData?.profilePicture}
+                        pseudoVisible={false}
+                    />
+                    <View style={styles.followersFollowingContainer}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowersList", { userId: userData._id })}>
+            <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
+            <Text style={styles.text}>followers</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowingList", { userId: userData._id })}>
+            <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
+            <Text style={styles.text}>suivies</Text>
+          </TouchableOpacity>
+        </View>
                 </View>
                 <TouchableOpacity style={styles.followButton} onPress={handleFollow}>
                     <Text style={styles.followButtonText}>{isFollowing ? 'Ne plus suivre' : 'Suivre'}</Text>
@@ -101,32 +113,43 @@ const SearchedProfile = () => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 80,
         flex: 1,
         backgroundColor: '#FFFFFF'
     },
     comeBack: {
         position: 'absolute',
-        top: 80,
+        top: 57,
         left: 10
     },
     header: {
         display: 'flex',
         alignItems: 'center',
+        paddingTop: 60,
+
     },
     title: {
-        fontSize: 25,
+        fontSize: 24,
         fontWeight: 'bold'
     },
     button: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    text: {
-        fontSize: 20,
-        marginBottom: 20,
-        textAlign: 'center',
+        marginHorizontal: 10,
+        flexDirection: 'row',
+        alignItems: 'center'
+      },
+      number: {
+        fontSize: 17,
+        marginHorizontal: 4,
+        fontWeight: '500'
+      },
+      text: {
+        fontSize: 15,
+      },
+    pseudoFollowContainer:{
+        flexDirection:'row',
+        alignItems:'center',
+        width:'100%',
+        marginTop:35,
+        marginBottom:15
     },
     followButton: {
         paddingHorizontal: 25,
@@ -135,7 +158,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#4b4b4b',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 20
+
     },
     followButtonText: {
         color: '#fff',
@@ -143,8 +166,6 @@ const styles = StyleSheet.create({
     },
     followersFollowingContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '50%',
         margin: 10,
     },
 })
