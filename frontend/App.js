@@ -20,13 +20,36 @@ import FollowingList from "./screens/FollowingList";
 import CreateOutfit from "./screens/CreateOutfit";
 import Settings from "./screens/Settings";
 import InfosProfileSettings from "./screens/InfosProfileSettings";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomeTabs() {
   return (
-    <Tab.Navigator initialRouteName="SplashScreen" screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      initialRouteName="SplashScreen"
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#000000",
+        tabBarInactiveTintColor: "#A9A9A9",
+        tabBarActiveBackgroundColor: "#FFFFFF",
+        tabBarInactiveBackgroundColor: "#FFFFFF",
+        tabBarShowLabel: false,
+        headerShown: false,
+        unmountOnBlur: true,
+        tabBarIcon: ({ color }) => {
+          let iconName;
+          if (route.name === "Social") {
+            iconName = "home-sharp";
+          } else if (route.name === "WorkSpace") {
+            iconName = "add-circle-sharp";
+          } else if (route.name === "Profile") {
+            iconName = "person-sharp";
+          }
+          return <Ionicons name={iconName} size={35} color={color} />;
+        },
+      })}
+    >
       <Tab.Screen name="Social" component={Social} />
       <Tab.Screen name="WorkSpace" component={WorkSpace} />
       <Tab.Screen name="Profile" component={Profile} />
@@ -52,7 +75,6 @@ export default function App() {
         <Stack.Screen name="CreateOutfit" component={CreateOutfit} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="InfosProfileSettings" component={InfosProfileSettings} />
-
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

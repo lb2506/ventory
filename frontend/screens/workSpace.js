@@ -14,7 +14,6 @@ const WorkSpace = () => {
 
   return (
     <View style={styles.container}>
-    
       <ImageBackground source={require("../assets/23.webp")} resizeMode="cover" style={styles.buttonsContainer}>
         <View style={styles.header}>
         {/* <Text style={styles.title}>Atelier de création</Text> */}

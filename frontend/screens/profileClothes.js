@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity, ScrollView, Text } from "react-native";
 import axios from "axios";
 import { url } from "../api";
@@ -13,6 +13,7 @@ const windowWidth = Dimensions.get("window").width;
 const ProfileClothes = ({ navigation, ...props }) => {
   const [clothes, setClothes] = useState([]);
   const [listClothesShowed, setlistClothesShowed] = useState([]);
+  const [isFetched, setIsFetched] = useState(false);
 
   const handleSetClothes = (clothes) => {
     setlistClothesShowed(clothes);
@@ -27,16 +28,15 @@ const ProfileClothes = ({ navigation, ...props }) => {
       const sortedClothes = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setClothes(sortedClothes);
       setlistClothesShowed(sortedClothes);
+      setIsFetched(true);
     } catch (error) {
       console.error(error);
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchClothes();
-    }, [])
-  );
+  useEffect(() => {
+    fetchClothes();
+  }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -67,8 +67,11 @@ const ProfileClothes = ({ navigation, ...props }) => {
 
   return (
     <View style={props.isCreation ? [styles.container, styles.selectContainer] : styles.container}>
-      <ListFilterClothes listClothesShowed={listClothesShowed} clothes={clothes} setListClothesShowed={handleSetClothes} />
+      {listClothesShowed.length > 0 && (
+        <ListFilterClothes listClothesShowed={listClothesShowed} clothes={clothes} setListClothesShowed={handleSetClothes} />
+      )}
       {listClothesShowed.length === 0 && <SkeletonClotheOutfit />}
+      {listClothesShowed.length === 0 && isFetched && <Text style={styles.noClothesText}>Vous n'avez pas encore ajouté de vêtement.</Text>}
       <FlatList
         data={listClothesShowed}
         renderItem={renderItem}
@@ -151,6 +154,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 500,
+  },
+  noClothesText: {
+    fontSize: 17,
+    marginTop: 20,
+    marginLeft: 20,
+    color: '#bbb',
+    fontStyle:'italic'
   },
 });
 

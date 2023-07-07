@@ -6,13 +6,13 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { url } from "../api";
 import axios from "axios";
 
-import SettingsBoutton from "../components/settingsButton";
-import ModalSettings from "../components/modalSettings"
+import ModalSettings from "../components/modalSettings";
 
 import ProfileClothes from "./ProfileClothes";
 import ProfileOutfits from "./ProfileOutfits";
 import PhotoPseudo from "../components/photoPseudo";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -65,7 +65,9 @@ const Profile = () => {
             <Text style={styles.text}>suivies</Text>
           </TouchableOpacity>
         </View>
-        <SettingsBoutton onPress={openBottomSettingslotheSheet} />
+        <TouchableOpacity onPress={openBottomSettingslotheSheet} style={styles.settingButton}>
+          <Ionicons name="settings-sharp" size={24} color="black" />
+        </TouchableOpacity>
       </View>
       <Tab.Navigator
         screenOptions={{
@@ -80,7 +82,7 @@ const Profile = () => {
         }}
       >
         <Tab.Screen name="Mes vêtements" component={ProfileClothes} />
-        <Tab.Screen name="Mes ensembles" component={ProfileOutfits} />
+        <Tab.Screen name="Mes outfits" component={ProfileOutfits} />
       </Tab.Navigator>
       <ModalSettings visible={bottomSettingsSheetVisible} setVisible={setBottomSettingsSheetVisible} />
     </View>
@@ -127,7 +129,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: '100%',
     marginTop: 20,
-    justifyContent: 'center'
+    justifyContent: 'center',
+  },
+  settingButton: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    right: 25,
+    height: 30,
+    width: 40,
+    marginTop: 60,
   },
 });
 

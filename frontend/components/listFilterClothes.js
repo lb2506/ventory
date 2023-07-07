@@ -38,13 +38,13 @@ const ListFilterClothes = (props) => {
     }
   };
 
-  var listUniqueBrands = [...new Set(props.listClothesShowed.map((c) => c.brand))];
+  var listUniqueBrands = [...new Set(props.listClothesShowed.map((c) => c.brand))].filter((brand) => brand.trim() !== "");
   var listBrands = listUniqueBrands.map((m) => ({ key: m.toLowerCase(), label: m }));
-  var listUniqueTags = [...new Set(props.listClothesShowed.flatMap((c) => c.tags))];
+  var listUniqueTags = [...new Set(props.listClothesShowed.flatMap((c) => c.tags))].filter((tag) => tag.trim() !== "");
   var listTags = listUniqueTags.map((t) => ({ key: t.toLowerCase(), label: t }));
-  var listUniqueSeasons = [...new Set(props.listClothesShowed.map((c) => c.season))];
+  var listUniqueSeasons = [...new Set(props.listClothesShowed.map((c) => c.season))].filter((season) => season.trim() !== "");
   var listSeasons = listUniqueSeasons.map((s) => ({ key: s.toLowerCase(), label: s }));
-  var listUniqueCategories = [...new Set(props.listClothesShowed.map((c) => c.category))];
+  var listUniqueCategories = [...new Set(props.listClothesShowed.map((c) => c.category))].filter((category) => category.trim() !== "");
   var listCategories = listUniqueCategories.map((c) => ({ key: c.toLowerCase(), label: c }));
 
   const openModal = () => {
