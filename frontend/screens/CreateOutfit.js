@@ -263,6 +263,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: "bold",
+    textAlign:'center'
   },
   titleInput: {
     fontSize: 15,
@@ -319,7 +320,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: "100%",
     height: 600,
-    alignItems: "center",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingBottom: 50,
