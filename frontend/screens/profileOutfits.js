@@ -4,7 +4,6 @@ import axios from "axios";
 import { url } from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import Modal from "react-native-modal";
 import ListFilterOutfits from "../components/listFilterOutfits";
 import SkeletonClotheOutfit from "../components/skeletonClotheOutfit";
 const windowWidth = Dimensions.get("window").width;
@@ -52,7 +51,7 @@ const ProfileOutfits = ({ navigation }) => {
   );
   return (
     <View style={styles.container}>
-      {listOutfitsShowed.length === 0 && (
+      {listOutfitsShowed.length !== 0 && (
         <ListFilterOutfits outfits={outfits} listOutfitsShowed={listOutfitsShowed} setListOutfitsShowed={handleSetOutfits} />
       )}
       {listOutfitsShowed.length === 0 && !isFetched && <SkeletonClotheOutfit />}
@@ -145,7 +144,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20,
     color: '#bbb',
-    fontStyle:'italic'
+    fontStyle: 'italic'
   },
 });
 

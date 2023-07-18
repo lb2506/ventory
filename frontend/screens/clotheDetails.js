@@ -9,11 +9,13 @@ import List from "../components/list";
 import Tags from "../components/tags";
 import ModalAddPicture from "../components/modalAddPicture";
 import * as ImageManipulator from "expo-image-manipulator";
+import ConfirmDeleteModal from "../components/confirmDeleteModal";
 const windowWidth = Dimensions.get("window").width;
 
 function ClotheDetails({ route, navigation }) {
   const { item } = route.params;
 
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
   const [brand, setBrand] = useState(item.brand);
   const [update, setUpdate] = useState(false);
@@ -53,6 +55,7 @@ function ClotheDetails({ route, navigation }) {
   };
 
   const deleteClothe = async () => {
+    setDeleteModalVisible(false);
     const token = await AsyncStorage.getItem("token");
 
     try {
@@ -146,12 +149,21 @@ function ClotheDetails({ route, navigation }) {
               <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Enregistrer"}</Text>
             </TouchableOpacity>
           ) : null}
-          <TouchableOpacity onPress={deleteClothe} style={styles.submitButton}>
+          <TouchableOpacity onPress={() => setDeleteModalVisible(true)} style={styles.submitButton}>
             <Text style={styles.submitText}>Supprimer</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <ModalAddPicture visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} isOutfitImage={true} setImage={handleImage} />
+      <ModalAddPicture
+        visible={bottomAddClotheSheetVisible}
+        setVisible={setBottomAddClotheSheetVisible}
+        isOutfitImage={true}
+        setImage={handleImage} />
+      <ConfirmDeleteModal
+        visible={deleteModalVisible}
+        onConfirm={deleteClothe}
+        onCancel={() => setDeleteModalVisible(false)}
+      />
     </View>
   );
 }

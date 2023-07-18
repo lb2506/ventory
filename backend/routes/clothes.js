@@ -20,6 +20,7 @@ router.post("/addClothe", authenticate, upload.single("image"), async (req, res)
 
     const clothe = new Clothe({
       image: uploadedResponse.secure_url,
+      public_id: uploadedResponse.public_id,
       brand: req.body.brand,
       category: req.body.category,
       season: req.body.season,
@@ -76,6 +77,19 @@ router.get("/outfits", authenticate, async (req, res) => {
 
 router.delete("/deleteClothe/:id", authenticate, async (req, res) => {
   try {
+    // Récupérer le vêtement
+    const clothe = await Clothe.findById(req.params.id);
+
+    // Supprimer l'image de Cloudinary
+    const destroyResponse = await cloudinary.uploader.destroy(clothe.public_id);
+
+    if (!destroyResponse) {
+      console.error("Echec de la suppression de l'image Cloudinary.");
+      return res.status(500).send({ error: "Une erreur est survenue lors de la suppression de l'image Cloudinary." });
+    }
+
+    console.log("Image Cloudinary supprimée avec succès !");
+
     // Supprimer le vêtement de la collection 'clothes'
     await Clothe.findByIdAndDelete(req.params.id);
 
@@ -90,10 +104,27 @@ router.delete("/deleteClothe/:id", authenticate, async (req, res) => {
   }
 });
 
+
 router.delete("/deleteOutfit/:id", authenticate, async (req, res) => {
   try {
+    // Récupérer l'outfit
+    const outfit = await Outfit.findById(req.params.id);
+
+    // Supprimer l'image de Cloudinary
+    const destroyResponse = await cloudinary.uploader.destroy(outfit.public_id);
+
+    if (!destroyResponse) {
+      console.error("Echec de la suppression de l'image Cloudinary.");
+      return res.status(500).send({ error: "Une erreur est survenue lors de la suppression de l'image Cloudinary." });
+    }
+
+    console.log("Image Cloudinary supprimée avec succès !");
+
+    // Supprimer l'outfit de la collection 'outfits'
     await Outfit.findByIdAndDelete(req.params.id);
 
+
+    // Supprimer la référence de l'outfit dans l'objet utilisateur
     req.user.outfits.pull(req.params.id);
     await req.user.save();
 
@@ -115,6 +146,7 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
 
     const outfit = new Outfit({
       image: uploadedResponse.secure_url,
+      public_id: uploadedResponse.public_id,
       name: req.body.name,
       category: req.body.category,
       season: req.body.season,

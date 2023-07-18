@@ -6,9 +6,11 @@ const SkeletonClotheOutfit = () => {
   const numberOfSkeletons = 12;
 
   const listSkeletons = () => {
+    let skeletons = [];
     for (let i = 0; i < numberOfSkeletons; i++) {
-      return (
+      skeletons.push(
         <Skeleton
+          key={i}
           LinearGradientComponent={LinearGradient}
           animation="wave"
           height={windowWidth / 3 - 4}
@@ -16,10 +18,12 @@ const SkeletonClotheOutfit = () => {
         />
       );
     }
+    return skeletons;
   };
+
   return (
     <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
-      <>{listSkeletons}</>
+      {listSkeletons()}
     </View>
   );
 };

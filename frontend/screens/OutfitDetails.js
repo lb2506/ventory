@@ -11,11 +11,14 @@ import ModalAddPicture from "../components/modalAddPicture";
 import * as ImageManipulator from "expo-image-manipulator";
 import ProfileClothes from "./ProfileClothes";
 import { BottomSheet } from "react-native-btr";
+import ConfirmDeleteModal from "../components/confirmDeleteModal";
+
 const windowWidth = Dimensions.get("window").width;
 
 function OutfitDetails({ route, navigation }) {
   const { item } = route.params;
 
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
   const [visibleBottomSheet, setVisibleBottomSheet] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -64,6 +67,7 @@ function OutfitDetails({ route, navigation }) {
   };
 
   const deleteOutfit = async () => {
+    setDeleteModalVisible(false);
     const token = await AsyncStorage.getItem("token");
 
     try {
@@ -194,12 +198,21 @@ function OutfitDetails({ route, navigation }) {
               <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Enregistrer"}</Text>
             </TouchableOpacity>
           ) : null}
-          <TouchableOpacity onPress={deleteOutfit} style={styles.submitButton}>
+          <TouchableOpacity onPress={() => setDeleteModalVisible(true)} style={styles.submitButton}>
             <Text style={styles.submitText}>Supprimer</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <ModalAddPicture visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} isOutfitImage={true} setImage={handleImage} />
+      <ModalAddPicture
+        visible={bottomAddClotheSheetVisible}
+        setVisible={setBottomAddClotheSheetVisible}
+        isOutfitImage={true}
+        setImage={handleImage} />
+      <ConfirmDeleteModal
+        visible={deleteModalVisible}
+        onConfirm={deleteOutfit}
+        onCancel={() => setDeleteModalVisible(false)}
+      />
     </View>
   );
 }
