@@ -18,6 +18,8 @@ const AddClothe = ({ route, navigation }) => {
   const [tagsArray, setTagsArray] = useState([]);
   const [valueCat, setValueCat] = useState("");
   const [valueSeason, setValueSeason] = useState("");
+  const [valueTaille, setValueTaille] = useState("");
+  const [valueCouleur, setValueCouleur] = useState("");
   const [itemsCat, setItemsCat] = useState([
     { label: "Casual", value: "Casual" },
     { label: "Sport", value: "Sport" },
@@ -33,6 +35,30 @@ const AddClothe = ({ route, navigation }) => {
     { label: "Automne", value: "Automne" },
     { label: "Autre", value: "Autre" },
   ]);
+  const [itemsTaille, setItemsTaille] = useState([
+    { label: "XXS", value: "XXS" },
+    { label: "XS", value: "XS" },
+    { label: "S", value: "S" },
+    { label: "M", value: "M" },
+    { label: "L", value: "L" },
+    { label: "XL", value: "XL" },
+    { label: "XXL", value: "XXL" },
+  ]);
+  const [itemsCouleur, setItemsCouleur] = useState([
+    { label: "Bleu", value: "Bleu" },
+    { label: "Blanc", value: "Blanc" },
+    { label: "Beige", value: "Beige" },
+    { label: "Gris", value: "Gris" },
+    { label: "Jaune", value: "Jaune" },
+    { label: "Marron", value: "Marron" },
+    { label: "Noir", value: "Noir" },
+    { label: "Orange", value: "Orange" },
+    { label: "Rose", value: "Rose" },
+    { label: "Rouge", value: "Rouge" },
+    { label: "Vert", value: "Vert" },
+    { label: "Violet", value: "Violet" },
+    { label: "Autre", value: "Autre" },
+  ]);
   const [isValid, setIsValid] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,6 +68,12 @@ const AddClothe = ({ route, navigation }) => {
   };
   const handleValueSeason = (value) => {
     setValueSeason(value);
+  };
+  const handleValueTaille = (value) => {
+    setValueTaille(value);
+  };
+  const handleValueCouleur = (value) => {
+    setValueCouleur(value);
   };
   const handleImage = (value) => {
     setImage(value);
@@ -68,6 +100,8 @@ const AddClothe = ({ route, navigation }) => {
       formData.append("brand", brand);
       formData.append("category", valueCat);
       formData.append("season", valueSeason);
+      formData.append("size", valueTaille);
+      formData.append("color", valueCouleur);
       formData.append("tags", tags);
 
       await axios.post(`${url}/addClothe`, formData, {
@@ -119,6 +153,14 @@ const AddClothe = ({ route, navigation }) => {
             <List value={valueSeason} setValue={handleValueSeason} items={itemsSeason} />
           </View>
           <View style={styles.inputs}>
+            <Text style={styles.titleInput}>Taille:</Text>
+            <List value={valueTaille} setValue={handleValueTaille} items={itemsTaille} />
+          </View>
+          <View style={styles.inputs}>
+            <Text style={styles.titleInput}>Couleur:</Text>
+            <List value={valueCouleur} setValue={handleValueCouleur} items={itemsCouleur} />
+          </View>
+          <View style={styles.inputs}>
             <Text style={styles.titleInput}>Tags:</Text>
             <Tags tags={tags} setTags={setTags} tagsArray={tagsArray} setTagsArray={setTagsArray} />
           </View>
@@ -129,7 +171,12 @@ const AddClothe = ({ route, navigation }) => {
           ) : null}
         </View>
       </ScrollView>
-      <ModalAddPicture visible={bottomAddClotheSheetVisible} setVisible={setBottomAddClotheSheetVisible} isOutfitImage={true} setImage={handleImage} />
+      <ModalAddPicture
+        visible={bottomAddClotheSheetVisible}
+        setVisible={setBottomAddClotheSheetVisible}
+        isOutfitImage={true}
+        setImage={handleImage}
+      />
     </View>
   );
 };

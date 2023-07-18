@@ -3,11 +3,9 @@ const mongoose = require("mongoose");
 const outfitSchema = new mongoose.Schema({
   image: {
     type: String,
-    required: true
   },
   public_id: {
     type: String,
-    required: true,
   },
   name: {
     type: String,

@@ -57,6 +57,7 @@ function OutfitDetails({ route, navigation }) {
     setValueSeason(value);
   };
   const handleImage = (value) => {
+    console.log(value);
     setImage(value);
   };
   const toggleBottomSheet = () => {
@@ -142,7 +143,13 @@ function OutfitDetails({ route, navigation }) {
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
         <View style={{ position: "relative" }}>
-          <Image source={{ uri: image }} style={{ width: windowWidth, height: 500 }} />
+          {image === "" || !image ? (
+            <View style={{ width: windowWidth, height: 500, justifyContent: "center", alignItems: "center" }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>Aucune image</Text>
+            </View>
+          ) : (
+            <Image source={{ uri: image }} style={{ width: windowWidth, height: 500 }} />
+          )}
           <View style={{ position: "absolute", bottom: 10, right: 10 }}>
             <Ionicons name="create-sharp" size={35} color="#000000" onPress={openBottomAddClotheSheet} />
           </View>
@@ -207,12 +214,9 @@ function OutfitDetails({ route, navigation }) {
         visible={bottomAddClotheSheetVisible}
         setVisible={setBottomAddClotheSheetVisible}
         isOutfitImage={true}
-        setImage={handleImage} />
-      <ConfirmDeleteModal
-        visible={deleteModalVisible}
-        onConfirm={deleteOutfit}
-        onCancel={() => setDeleteModalVisible(false)}
+        setImage={handleImage}
       />
+      <ConfirmDeleteModal visible={deleteModalVisible} onConfirm={deleteOutfit} onCancel={() => setDeleteModalVisible(false)} />
     </View>
   );
 }

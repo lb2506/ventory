@@ -62,7 +62,6 @@ const Social = () => {
     }
   };
 
-
   const handleSearch = useCallback(async () => {
     if (!isSearchBarFocused) {
       setSearchResults([]);
@@ -104,13 +103,7 @@ const Social = () => {
           <TouchableOpacity onPress={() => handleUserClick(item._id)}>
             <View style={styles.listItem}>
               <Text style={styles.listText}>
-                <PhotoPseudo
-                  pictureSize={40}
-                  pseudoSize={14}
-                  pseudoName={item.pseudo}
-                  pictureUrl={item.profilePicture}
-                  pseudoVisible={true}
-                />
+                <PhotoPseudo pictureSize={40} pseudoSize={14} pseudoName={item.pseudo} pictureUrl={item.profilePicture} pseudoVisible={true} />
               </Text>
             </View>
           </TouchableOpacity>
@@ -119,18 +112,39 @@ const Social = () => {
     );
   };
 
+  // Fonction pour afficher la durée entre deux dates
+  const afficherDuree = (date) => {
+    const dateActuelle = new Date(); // Date actuelle
+    const dateDonnee = new Date(date); // Date donnée en argument
+
+    // Calcul de la différence entre les deux dates en millisecondes
+    const difference = dateActuelle - dateDonnee;
+
+    // Conversion de la différence en secondes, minutes, heures, jours, etc.
+    const secondes = Math.floor(difference / 1000);
+    const minutes = Math.floor(secondes / 60);
+    const heures = Math.floor(minutes / 60);
+    const jours = Math.floor(heures / 24);
+
+    // Affichage du résultat
+    if (jours > 0) {
+      return `Il y a ${jours} jour${jours > 1 ? "s" : ""}`;
+    } else if (heures > 0) {
+      return `Il y a ${heures} heure${heures > 1 ? "s" : ""}`;
+    } else if (minutes > 0) {
+      return `Il y a ${minutes} minute${minutes > 1 ? "s" : ""}`;
+    } else {
+      return `Il y a quelques secondes`;
+    }
+  };
+
   const renderNewsFeedItem = ({ item }) => (
     <View style={styles.newsFeedItem}>
       <Text style={styles.newsFeedText} onPress={() => handleUserClick(item.userId)}>
-        <PhotoPseudo
-          pictureSize={40}
-          pseudoSize={14}
-          pseudoName={item.pseudo}
-          pictureUrl={item.profilePicture}
-          pseudoVisible={true}
-        />
+        <PhotoPseudo pictureSize={40} pseudoSize={14} pseudoName={item.pseudo} pictureUrl={item.profilePicture} pseudoVisible={true} />
       </Text>
       <Image style={styles.newsFeedImage} source={{ uri: item.image }} />
+      <Text style={styles.newsFeedTextDate}>{afficherDuree(item.date)}</Text>
     </View>
   );
 
@@ -139,9 +153,8 @@ const Social = () => {
   };
 
   useFocusEffect(
-
     useCallback(() => {
-      setSearchBarFocused(false)
+      setSearchBarFocused(false);
       setSearchText("");
       if (currentUserId) {
         setPage(1);
@@ -150,7 +163,6 @@ const Social = () => {
       }
     }, [currentUserId])
   );
-
 
   return (
     <View style={styles.container}>
@@ -271,8 +283,8 @@ const styles = StyleSheet.create({
   },
   noResults: {
     paddingLeft: 10,
-    fontStyle: 'italic',
-    color: '#bbb'
+    fontStyle: "italic",
+    color: "#bbb",
   },
   newsFeedItem: {
     marginVertical: 10,
@@ -281,7 +293,14 @@ const styles = StyleSheet.create({
   newsFeedText: {
     fontSize: 18,
     alignSelf: "flex-start",
-    marginLeft: 10
+    marginLeft: 10,
+  },
+  newsFeedTextDate: {
+    fontSize: 12,
+    alignSelf: "flex-start",
+    marginLeft: 10,
+    marginTop: 5,
+    color: "#bbb",
   },
   newsFeedImage: {
     width: "100%",
@@ -292,8 +311,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 20,
     marginHorizontal: 10,
-    color: '#bbb',
-    fontStyle: 'italic',
+    color: "#bbb",
+    fontStyle: "italic",
     lineHeight: 25,
   },
 });

@@ -21,6 +21,12 @@ const clotheSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  size: {
+    type: String,
+  },
+  color: {
+    type: String,
+  },
   date: {
     type: Date,
     default: Date.now,

@@ -25,6 +25,8 @@ function ClotheDetails({ route, navigation }) {
   const [tagsArray, setTagsArray] = useState([item.tags]);
   const [valueCat, setValueCat] = useState(item.category);
   const [valueSeason, setValueSeason] = useState(item.season);
+  const [valueTaille, setValueTaille] = useState(item.size);
+  const [valueCouleur, setValueCouleur] = useState(item.color);
   const [itemsCat, setItemsCat] = useState([
     { label: "Casual", value: "Casual" },
     { label: "Sport", value: "Sport" },
@@ -40,12 +42,42 @@ function ClotheDetails({ route, navigation }) {
     { label: "Automne", value: "Automne" },
     { label: "Autre", value: "Autre" },
   ]);
+  const [itemsTaille, setItemsTaille] = useState([
+    { label: "XXS", value: "XXS" },
+    { label: "XS", value: "XS" },
+    { label: "S", value: "S" },
+    { label: "M", value: "M" },
+    { label: "L", value: "L" },
+    { label: "XL", value: "XL" },
+    { label: "XXL", value: "XXL" },
+  ]);
+  const [itemsCouleur, setItemsCouleur] = useState([
+    { label: "Bleu", value: "Bleu" },
+    { label: "Blanc", value: "Blanc" },
+    { label: "Beige", value: "Beige" },
+    { label: "Gris", value: "Gris" },
+    { label: "Jaune", value: "Jaune" },
+    { label: "Marron", value: "Marron" },
+    { label: "Noir", value: "Noir" },
+    { label: "Orange", value: "Orange" },
+    { label: "Rose", value: "Rose" },
+    { label: "Rouge", value: "Rouge" },
+    { label: "Vert", value: "Vert" },
+    { label: "Violet", value: "Violet" },
+    { label: "Autre", value: "Autre" },
+  ]);
 
   const handleValueCat = (value) => {
     setValueCat(value);
   };
   const handleValueSeason = (value) => {
     setValueSeason(value);
+  };
+  const handleValueTaille = (value) => {
+    setValueTaille(value);
+  };
+  const handleValueCouleur = (value) => {
+    setValueCouleur(value);
   };
   const handleImage = (value) => {
     setImage(value);
@@ -70,12 +102,20 @@ function ClotheDetails({ route, navigation }) {
   };
 
   useEffect(() => {
-    if (valueCat != item.category || valueSeason != item.season || tagsArray != item.tags || image != item.image || brand != item.brand) {
+    if (
+      valueCat != item.category ||
+      valueSeason != item.season ||
+      tagsArray != item.tags ||
+      image != item.image ||
+      brand != item.brand ||
+      valueTaille != item.size ||
+      valueCouleur != item.color
+    ) {
       setUpdate(true);
     } else {
       setUpdate(false);
     }
-  }, [valueCat, valueSeason, tagsArray, image, brand]);
+  }, [valueCat, valueSeason, tagsArray, image, brand, valueTaille, valueCouleur]);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -97,6 +137,8 @@ function ClotheDetails({ route, navigation }) {
       formData.append("brand", brand);
       formData.append("category", valueCat);
       formData.append("season", valueSeason);
+      formData.append("size", valueTaille);
+      formData.append("color", valueCouleur);
       formData.append("tags", tags);
 
       await axios.post(`${url}/updateClothe/${item._id}`, formData, {
@@ -140,6 +182,14 @@ function ClotheDetails({ route, navigation }) {
             <List value={valueSeason} setValue={handleValueSeason} items={itemsSeason} />
           </View>
           <View style={styles.inputs}>
+            <Text style={styles.titleInput}>Taille:</Text>
+            <List value={valueTaille} setValue={handleValueTaille} items={itemsTaille} />
+          </View>
+          <View style={styles.inputs}>
+            <Text style={styles.titleInput}>Couleur:</Text>
+            <List value={valueCouleur} setValue={handleValueCouleur} items={itemsCouleur} />
+          </View>
+          <View style={styles.inputs}>
             <Text style={styles.titleInput}>Tags:</Text>
             <Tags tags={tags} setTags={setTags} tagsArray={tagsArray} setTagsArray={setTagsArray} />
           </View>
@@ -158,12 +208,9 @@ function ClotheDetails({ route, navigation }) {
         visible={bottomAddClotheSheetVisible}
         setVisible={setBottomAddClotheSheetVisible}
         isOutfitImage={true}
-        setImage={handleImage} />
-      <ConfirmDeleteModal
-        visible={deleteModalVisible}
-        onConfirm={deleteClothe}
-        onCancel={() => setDeleteModalVisible(false)}
+        setImage={handleImage}
       />
+      <ConfirmDeleteModal visible={deleteModalVisible} onConfirm={deleteClothe} onCancel={() => setDeleteModalVisible(false)} />
     </View>
   );
 }

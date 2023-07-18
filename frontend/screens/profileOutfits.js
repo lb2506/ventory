@@ -38,17 +38,45 @@ const ProfileOutfits = ({ navigation }) => {
     }, [])
   );
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("OutfitDetails", { item: item });
-      }}
-    >
-      <View>
-        <Image source={{ uri: item.image }} style={styles.image} />
-      </View>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    const renderImages = () => {
+      const imageSize = {
+        width: (windowWidth / 3 - 1.5) / 3,
+        height: (windowWidth / 3 - 1.5) / 3,
+      };
+      const vetements = item.vetements.map((vetement, index) => (
+        <View key={index}>
+          <Image source={{ uri: vetement.image }} style={imageSize} />
+        </View>
+      ));
+      return (
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            width: windowWidth / 3 - 1.5,
+            height: windowWidth / 3 - 1.5,
+            margin: 0.75,
+          }}
+        >
+          {vetements}
+        </View>
+      );
+    };
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("OutfitDetails", { item: item });
+        }}
+        style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}
+      >
+        {item.image && item.image !== "" ? <Image source={{ uri: item.image }} style={styles.image} /> : renderImages()}
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       {listOutfitsShowed.length !== 0 && (
@@ -143,8 +171,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 20,
     marginLeft: 20,
-    color: '#bbb',
-    fontStyle: 'italic'
+    color: "#bbb",
+    fontStyle: "italic",
   },
 });
 

@@ -11,6 +11,7 @@ import Register from "./screens/Register";
 import Profile from "./screens/Profile";
 import Social from "./screens/Social";
 import AddClothe from "./screens/AddClothe";
+import AddMultipleClothe from "./screens/AddMultipleClothe";
 import ClotheDetails from "./screens/ClotheDetails";
 import OutfitDetails from "./screens/OutfitDetails";
 import WorkSpace from "./screens/WorkSpace";
@@ -67,6 +68,7 @@ export default function App() {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
         <Stack.Screen name="AddClothe" component={AddClothe} />
+        <Stack.Screen name="AddMultipleClothe" component={AddMultipleClothe} />
         <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
         <Stack.Screen name="OutfitDetails" component={OutfitDetails} />
         <Stack.Screen name="SearchedProfile" component={SearchedProfile} />

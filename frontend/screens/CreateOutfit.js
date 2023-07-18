@@ -120,22 +120,29 @@ const CreateOutfit = () => {
     const strVetementsId = listVetementsId.join(",");
     const token = await AsyncStorage.getItem("token");
     try {
-      const manipResult = await ImageManipulator.manipulateAsync(imageUri, [{ resize: { width: 720, height: 960 } }], {
-        compress: 0.5,
-        format: ImageManipulator.SaveFormat.JPEG,
-      });
-
       let formData = new FormData();
-      formData.append("image", {
-        uri: manipResult.uri,
-        type: "image/jpeg",
-        name: "image.jpg",
-      });
+      if (imageUri) {
+        const manipResult = await ImageManipulator.manipulateAsync(imageUri, [{ resize: { width: 720, height: 960 } }], {
+          compress: 0.5,
+          format: ImageManipulator.SaveFormat.JPEG,
+        });
+
+        formData.append("image", {
+          uri: manipResult.uri,
+          type: "image/jpeg",
+          name: "image.jpg",
+        });
+      }
+
       formData.append("name", outfitName);
       formData.append("category", valueCat);
       formData.append("season", valueSeason);
       formData.append("tags", tags);
-      formData.append("vetements", strVetementsId);
+
+      // Check if either image or at least one vetement is present
+      if (listVetementsId.length > 0) {
+        formData.append("vetements", strVetementsId);
+      }
 
       await axios.post(`${url}/addOutfit`, formData, {
         headers: {
@@ -263,7 +270,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: "bold",
-    textAlign:'center'
+    textAlign: "center",
   },
   titleInput: {
     fontSize: 15,

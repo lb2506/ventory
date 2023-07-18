@@ -12,7 +12,6 @@ const SkeletonClotheOutfit = () => {
         <Skeleton
           key={i}
           LinearGradientComponent={LinearGradient}
-          animation="wave"
           height={windowWidth / 3 - 4}
           style={{ margin: 1, borderRadius: 0, width: windowWidth / 3 - 4 }}
         />
@@ -21,11 +20,7 @@ const SkeletonClotheOutfit = () => {
     return skeletons;
   };
 
-  return (
-    <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
-      {listSkeletons()}
-    </View>
-  );
+  return <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>{listSkeletons()}</View>;
 };
 
 export default SkeletonClotheOutfit;

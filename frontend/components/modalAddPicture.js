@@ -5,11 +5,8 @@ import * as ImagePicker from "expo-image-picker";
 import Modal from "react-native-modal";
 
 const modalAddPicture = (props) => {
-
-  
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
-
 
   const toggleBottomNavigationView = () => {
     props.setVisible(!props.visible);
@@ -32,7 +29,7 @@ const modalAddPicture = (props) => {
         });
         toggleBottomNavigationView();
         if (!image.canceled) {
-          if (image.assets && image.assets.length > 0 && props.isOutfitImage === true && props.isProfilePicture === false) {
+          if (image.assets && image.assets.length > 0 && props.isOutfitImage === true) {
             props.setImage(image.assets[0].uri);
           }
           if (props.isOutfitImage !== true) {
@@ -40,7 +37,7 @@ const modalAddPicture = (props) => {
           }
 
           if (props.isProfilePicture === true) {
-            navigation.navigate("InfosProfileSettings", { imageUri: image.assets[0].uri })
+            navigation.navigate("InfosProfileSettings", { imageUri: image.assets[0].uri });
           }
         }
       } else {
@@ -51,7 +48,7 @@ const modalAddPicture = (props) => {
     }
   };
 
-  const pickImage = async () => {
+  const pickImage = async (multiple) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       alert("Désolé, nous avons besoin de la permission d'accès à la galerie pour fonctionner!");
@@ -61,18 +58,27 @@ const modalAddPicture = (props) => {
         allowsEditing: false,
         aspect: [4, 3],
         quality: 1,
+        allowsMultipleSelection: multiple === true ? true : false,
       });
 
       if (!result.canceled) {
-        if (result.assets && result.assets.length > 0 && props.isOutfitImage === true && props.isProfilePicture === false ){
-          props.setImage(result.assets[0].uri);
-        }
-        if (props.isOutfitImage !== true) {
-          navigation.navigate("AddClothe", { imageUri: result.assets[0].uri });
-        }
+        if (multiple !== true) {
+          if (result.assets.length > 0 && props.isOutfitImage === true) {
+            props.setImage(result.assets[0].uri);
+          }
+          if (props.isOutfitImage !== true) {
+            navigation.navigate("AddClothe", { imageUri: result.assets[0].uri });
+          }
 
-        if (props.isProfilePicture === true) {
-          navigation.navigate("InfosProfileSettings", { imageUri: result.assets[0].uri })
+          if (props.isProfilePicture === true) {
+            navigation.navigate("InfosProfileSettings", { imageUri: result.assets[0].uri });
+          }
+        } else {
+          const images = [];
+          result.assets.map((image) => {
+            images.push(image.uri);
+          });
+          navigation.navigate("AddMultipleClothe", { images: images });
         }
       }
       toggleBottomNavigationView();
@@ -95,12 +101,16 @@ const modalAddPicture = (props) => {
         <View style={styles.center}>
           <View style={styles.barIcon} />
         </View>
-        <TouchableOpacity style={styles.textContainer} onPress={openCamera}>
+        <TouchableOpacity style={styles.textContainer} onPress={() => openCamera}>
           <Text style={styles.text}>Prendre une photo</Text>
         </TouchableOpacity>
         <View style={styles.line} />
-        <TouchableOpacity style={styles.textContainer} onPress={pickImage}>
+        <TouchableOpacity style={styles.textContainer} onPress={() => pickImage}>
           <Text style={styles.text}>Importer une photo</Text>
+        </TouchableOpacity>
+        <View style={styles.line} />
+        <TouchableOpacity style={styles.textContainer} onPress={() => pickImage(true)}>
+          <Text style={styles.text}>Ajout multiple</Text>
         </TouchableOpacity>
       </View>
     </Modal>

@@ -24,6 +24,8 @@ router.post("/addClothe", authenticate, upload.single("image"), async (req, res)
       brand: req.body.brand,
       category: req.body.category,
       season: req.body.season,
+      color: req.body.color,
+      size: req.body.size,
       tags: req.body.tags,
     });
 
@@ -98,10 +100,7 @@ router.delete("/deleteClothe/:id", authenticate, async (req, res) => {
     await req.user.save();
 
     // Supprimer l'objectId du vêtement dans tous les outfits
-    await Outfit.updateMany(
-      { "vetements": req.params.id }, 
-      { "$pull": { "vetements": req.params.id } }
-    );
+    await Outfit.updateMany({ vetements: req.params.id }, { $pull: { vetements: req.params.id } });
 
     res.status(201).send();
     console.log("Vêtement supprimé avec succès !");
@@ -110,26 +109,25 @@ router.delete("/deleteClothe/:id", authenticate, async (req, res) => {
   }
 });
 
-
-
 router.delete("/deleteOutfit/:id", authenticate, async (req, res) => {
   try {
     // Récupérer l'outfit
     const outfit = await Outfit.findById(req.params.id);
 
     // Supprimer l'image de Cloudinary
-    const destroyResponse = await cloudinary.uploader.destroy(outfit.public_id);
+    if (outfit.public_id) {
+      const destroyResponse = await cloudinary.uploader.destroy(outfit.public_id);
 
-    if (!destroyResponse) {
-      console.error("Echec de la suppression de l'image Cloudinary.");
-      return res.status(500).send({ error: "Une erreur est survenue lors de la suppression de l'image Cloudinary." });
+      if (!destroyResponse) {
+        console.error("Echec de la suppression de l'image Cloudinary.");
+        return res.status(500).send({ error: "Une erreur est survenue lors de la suppression de l'image Cloudinary." });
+      }
     }
 
     console.log("Image Cloudinary supprimée avec succès !");
 
     // Supprimer l'outfit de la collection 'outfits'
     await Outfit.findByIdAndDelete(req.params.id);
-
 
     // Supprimer la référence de l'outfit dans l'objet utilisateur
     req.user.outfits.pull(req.params.id);
@@ -144,19 +142,29 @@ router.delete("/deleteOutfit/:id", authenticate, async (req, res) => {
 
 router.post("/addOutfit", authenticate, upload.single("image"), async (req, res) => {
   try {
-    const uploadedResponse = await cloudinary.uploader.upload(req.file.path, {
-      upload_preset: "ventory",
-      format: "webp",
-    });
+    // Check if either image or at least one vetement is present
+    if (!req.file && !req.body.vetements) {
+      return res.status(400).send("Either image or at least one vetement is required.");
+    }
 
-    const clotheIds = req.body.vetements.split(",").map((id) => new ObjectId(id));
+    let uploadedResponse = null;
+    if (req.file) {
+      uploadedResponse = await cloudinary.uploader.upload(req.file.path, {
+        upload_preset: "ventory",
+        format: "webp",
+      });
+    }
+
+    const clotheIds = req.body.vetements ? req.body.vetements.split(",").map((id) => new ObjectId(id)) : [];
 
     const outfit = new Outfit({
-      image: uploadedResponse.secure_url,
-      public_id: uploadedResponse.public_id,
+      image: uploadedResponse ? uploadedResponse.secure_url || "" : "",
+      public_id: uploadedResponse ? uploadedResponse.public_id || "" : "",
       name: req.body.name,
       category: req.body.category,
       season: req.body.season,
+      color: req.body.color,
+      size: req.body.size,
       tags: req.body.tags,
       vetements: clotheIds,
     });
@@ -166,14 +174,16 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
     req.user.outfits.push(outfit._id);
     await req.user.save();
 
-    fs.unlink(req.file.path, (err) => {
-      // remove the file
-      if (err) {
-        console.error("Failed to delete local image:" + err);
-      } else {
-        console.log("Fichier local supprimé avec succès !");
-      }
-    });
+    if (req.file) {
+      fs.unlink(req.file.path, (err) => {
+        // remove the file
+        if (err) {
+          console.error("Failed to delete local image:" + err);
+        } else {
+          console.log("Fichier local supprimé avec succès !");
+        }
+      });
+    }
 
     res.status(201).send(outfit);
     console.log("Outfit ajouté avec succès !");
@@ -198,6 +208,7 @@ router.post("/updateOutfit/:id", authenticate, upload.single("image"), async (re
         format: "webp",
       });
       outfit.image = uploadedResponse.secure_url;
+      outfit.public_id = uploadedResponse.public_id;
     }
 
     outfit.name = req.body.name || outfit.name;
@@ -248,10 +259,16 @@ router.post("/updateClothe/:id", authenticate, upload.single("image"), async (re
         format: "webp",
       });
       clothe.image = uploadedResponse.secure_url;
+      clothe.public_id = uploadedResponse.public_id;
+    } else {
+      clothe.image = req.body.image || clothe.image;
+      clothe.public_id = req.body.public_id || clothe.public_id;
     }
     clothe.brand = req.body.brand || clothe.brand;
     clothe.category = req.body.category || clothe.category;
     clothe.season = req.body.season || clothe.season;
+    clothe.color = req.body.color || clothe.color;
+    clothe.size = req.body.size || clothe.size;
     clothe.tags = req.body.tags || clothe.tags;
 
     await clothe.save();
