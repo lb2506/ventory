@@ -97,12 +97,19 @@ router.delete("/deleteClothe/:id", authenticate, async (req, res) => {
     req.user.clothes.pull(req.params.id);
     await req.user.save();
 
+    // Supprimer l'objectId du vêtement dans tous les outfits
+    await Outfit.updateMany(
+      { "vetements": req.params.id }, 
+      { "$pull": { "vetements": req.params.id } }
+    );
+
     res.status(201).send();
     console.log("Vêtement supprimé avec succès !");
   } catch (error) {
     res.status(500).send({ error: "Une erreur est survenue lors de la suppression du vêtement." });
   }
 });
+
 
 
 router.delete("/deleteOutfit/:id", authenticate, async (req, res) => {
