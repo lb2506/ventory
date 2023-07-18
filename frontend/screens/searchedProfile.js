@@ -75,15 +75,15 @@ const SearchedProfile = () => {
                         pseudoVisible={false}
                     />
                     <View style={styles.followersFollowingContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowersList", { userId: userData._id })}>
-            <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
-            <Text style={styles.text}>followers</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowingList", { userId: userData._id })}>
-            <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
-            <Text style={styles.text}>suivies</Text>
-          </TouchableOpacity>
-        </View>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowersList", { userId: userData._id })}>
+                            <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
+                            <Text style={styles.text}>followers</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowingList", { userId: userData._id })}>
+                            <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
+                            <Text style={styles.text}>suivies</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <TouchableOpacity style={styles.followButton} onPress={handleFollow}>
                     <Text style={styles.followButtonText}>{isFollowing ? 'Ne plus suivre' : 'Suivre'}</Text>
@@ -135,21 +135,21 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         flexDirection: 'row',
         alignItems: 'center'
-      },
-      number: {
+    },
+    number: {
         fontSize: 17,
         marginHorizontal: 4,
         fontWeight: '500'
-      },
-      text: {
+    },
+    text: {
         fontSize: 15,
-      },
-    pseudoFollowContainer:{
-        flexDirection:'row',
-        alignItems:'center',
-        width:'100%',
-        marginTop:35,
-        marginBottom:15
+    },
+    pseudoFollowContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 35,
+        marginBottom: 15
     },
     followButton: {
         paddingHorizontal: 25,

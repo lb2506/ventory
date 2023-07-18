@@ -49,16 +49,19 @@ const Social = () => {
   const fetchNewsFeed = async () => {
     try {
       setRefreshing(true);
+      setIsFetched(false); // <- Add this line
       const response = await axios.get(`${url}/user/feed/${currentUserId}?limit=5&page=${page}`);
       const sortedNewsFeed = [...newsFeed, ...response.data];
       setNewsFeed(sortedNewsFeed);
       setRefreshing(false);
       setPage(page + 1);
-      setIsFetched(true);
+      setIsFetched(true); // <- Move this line here
     } catch (error) {
       console.log(error);
+      setRefreshing(false);
     }
   };
+
 
   const handleSearch = useCallback(async () => {
     if (!isSearchBarFocused) {
@@ -196,6 +199,7 @@ const Social = () => {
               Il semble que vous ne suivez encore aucun compte. Commencez à suivre des comptes pour que leur dernières actualités apparaissent ici.
             </Text>
           ) : null}
+
           <FlatList
             data={newsFeed}
             keyExtractor={(item) => item.image}
