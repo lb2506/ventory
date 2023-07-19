@@ -81,7 +81,7 @@ const SearchedProfile = () => {
           <Text style={styles.followButtonText}>{isFollowing ? "Ne plus suivre" : "Suivre"}</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Social")} style={styles.comeBack}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
         <Ionicons name="chevron-back-outline" size={35} color="#000000" />
       </TouchableOpacity>
       <Tab.Navigator

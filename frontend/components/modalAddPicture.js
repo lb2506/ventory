@@ -101,11 +101,11 @@ const modalAddPicture = (props) => {
         <View style={styles.center}>
           <View style={styles.barIcon} />
         </View>
-        <TouchableOpacity style={styles.textContainer} onPress={() => openCamera}>
+        <TouchableOpacity style={styles.textContainer} onPress={openCamera}>
           <Text style={styles.text}>Prendre une photo</Text>
         </TouchableOpacity>
         <View style={styles.line} />
-        <TouchableOpacity style={styles.textContainer} onPress={() => pickImage}>
+        <TouchableOpacity style={styles.textContainer} onPress={pickImage}>
           <Text style={styles.text}>Importer une photo</Text>
         </TouchableOpacity>
         <View style={styles.line} />
