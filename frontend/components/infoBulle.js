@@ -9,11 +9,11 @@ const InfoBulle = (props) => {
   if (isVisible === true) {
     return (
       <View style={{ width: "100%", alignItems: "center" }}>
-        <View style={{ width: "90%", padding: 20, borderWidth: 1, marginBottom: 30 }}>
+        <View style={{ width: "100%", padding: 25, borderWidth: 1, marginBottom: 30, borderRadius:10 }}>
           <TouchableOpacity onPress={() => setIsVisible(false)} style={{ position: "absolute", right: 5, top: 5 }}>
             <Ionicons name="close-sharp" size={20} />
           </TouchableOpacity>
-          <Text>{props.text}</Text>
+          <Text style={{textAlign:'justify'}}>{props.text}</Text>
         </View>
       </View>
     );

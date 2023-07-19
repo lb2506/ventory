@@ -90,6 +90,7 @@ const ProfileClothes = ({ navigation, ...props }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
+    flex:1
   },
   selectContainer: {
     height: 400,
@@ -110,7 +111,6 @@ const styles = StyleSheet.create({
   filtersContainer: {
     flexDirection: "row",
   },
-
   filtersButton: {
     borderColor: "black",
     borderWidth: 1,
@@ -122,41 +122,6 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-  },
-  modal: {
-    justifyContent: "flex-end",
-    margin: 0,
-  },
-  modalContent: {
-    backgroundColor: "white",
-    paddingTop: 12,
-    paddingHorizontal: 12,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    minHeight: 400,
-    paddingBottom: 20,
-  },
-  center: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  barIcon: {
-    width: 60,
-    height: 5,
-    backgroundColor: "#bbb",
-    borderRadius: 3,
-  },
-  text: {
-    color: "#bbb",
-    fontSize: 24,
-    marginTop: 100,
-  },
-  btnContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 500,
   },
   noClothesText: {
     fontSize: 17,

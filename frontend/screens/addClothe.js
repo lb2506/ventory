@@ -141,7 +141,7 @@ const AddClothe = ({ route, navigation }) => {
           </View>
         </View>
         <View style={styles.containerInputs}>
-          <InfoBulle text="Pour ajouter un vêtement, seul la photo est obligatoire. Vous pourrez compléter les informations du vêtement ultérieurement si vous le souhaitez." />
+          <InfoBulle text="Pour ajouter un vêtement, seule la photo est obligatoire. Vous pouvez ensuite compléter les informations du vêtement ultérieurement, selon vos préférences." />
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Marque:</Text>
             <TextInput style={{ height: 50, borderWidth: 1, paddingLeft: 15 }} onChangeText={(text) => setBrand(text)} value={brand} />

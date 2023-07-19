@@ -71,7 +71,10 @@ const AddMultipleClothe = ({ route, navigation }) => {
         <View style={styles.containerInputs}>
           <View style={styles.inputs}>
             <Text style={styles.Text}>
-              L'ajout multiple permet de créer un vêtement par image. Vous pourrez modifier ses informations dans votre profil après enregistrement.
+              En utilisant l'ajout multiple, vous pouvez créer un vêtement pour chaque image importée.
+            </Text>
+            <Text style={styles.Text}>
+              Une fois que vous avez enregistré, vous pourrez modifier les informations du vêtement dans votre profil.
             </Text>
           </View>
           <View style={styles.ClothesContainer}>
@@ -141,6 +144,7 @@ const styles = StyleSheet.create({
   Text: {
     color: "black",
     fontSize: 15,
+    marginBottom:5
   },
   disabledSubmitText: {
     color: "black",

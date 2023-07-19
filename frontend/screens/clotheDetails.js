@@ -162,9 +162,9 @@ function ClotheDetails({ route, navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
-        <View style={{ position: "relative" }}>
-          <Image source={{ uri: image }} style={{ width: windowWidth, height: 500 }} />
-          <View style={{ position: "absolute", bottom: 10, right: 10 }}>
+        <View style={{ position: "relative", marginTop:90 }}>
+          <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
+          <View style={{ position: "absolute", bottom: -25, right: 20, backgroundColor:'white', alignItems:'center', borderRadius:50, padding:5, paddingLeft:9 }}>
             <Ionicons name="create-sharp" size={35} color="#000000" onPress={openBottomAddClotheSheet} />
           </View>
         </View>
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   },
   comeBack: {
     position: "absolute",
-    top: 80,
+    top: 40,
     left: 10,
     zIndex: 1,
   },

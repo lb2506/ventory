@@ -170,7 +170,7 @@ const CreateOutfit = () => {
       </View>
       <ScrollView>
         <View style={styles.containerInputs}>
-          <InfoBulle text="Pour créer un outfit, seul la photo de l'outfit ou les vêtements qui le compose sont nécessaires. Vous pourrez compléter les autres informations de l'outfit ultérieurement si vous le souhaitez." />
+          <InfoBulle text="Pour créer un outfit, seule la photo de l'ensemble ou des vêtements qui le composent est obligatoire. Vous pouvez ensuite compléter les autres informations de l'ensemble ultérieurement, selon vos préférences." />
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Photo de votre outfit:</Text>
             {imageUri != null ? (
@@ -204,7 +204,7 @@ const CreateOutfit = () => {
                 <Text style={styles.option}>Phototèque</Text>
               </TouchableOpacity> */}
               <TouchableOpacity style={styles.addButton} onPress={toggleBottomSheet}>
-                <Text style={styles.option}>Vêtements du profil</Text>
+                <Text style={styles.option}>Sélectionner</Text>
               </TouchableOpacity>
             </View>
             <BottomSheet visible={visibleBottomSheet} onBackButtonPress={toggleBottomSheet} onBackdropPress={toggleBottomSheet}>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     marginTop: 20,
-    marginBottom: 50,
+    marginBottom: 0,
   },
   submitText: {
     color: "#FFFFFF",
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     marginTop: 20,
-    marginBottom: 50,
+    marginBottom: 0,
   },
   inputs: {
     marginBottom: 30,
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   bottomNavigationView: {
     backgroundColor: "white",
     width: "100%",
-    height: 600,
+    height: '70%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingBottom: 50,

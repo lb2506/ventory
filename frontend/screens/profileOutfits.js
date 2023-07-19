@@ -99,6 +99,7 @@ const ProfileOutfits = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
+    flex:1
   },
   selectContainer: {
     height: 400,

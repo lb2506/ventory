@@ -5,7 +5,9 @@ import { useNavigation } from "@react-navigation/native";
 
 const listItems = [
     { title: "Informations du profil", screen: "InfosProfileSettings" },
+    { title: "Nous contacter", screen: "ContactUs" },
     { title: "À propos", screen: "About" },
+    { title: "Signaler un bug", screen: "ReportingBug" },
     { title: "Conditions générales d'utilisation", screen: "Terms" }
 ]
 
@@ -13,7 +15,7 @@ const Settings = () => {
     const navigation = useNavigation()
 
     const ListItem = ({ item }) => (
-        <TouchableOpacity 
+        <TouchableOpacity
             style={styles.listItem}
             onPress={() => navigation.navigate(item.screen)}
         >
@@ -21,7 +23,7 @@ const Settings = () => {
             <Ionicons name="chevron-forward-outline" size={25} color="#000000" />
         </TouchableOpacity>
     )
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingTop: 60,
         paddingBottom: 20,
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     title: {
         fontSize: 25,
