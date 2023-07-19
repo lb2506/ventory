@@ -6,6 +6,7 @@ import { View, Image, Text, TextInput, StyleSheet, TouchableOpacity, Dimensions,
 import { Ionicons } from "@expo/vector-icons";
 import List from "../components/list";
 import Tags from "../components/tags";
+import InfoBulle from "../components/infoBulle";
 import ModalAddPicture from "../components/modalAddPicture";
 import * as ImageManipulator from "expo-image-manipulator";
 const windowWidth = Dimensions.get("window").width;
@@ -140,6 +141,7 @@ const AddClothe = ({ route, navigation }) => {
           </View>
         </View>
         <View style={styles.containerInputs}>
+          <InfoBulle text="Pour ajouter un vêtement, seul la photo est obligatoire. Vous pourrez compléter les informations du vêtement ultérieurement si vous le souhaitez." />
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Marque:</Text>
             <TextInput style={{ height: 50, borderWidth: 1, paddingLeft: 15 }} onChangeText={(text) => setBrand(text)} value={brand} />

@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImageManipulator from "expo-image-manipulator";
 import { url } from "../api";
 import axios from "axios";
+import InfoBulle from "../components/infoBulle";
 
 const CreateOutfit = () => {
   const navigation = useNavigation();
@@ -169,6 +170,7 @@ const CreateOutfit = () => {
       </View>
       <ScrollView>
         <View style={styles.containerInputs}>
+          <InfoBulle text="Pour créer un outfit, seul la photo de l'outfit ou les vêtements qui le compose sont nécessaires. Vous pourrez compléter les autres informations de l'outfit ultérieurement si vous le souhaitez." />
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Photo de votre outfit:</Text>
             {imageUri != null ? (
