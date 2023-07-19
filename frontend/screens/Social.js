@@ -49,13 +49,13 @@ const Social = () => {
   const fetchNewsFeed = async () => {
     try {
       setRefreshing(true);
-      setIsFetched(false); // <- Add this line
+      setIsFetched(false);
       const response = await axios.get(`${url}/user/feed/${currentUserId}?limit=5&page=${page}`);
       const sortedNewsFeed = [...newsFeed, ...response.data];
       setNewsFeed(sortedNewsFeed);
       setRefreshing(false);
       setPage(page + 1);
-      setIsFetched(true); // <- Move this line here
+      setIsFetched(true);
     } catch (error) {
       console.log(error);
       setRefreshing(false);

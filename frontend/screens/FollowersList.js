@@ -37,15 +37,13 @@ const FollowersList = ({ route }) => {
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <View style={styles.listItem}>
-                        <Text >
-                            <PhotoPseudo
-                                pictureSize={50}
-                                pseudoSize={15}
-                                pseudoName={item.pseudo}
-                                pictureUrl={item.profilePicture}
-                                pseudoVisible={true}
-                            />
-                        </Text>
+                        <PhotoPseudo
+                            pictureSize={50}
+                            pseudoSize={15}
+                            pseudoName={item.pseudo}
+                            pictureUrl={item.profilePicture}
+                            pseudoVisible={true}
+                        />
                     </View>
                 )}
             />

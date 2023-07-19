@@ -37,15 +37,13 @@ const FollowingList = ({ route }) => {
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <View style={styles.listItem}>
-                        <Text style={styles.listText}>
-                            <PhotoPseudo
-                                pictureSize={50}
-                                pseudoSize={15}
-                                pseudoName={item.pseudo}
-                                pictureUrl={item.profilePicture}
-                                pseudoVisible={true}
-                            />
-                        </Text>
+                        <PhotoPseudo
+                            pictureSize={50}
+                            pseudoSize={15}
+                            pseudoName={item.pseudo}
+                            pictureUrl={item.profilePicture}
+                            pseudoVisible={true}
+                        />
                     </View>
                 )}
             />
@@ -71,9 +69,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
-    },
-    listText: {
-        fontSize: 18
     },
     comeBack: {
         position: 'absolute',

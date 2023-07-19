@@ -135,7 +135,7 @@ const ListFilterClothes = (props) => {
         onBackdropPress={openModal}
         onBackButtonPress={openModal}
         isVisible={visible}
-        swipeDirection="down"
+        swipeDirection={null}
         onSwipeComplete={openModal}
         animationInTiming={200}
         animationOutTiming={500}
@@ -147,7 +147,7 @@ const ListFilterClothes = (props) => {
           <View style={{ alignItems: "center" }}>
             <Text style={styles.text}>Filtrer par {modalTitle.toLowerCase()}</Text>
           </View>
-          <ScrollView style={{ marginBottom: 50 }}>
+          <ScrollView nestedScrollEnabled={true} style={{ flex: 1, marginBottom: 30 }}>
             {options.map((l, i) => (
               <ListItem
                 key={i}
@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     minHeight: 400,
     paddingBottom: 20,
+    maxHeight: '50%'
   },
   barIcon: {
     width: 60,
