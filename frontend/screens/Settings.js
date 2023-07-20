@@ -6,8 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 const listItems = [
     { title: "Informations du profil", screen: "InfosProfileSettings" },
     { title: "Nous contacter", screen: "ContactUs" },
-    { title: "À propos", screen: "About" },
-    { title: "Signaler un bug", screen: "ReportingBug" },
+    { title: "À propos de nous", screen: "AboutUs" },
+    { title: "Signaler un bug", screen: "ReportBug" },
     { title: "Conditions générales d'utilisation", screen: "Terms" }
 ]
 

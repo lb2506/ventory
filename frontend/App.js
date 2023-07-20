@@ -21,6 +21,9 @@ import FollowingList from "./screens/FollowingList";
 import CreateOutfit from "./screens/CreateOutfit";
 import Settings from "./screens/Settings";
 import InfosProfileSettings from "./screens/InfosProfileSettings";
+import ContactUs from "./screens/ContactUs";
+import ReportBug from "./screens/ReportBug";
+import AboutUs from "./screens/AboutUs";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -77,6 +80,9 @@ export default function App() {
         <Stack.Screen name="CreateOutfit" component={CreateOutfit} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="InfosProfileSettings" component={InfosProfileSettings} />
+        <Stack.Screen name="ContactUs" component={ContactUs} />
+        <Stack.Screen name="ReportBug" component={ReportBug} />
+        <Stack.Screen name="AboutUs" component={AboutUs} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

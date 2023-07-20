@@ -6,7 +6,8 @@ const bodyParser = require('body-parser');
 const registerRoutes = require('./routes/register')
 const loginRoutes = require('./routes/login')
 const clothesRouter = require('./routes/clothes');
-const usersRouter = require('./routes/users')
+const usersRouter = require('./routes/users');
+const contactRouter = require('./routes/contact');
 
 
 
@@ -26,6 +27,7 @@ app.use('/', registerRoutes);
 app.use('/', loginRoutes);
 app.use('/', clothesRouter);
 app.use('/', usersRouter);
+app.use('/', contactRouter);
 
 
 

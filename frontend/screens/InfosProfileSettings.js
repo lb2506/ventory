@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Button, ActivityIndicator, Alert } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import axios from "axios";
