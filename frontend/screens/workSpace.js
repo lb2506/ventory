@@ -10,14 +10,12 @@ const WorkSpace = () => {
   const openBottomAddClotheSheet = () => {
     setBottomAddClotheSheetVisible(true);
   };
-  const handleImage = (value) => { };
+  const handleImage = (value) => {};
 
   return (
     <View style={styles.container}>
       <ImageBackground source={require("../assets/23.webp")} resizeMode="cover" style={styles.buttonsContainer}>
-        <View style={styles.header}>
-        {/* <Text style={styles.title}>Atelier de création</Text> */}
-      </View>
+        <View style={styles.header}>{/* <Text style={styles.title}>Atelier de création</Text> */}</View>
         <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate("CreateOutfit")}>
           <Text style={styles.submitText}>Créer un outfit</Text>
         </TouchableOpacity>
@@ -29,6 +27,7 @@ const WorkSpace = () => {
         visible={bottomAddClotheSheetVisible}
         setVisible={setBottomAddClotheSheetVisible}
         isOutfitImage={false}
+        isMultiple={true}
         setImage={handleImage}
       />
     </View>
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     width: "60%",
-    marginVertical: 30
+    marginVertical: 30,
   },
   submitText: {
     color: "#FFFFFF",

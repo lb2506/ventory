@@ -108,10 +108,14 @@ const modalAddPicture = (props) => {
         <TouchableOpacity style={styles.textContainer} onPress={pickImage}>
           <Text style={styles.text}>Importer une photo</Text>
         </TouchableOpacity>
-        <View style={styles.line} />
-        <TouchableOpacity style={styles.textContainer} onPress={() => pickImage(true)}>
-          <Text style={styles.text}>Ajout multiple</Text>
-        </TouchableOpacity>
+        {props.isMultiple === true && (
+          <>
+            <View style={styles.line} />
+            <TouchableOpacity style={styles.textContainer} onPress={() => pickImage(true)}>
+              <Text style={styles.text}>Ajout multiple</Text>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
     </Modal>
   );
