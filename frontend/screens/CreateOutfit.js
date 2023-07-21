@@ -26,21 +26,23 @@ const CreateOutfit = () => {
   const [valueCat, setValueCat] = useState("");
   const [valueSeason, setValueSeason] = useState("");
   const [visibleBottomSheet, setVisibleBottomSheet] = useState(false);
-  const [itemsCat, setItemsCat] = useState([
+  
+  const itemsCat = [
     { label: "Casual", value: "Casual" },
     { label: "Sport", value: "Sport" },
     { label: "Chic", value: "Chic" },
     { label: "Soirée", value: "Soirée" },
     { label: "Travail", value: "Travail" },
     { label: "Autre", value: "Autre" },
-  ]);
-  const [itemsSeason, setItemsSeason] = useState([
+  ];
+  
+  const itemsSeason = [
     { label: "Hiver", value: "Hiver" },
     { label: "Printemps", value: "Printemps" },
     { label: "Été", value: "Été" },
     { label: "Automne", value: "Automne" },
     { label: "Autre", value: "Autre" },
-  ]);
+  ];
 
   const handleSelectedClotheChange = (selectedClothe) => {
     setSelectedClothe(selectedClothe);
@@ -152,7 +154,10 @@ const CreateOutfit = () => {
         },
       });
 
-      navigation.navigate("Profile");
+      navigation.navigate("Home", {
+        screen: 'ProfileTab',
+        params: { screen: 'ProfileScreen' },
+      });
     } catch (error) {
       console.error(error.response);
     } finally {
@@ -204,7 +209,7 @@ const CreateOutfit = () => {
                 <Text style={styles.option}>Phototèque</Text>
               </TouchableOpacity> */}
               <TouchableOpacity style={styles.addButton} onPress={toggleBottomSheet}>
-                <Text style={styles.option}>Sélectionner</Text>
+                <Text style={styles.option}>Ajouter</Text>
               </TouchableOpacity>
             </View>
             <BottomSheet visible={visibleBottomSheet} onBackButtonPress={toggleBottomSheet} onBackdropPress={toggleBottomSheet}>
@@ -299,7 +304,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     marginTop: 20,
-    marginBottom: 0,
+    marginBottom: 20,
   },
   submitText: {
     color: "#FFFFFF",
@@ -320,7 +325,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     marginTop: 20,
-    marginBottom: 0,
+    marginBottom: 20,
   },
   inputs: {
     marginBottom: 30,

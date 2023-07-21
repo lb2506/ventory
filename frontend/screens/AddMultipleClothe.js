@@ -43,7 +43,10 @@ const AddMultipleClothe = ({ route, navigation }) => {
         });
       }
 
-      navigation.navigate("Profile");
+      navigation.navigate("Home", {
+        screen: 'ProfileTab',
+        params: { screen: 'ProfileScreen' },
+      });
     } catch (error) {
       console.error(error.response.data);
     } finally {

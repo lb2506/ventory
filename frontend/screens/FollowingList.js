@@ -35,7 +35,7 @@ const FollowingList = ({ route }) => {
         data={following}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate("SearchedProfile", { userId: item._id })}>
+          <TouchableOpacity style={styles.listItem} onPress={() => navigation.push("SearchedProfile", { userId: item._id })}>
             <Text style={styles.listText}>
               <PhotoPseudo pictureSize={50} pseudoSize={15} pseudoName={item.pseudo} pictureUrl={item.profilePicture} pseudoVisible={true} />
             </Text>

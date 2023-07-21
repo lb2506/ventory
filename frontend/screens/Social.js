@@ -149,7 +149,7 @@ const Social = () => {
   );
 
   const handleUserClick = (userId) => {
-    navigation.navigate("SearchedProfile", { userId: userId });
+    navigation.push("SearchedProfile", { userId: userId });
   };
 
   useFocusEffect(

@@ -67,11 +67,11 @@ const SearchedProfile = () => {
         <View style={styles.pseudoFollowContainer}>
           <PhotoPseudo pictureSize={70} pseudoSize={20} pseudoName={userData?.pseudo} pictureUrl={userData?.profilePicture} pseudoVisible={false} />
           <View style={styles.followersFollowingContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowersList", { userId: userData._id })}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowersList", { userId: userData._id })}>
               <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
               <Text style={styles.text}>followers</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("FollowingList", { userId: userData._id })}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowingList", { userId: userData._id })}>
               <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
               <Text style={styles.text}>suivies</Text>
             </TouchableOpacity>

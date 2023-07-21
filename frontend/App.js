@@ -1,7 +1,7 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import SplashScreen from "./screens/SplashScreen";
@@ -26,13 +26,53 @@ import ReportBug from "./screens/ReportBug";
 import AboutUs from "./screens/AboutUs";
 import { Ionicons } from "@expo/vector-icons";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function HomeTabs() {
+function SocialStack() {
+  return (
+    <Stack.Navigator initialRouteName="SocialScreen" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="SocialScreen" component={Social} />
+      <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
+      <Stack.Screen name="FollowersList" component={FollowersList} />
+      <Stack.Screen name="FollowingList" component={FollowingList} />
+    </Stack.Navigator>
+  );
+}
+
+function WorkSpaceStack() {
+  return (
+    <Stack.Navigator initialRouteName="WorkSpaceScreen" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="WorkSpaceScreen" component={WorkSpace} />
+      <Stack.Screen name="CreateOutfit" component={CreateOutfit} />
+      <Stack.Screen name="AddClothe" component={AddClothe} />
+      <Stack.Screen name="AddMultipleClothe" component={AddMultipleClothe} />
+    </Stack.Navigator>
+  );
+}
+
+function ProfileStack() {
+  return (
+    <Stack.Navigator initialRouteName="ProfileScreen" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ProfileScreen" component={Profile} />
+      <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
+      <Stack.Screen name="OutfitDetails" component={OutfitDetails} />
+      <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
+      <Stack.Screen name="FollowersList" component={FollowersList} />
+      <Stack.Screen name="FollowingList" component={FollowingList} />
+      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen name="InfosProfileSettings" component={InfosProfileSettings} />
+      <Stack.Screen name="ContactUs" component={ContactUs} />
+      <Stack.Screen name="ReportBug" component={ReportBug} />
+      <Stack.Screen name="AboutUs" component={AboutUs} />
+    </Stack.Navigator>
+  );
+}
+
+function TabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="SplashScreen"
+      initialRouteName="SocialTab"
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: "#000000",
         tabBarInactiveTintColor: "#A9A9A9",
@@ -43,20 +83,20 @@ function HomeTabs() {
         unmountOnBlur: true,
         tabBarIcon: ({ color }) => {
           let iconName;
-          if (route.name === "Social") {
+          if (route.name === "SocialTab") {
             iconName = "home-sharp";
-          } else if (route.name === "WorkSpace") {
+          } else if (route.name === "WorkSpaceTab") {
             iconName = "add-circle-sharp";
-          } else if (route.name === "Profile") {
+          } else if (route.name === "ProfileTab") {
             iconName = "person-sharp";
           }
           return <Ionicons name={iconName} size={35} color={color} />;
         },
       })}
     >
-      <Tab.Screen name="Social" component={Social} />
-      <Tab.Screen name="WorkSpace" component={WorkSpace} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="SocialTab" component={SocialStack} />
+      <Tab.Screen name="WorkSpaceTab" component={WorkSpaceStack} />
+      <Tab.Screen name="ProfileTab" component={ProfileStack} />
     </Tab.Navigator>
   );
 }
@@ -69,20 +109,7 @@ export default function App() {
         <Stack.Screen name="OpenScreen" component={OpenScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
-        <Stack.Screen name="AddClothe" component={AddClothe} />
-        <Stack.Screen name="AddMultipleClothe" component={AddMultipleClothe} />
-        <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
-        <Stack.Screen name="OutfitDetails" component={OutfitDetails} />
-        <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
-        <Stack.Screen name="FollowersList" component={FollowersList} />
-        <Stack.Screen name="FollowingList" component={FollowingList} />
-        <Stack.Screen name="CreateOutfit" component={CreateOutfit} />
-        <Stack.Screen name="Settings" component={Settings} />
-        <Stack.Screen name="InfosProfileSettings" component={InfosProfileSettings} />
-        <Stack.Screen name="ContactUs" component={ContactUs} />
-        <Stack.Screen name="ReportBug" component={ReportBug} />
-        <Stack.Screen name="AboutUs" component={AboutUs} />
+        <Stack.Screen name="Home" component={TabNavigator} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

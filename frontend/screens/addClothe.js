@@ -21,22 +21,25 @@ const AddClothe = ({ route, navigation }) => {
   const [valueSeason, setValueSeason] = useState("");
   const [valueTaille, setValueTaille] = useState("");
   const [valueCouleur, setValueCouleur] = useState("");
-  const [itemsCat, setItemsCat] = useState([
+  
+  const itemsCat = [
     { label: "Casual", value: "Casual" },
     { label: "Sport", value: "Sport" },
     { label: "Chic", value: "Chic" },
     { label: "Soirée", value: "Soirée" },
     { label: "Travail", value: "Travail" },
     { label: "Autre", value: "Autre" },
-  ]);
-  const [itemsSeason, setItemsSeason] = useState([
+  ];
+  
+  const itemsSeason = [
     { label: "Hiver", value: "Hiver" },
     { label: "Printemps", value: "Printemps" },
     { label: "Été", value: "Été" },
     { label: "Automne", value: "Automne" },
     { label: "Autre", value: "Autre" },
-  ]);
-  const [itemsTaille, setItemsTaille] = useState([
+  ];
+  
+  const itemsTaille = [
     { label: "XXS", value: "XXS" },
     { label: "XS", value: "XS" },
     { label: "S", value: "S" },
@@ -44,8 +47,9 @@ const AddClothe = ({ route, navigation }) => {
     { label: "L", value: "L" },
     { label: "XL", value: "XL" },
     { label: "XXL", value: "XXL" },
-  ]);
-  const [itemsCouleur, setItemsCouleur] = useState([
+  ];
+  
+  const itemsCouleur = [
     { label: "Bleu", value: "Bleu" },
     { label: "Blanc", value: "Blanc" },
     { label: "Beige", value: "Beige" },
@@ -59,7 +63,8 @@ const AddClothe = ({ route, navigation }) => {
     { label: "Vert", value: "Vert" },
     { label: "Violet", value: "Violet" },
     { label: "Autre", value: "Autre" },
-  ]);
+  ];
+  
   const [isValid, setIsValid] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -112,7 +117,10 @@ const AddClothe = ({ route, navigation }) => {
         },
       });
 
-      navigation.navigate("Profile");
+      navigation.navigate("Home", {
+        screen: 'ProfileTab',
+        params: { screen: 'ProfileScreen' },
+      });
     } catch (error) {
       console.error(error.response.data);
     } finally {

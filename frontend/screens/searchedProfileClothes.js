@@ -29,11 +29,9 @@ const SearchedProfileClothes = ({ route }) => {
 
 
     const renderItem = ({ item }) => (
-        // <TouchableOpacity onPress={() => navigation.navigate('ClotheDetails', { item: item })}>
             <View>
                 <Image source={{ uri: item }} style={styles.image} />
             </View>
-        // </TouchableOpacity>
     );
 
     return (

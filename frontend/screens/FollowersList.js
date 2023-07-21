@@ -35,7 +35,7 @@ const FollowersList = ({ route }) => {
         data={followers}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate("SearchedProfile", { userId: item._id })}>
+          <TouchableOpacity style={styles.listItem} onPress={() => navigation.push("SearchedProfile", { userId: item._id })}>
             <Text>
               <PhotoPseudo pictureSize={50} pseudoSize={15} pseudoName={item.pseudo} pictureUrl={item.profilePicture} pseudoVisible={true} />
             </Text>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: 80,
+    paddingTop: 60,
     alignItems: "center",
     paddingBottom: 20,
   },
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
   comeBack: {
     position: "absolute",
-    top: 77,
+    top: 57,
     left: 10,
   },
 });

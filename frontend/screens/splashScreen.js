@@ -11,7 +11,7 @@ const SplashScreen = ({ navigation }) => {
 
       setTimeout(() => {
         if (token !== null) {
-          navigation.replace("HomeTabs");
+          navigation.replace("Home");
         } else {
           navigation.replace("OpenScreen");
         }
