@@ -27,7 +27,7 @@ router.post("/contact", authenticate, upload.single('file'), async (req, res) =>
         from: process.env.CONTACT_EMAIL,
         to: process.env.CONTACT_EMAIL,
         subject: `${req.body.type} ${req.body.subject}`,
-        text: req.body.message,
+        text: `Adresse e-mail : ${req.user.email}\nNom : ${req.user.lastName}\nPrénom : ${req.user.firstName}\nPseudo : ${req.user.pseudo}\n\nMessage : \n${req.body.message}`,
         replyTo: req.user.email,
         attachments: attachments
     };
