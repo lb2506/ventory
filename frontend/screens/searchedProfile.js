@@ -69,11 +69,11 @@ const SearchedProfile = () => {
           <View style={styles.followersFollowingContainer}>
             <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowersList", { userId: userData._id })}>
               <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
-              <Text style={styles.text}>followers</Text>
+              <Text style={styles.text}>follower(s)</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowingList", { userId: userData._id })}>
               <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
-              <Text style={styles.text}>suivies</Text>
+              <Text style={styles.text}>suivie(s)</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -21,7 +21,7 @@ const AddClothe = ({ route, navigation }) => {
   const [valueSeason, setValueSeason] = useState("");
   const [valueTaille, setValueTaille] = useState("");
   const [valueCouleur, setValueCouleur] = useState("");
-  
+
   const itemsCat = [
     { label: "Casual", value: "Casual" },
     { label: "Sport", value: "Sport" },
@@ -30,7 +30,7 @@ const AddClothe = ({ route, navigation }) => {
     { label: "Travail", value: "Travail" },
     { label: "Autre", value: "Autre" },
   ];
-  
+
   const itemsSeason = [
     { label: "Hiver", value: "Hiver" },
     { label: "Printemps", value: "Printemps" },
@@ -38,7 +38,7 @@ const AddClothe = ({ route, navigation }) => {
     { label: "Automne", value: "Automne" },
     { label: "Autre", value: "Autre" },
   ];
-  
+
   const itemsTaille = [
     { label: "XXS", value: "XXS" },
     { label: "XS", value: "XS" },
@@ -48,7 +48,7 @@ const AddClothe = ({ route, navigation }) => {
     { label: "XL", value: "XL" },
     { label: "XXL", value: "XXL" },
   ];
-  
+
   const itemsCouleur = [
     { label: "Bleu", value: "Bleu" },
     { label: "Blanc", value: "Blanc" },
@@ -64,7 +64,7 @@ const AddClothe = ({ route, navigation }) => {
     { label: "Violet", value: "Violet" },
     { label: "Autre", value: "Autre" },
   ];
-  
+
   const [isValid, setIsValid] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -87,6 +87,7 @@ const AddClothe = ({ route, navigation }) => {
   const openBottomAddClotheSheet = () => {
     setBottomAddClotheSheetVisible(true);
   };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const token = await AsyncStorage.getItem("token");
@@ -142,9 +143,9 @@ const AddClothe = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
-        <View style={{ position: "relative" }}>
-          <Image source={{ uri: image }} style={{ width: windowWidth, height: 500 }} />
-          <View style={{ position: "absolute", bottom: 10, right: 10 }}>
+        <View style={{ position: "relative", marginTop: 90 }}>
+          <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
+          <View style={{ position: "absolute", bottom: -25, right: 20, backgroundColor: 'white', alignItems: 'center', borderRadius: 50, padding: 5, paddingLeft: 9 }}>
             <Ionicons name="create-sharp" size={35} color="#000000" onPress={openBottomAddClotheSheet} />
           </View>
         </View>
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   },
   comeBack: {
     position: "absolute",
-    top: 80,
+    top: 40,
     left: 10,
     zIndex: 1,
   },

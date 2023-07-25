@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     height: 400,
   },
   list: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#EFEFEF",
     height: "100%",
   },
   image: {

@@ -27,19 +27,44 @@ const modalAddPicture = (props) => {
           quality: 1,
           exif: true,
         });
-        toggleBottomNavigationView();
-        if (!image.canceled) {
-          if (image.assets && image.assets.length > 0 && props.isOutfitImage === true) {
-            props.setImage(image.assets[0].uri);
-          }
-          if (props.isOutfitImage !== true) {
-            navigation.navigate("AddClothe", { imageUri: image.assets[0].uri });
-          }
 
+        if (!image.canceled && image.assets && image.assets.length > 0) {
           if (props.isProfilePicture === true) {
             navigation.navigate("InfosProfileSettings", { imageUri: image.assets[0].uri });
+          } else {
+            const data = new FormData();
+            data.append('image', {
+              name: 'image.jpg',
+              type: 'image/jpeg',
+              uri: Platform.OS === 'android' ? image.assets[0].uri : image.assets[0].uri.replace('file://', ''),
+            });
+
+            await fetch('https://api-removebg.onrender.com/remove-background', {
+              method: 'POST',
+              body: data,
+            })
+              .then((response) => response.blob())
+              .then((blob) => {
+                var reader = new FileReader();
+                reader.onload = () => {
+                  const imageURI = reader.result;
+
+                  if (props.isOutfitImage === true) {
+                    props.setImage(imageURI);
+                  }
+
+                  if (props.isOutfitImage === false) {
+                    navigation.navigate("AddClothe", { imageUri: imageURI });
+                  }
+                };
+                reader.readAsDataURL(blob);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
           }
         }
+        toggleBottomNavigationView();
       } else {
         console.log("La permission d'accès à la caméra a été refusée");
       }
@@ -47,6 +72,7 @@ const modalAddPicture = (props) => {
       console.log("Erreur lors de l'ouverture de la caméra :", error);
     }
   };
+
 
   const pickImage = async (multiple) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -62,17 +88,42 @@ const modalAddPicture = (props) => {
       });
 
       if (!result.canceled) {
-        if (multiple !== true) {
-          if (result.assets.length > 0 && props.isOutfitImage === true) {
-            props.setImage(result.assets[0].uri);
-          }
-          if (props.isOutfitImage !== true) {
-            navigation.navigate("AddClothe", { imageUri: result.assets[0].uri });
-          }
+        if (multiple !== true && result.assets.length > 0) {
           if (props.isProfilePicture === true) {
             navigation.navigate("InfosProfileSettings", { imageUri: result.assets[0].uri });
+          } else {
+            const data = new FormData();
+            data.append('image', {
+              name: 'image.jpg',
+              type: 'image/jpeg',
+              uri: Platform.OS === 'android' ? result.assets[0].uri : result.assets[0].uri.replace('file://', ''),
+            });
+
+            await fetch('https://api-removebg.onrender.com/remove-background', {
+              method: 'POST',
+              body: data,
+            })
+              .then((response) => response.blob())
+              .then((blob) => {
+                var reader = new FileReader();
+                reader.onload = () => {
+                  const imageURI = reader.result;
+
+                  if (props.isOutfitImage === true) {
+                    props.setImage(imageURI);
+                  }
+
+                  if (props.isOutfitImage === false) {
+                    navigation.navigate("AddClothe", { imageUri: imageURI });
+                  }
+                };
+                reader.readAsDataURL(blob);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
           }
-        } else {
+        } else if (multiple === true) {
           const images = [];
           result.assets.map((image) => {
             images.push(image.uri);
@@ -83,6 +134,7 @@ const modalAddPicture = (props) => {
       toggleBottomNavigationView();
     }
   };
+
   return (
     <Modal
       onBackdropPress={toggleModal}

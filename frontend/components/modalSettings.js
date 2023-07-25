@@ -13,12 +13,13 @@ const modalAddPicture = ({ visible, setVisible }) => {
     };
 
     const logOut = async () => {
-        await AsyncStorage.removeItem('token');
-        setVisible(!visible)
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'OpenScreen' }],
-        });
+        try {
+            await AsyncStorage.removeItem('token');
+            setVisible(!visible)
+            navigation.navigate("OpenScreen")
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const handleNavigate = () => {
@@ -50,7 +51,7 @@ const modalAddPicture = ({ visible, setVisible }) => {
                 </TouchableOpacity>
                 <View style={styles.line} />
                 <TouchableOpacity style={styles.textContainer} onPress={logOut}>
-                    <Text style={styles.text}>
+                    <Text style={[styles.text, { color: 'red' }]}>
                         Déconnexion
                     </Text>
                 </TouchableOpacity>
