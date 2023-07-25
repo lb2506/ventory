@@ -293,8 +293,10 @@ const styles = StyleSheet.create({
     color: "#bbb",
   },
   newsFeedItem: {
-    marginVertical: 10,
+    marginTop: 20,
     paddingBottom: 10,
+    borderBottomColor:'#EFEFEF',
+    borderBottomWidth:1
   },
   newsFeedText: {
     fontSize: 18,
