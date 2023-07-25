@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import axios from "axios";
@@ -14,7 +14,7 @@ import ModalAddPicture from "../components/modalAddPicture";
 
 
 
-const InfosProfileSettings = ({route}) => {
+const InfosProfileSettings = ({ route }) => {
     const navigation = useNavigation()
 
     const [pseudo, setPseudo] = useState("")
@@ -30,7 +30,7 @@ const InfosProfileSettings = ({route}) => {
     const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
 
 
-    
+
     const openBottomAddClotheSheet = () => {
         setBottomAddClotheSheetVisible(true);
     };
@@ -92,21 +92,21 @@ const InfosProfileSettings = ({route}) => {
                     compress: 0.5,
                     format: ImageManipulator.SaveFormat.JPEG,
                 });
-        
+
                 let formData = new FormData();
                 formData.append("profilePicture", {
                     uri: manipResult.uri,
                     type: "image/jpeg",
                     name: "profile.jpg",
                 });
-        
+
                 formData.append("pseudo", pseudo);
                 formData.append("firstName", firstName);
                 formData.append("lastName", lastName);
                 formData.append("email", email);
                 formData.append("phone", phone);
                 formData.append("password", password);
-        
+
                 const decoded = jwt_decode(token);
                 await axios.put(`${url}/user/${decoded._id}`, formData, {
                     headers: {
@@ -124,87 +124,93 @@ const InfosProfileSettings = ({route}) => {
 
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
-                    <Ionicons name="chevron-back-outline" size={35} color="#000000" />
-                </TouchableOpacity>
-                <Text style={styles.title}>Informations du profil</Text>
-            </View>
-            <View style={styles.photoPseudo}>
-                <PhotoPseudo
-                    pictureSize={150}
-                    pseudoSize={20}
-                    pseudoName={userData?.pseudo}
-                    pictureUrl={profilePicture}
-                    pseudoVisible={false}
-                />
-                <TouchableOpacity style={styles.editIconContainer}>
-                    <View  style={styles.editIcon} >
-                        <Ionicons name="add-outline" size={19} color="#FFFFFF" onPress={openBottomAddClotheSheet}/>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+        >
+            <ScrollView>
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
+                            <Ionicons name="chevron-back-outline" size={35} color="#000000" />
+                        </TouchableOpacity>
+                        <Text style={styles.title}>Informations du profil</Text>
                     </View>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.formContainer}>
-                <TextInput
-                    style={styles.input}
-                    value={pseudo}
-                    onChangeText={setPseudo}
-                    placeholder="Pseudo"
-                />
-                <TextInput
-                    style={styles.input}
-                    value={lastName}
-                    onChangeText={setLastName}
-                    placeholder="Nom"
-                />
-                <TextInput
-                    style={styles.input}
-                    value={firstName}
-                    onChangeText={setFirstName}
-                    placeholder="Prénom"
-                />
-                <TextInput
-                    style={styles.input}
-                    value={email}
-                    onChangeText={setEmail}
-                    placeholder="Adresse email"
-                />
-                <TextInput
-                    style={styles.input}
-                    value={phone}
-                    onChangeText={setPhone}
-                    placeholder="Numéro de téléphone"
-                />
-                <TextInput
-                    style={styles.input}
-                    value={password}
-                    onChangeText={handlePasswordChange}
-                    placeholder="Mot de passe"
-                    secureTextEntry={true}
-                    passwordRules=""
-                />
-                {password !== "" && (
-                    <TextInput
-                        style={styles.input}
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                        placeholder="Confirmer le mot de passe"
-                        secureTextEntry={true}
-                        passwordRules=""
+                    <View style={styles.photoPseudo}>
+                        <PhotoPseudo
+                            pictureSize={150}
+                            pseudoSize={20}
+                            pseudoName={userData?.pseudo}
+                            pictureUrl={profilePicture}
+                            pseudoVisible={false}
+                        />
+                        <TouchableOpacity style={styles.editIconContainer}>
+                            <View style={styles.editIcon} >
+                                <Ionicons name="add-outline" size={19} color="#FFFFFF" onPress={openBottomAddClotheSheet} />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.formContainer}>
+                        <TextInput
+                            style={styles.input}
+                            value={pseudo}
+                            onChangeText={setPseudo}
+                            placeholder="Pseudo"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={lastName}
+                            onChangeText={setLastName}
+                            placeholder="Nom"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={firstName}
+                            onChangeText={setFirstName}
+                            placeholder="Prénom"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={email}
+                            onChangeText={setEmail}
+                            placeholder="Adresse email"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={phone}
+                            onChangeText={setPhone}
+                            placeholder="Numéro de téléphone"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={password}
+                            onChangeText={handlePasswordChange}
+                            placeholder="Mot de passe"
+                            secureTextEntry={true}
+                            passwordRules=""
+                        />
+                        {password !== "" && (
+                            <TextInput
+                                style={styles.input}
+                                value={confirmPassword}
+                                onChangeText={setConfirmPassword}
+                                placeholder="Confirmer le mot de passe"
+                                secureTextEntry={true}
+                                passwordRules=""
+                            />
+                        )}
+                        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                            <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Valider"}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <ModalAddPicture
+                        visible={bottomAddClotheSheetVisible}
+                        setVisible={setBottomAddClotheSheetVisible}
+                        isProfilePicture={true}
                     />
-                )}
-                <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-                    <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Valider"}</Text>
-                </TouchableOpacity>
-            </View>
-            <ModalAddPicture
-                visible={bottomAddClotheSheetVisible}
-                setVisible={setBottomAddClotheSheetVisible}
-                isOutfitImage={true}
-                isProfilePicture={true}
-            />
-        </View>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
 

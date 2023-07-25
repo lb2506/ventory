@@ -88,7 +88,7 @@ const Register = () => {
         },
       });
       await AsyncStorage.setItem("token", response.data.token);
-      navigation.navigate("HomeTabs");
+      navigation.navigate("Home");
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         setErrorMessage(error.response.data.error);

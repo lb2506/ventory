@@ -24,7 +24,7 @@ const Login = () => {
     try {
       const response = await axios.post(`${url}/login`, { email: email.toLowerCase(), password });
       await AsyncStorage.setItem("token", response.data.token);
-      navigation.navigate("HomeTabs");
+      navigation.navigate("Home");
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         setErrorMessage(error.response.data.error);
