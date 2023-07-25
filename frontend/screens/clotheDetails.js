@@ -15,8 +15,6 @@ const windowWidth = Dimensions.get("window").width;
 function ClotheDetails({ route, navigation }) {
   const { item } = route.params;
 
-
-
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
   const [brand, setBrand] = useState(item.brand);
@@ -29,7 +27,7 @@ function ClotheDetails({ route, navigation }) {
   const [valueSeason, setValueSeason] = useState(item.season);
   const [valueTaille, setValueTaille] = useState(item.size);
   const [valueCouleur, setValueCouleur] = useState(item.color);
-  
+
   const itemsCat = [
     { label: "Casual", value: "Casual" },
     { label: "Sport", value: "Sport" },
@@ -38,7 +36,7 @@ function ClotheDetails({ route, navigation }) {
     { label: "Travail", value: "Travail" },
     { label: "Autre", value: "Autre" },
   ];
-  
+
   const itemsSeason = [
     { label: "Hiver", value: "Hiver" },
     { label: "Printemps", value: "Printemps" },
@@ -46,7 +44,7 @@ function ClotheDetails({ route, navigation }) {
     { label: "Automne", value: "Automne" },
     { label: "Autre", value: "Autre" },
   ];
-  
+
   const itemsTaille = [
     { label: "XXS", value: "XXS" },
     { label: "XS", value: "XS" },
@@ -56,7 +54,7 @@ function ClotheDetails({ route, navigation }) {
     { label: "XL", value: "XL" },
     { label: "XXL", value: "XXL" },
   ];
-  
+
   const itemsCouleur = [
     { label: "Bleu", value: "Bleu" },
     { label: "Blanc", value: "Blanc" },
@@ -72,7 +70,6 @@ function ClotheDetails({ route, navigation }) {
     { label: "Violet", value: "Violet" },
     { label: "Autre", value: "Autre" },
   ];
-  
 
   const handleValueCat = (value) => {
     setValueCat(value);
@@ -156,8 +153,8 @@ function ClotheDetails({ route, navigation }) {
       });
 
       navigation.navigate("Home", {
-        screen: 'ProfileTab',
-        params: { screen: 'ProfileScreen' },
+        screen: "ProfileTab",
+        params: { screen: "ProfileScreen" },
       });
     } catch (error) {
       console.error(error.response);
@@ -174,7 +171,18 @@ function ClotheDetails({ route, navigation }) {
         </TouchableOpacity>
         <View style={{ position: "relative", marginTop: 90 }}>
           <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
-          <View style={{ position: "absolute", bottom: -25, right: 20, backgroundColor: 'white', alignItems: 'center', borderRadius: 50, padding: 5, paddingLeft: 9 }}>
+          <View
+            style={{
+              position: "absolute",
+              bottom: -25,
+              right: 20,
+              backgroundColor: "white",
+              alignItems: "center",
+              borderRadius: 50,
+              padding: 5,
+              paddingLeft: 9,
+            }}
+          >
             <Ionicons name="create-sharp" size={35} color="#000000" onPress={openBottomAddClotheSheet} />
           </View>
         </View>

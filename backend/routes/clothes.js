@@ -59,6 +59,15 @@ router.get("/clothes", authenticate, async (req, res) => {
   }
 });
 
+router.get("/clothe/:id", authenticate, async (req, res) => {
+  try {
+    const clothe = await Clothe.findById(req.params.id);
+    res.send(clothe);
+  } catch (error) {
+    res.status(500).send({ error: "Une erreur est survenue en récupérant le vêtement." });
+  }
+});
+
 router.get("/outfits", authenticate, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate({

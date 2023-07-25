@@ -13,6 +13,7 @@ import Social from "./screens/Social";
 import AddClothe from "./screens/AddClothe";
 import AddMultipleClothe from "./screens/AddMultipleClothe";
 import ClotheDetails from "./screens/ClotheDetails";
+import SocialClotheDetails from "./screens/ClotheDetails";
 import OutfitDetails from "./screens/OutfitDetails";
 import WorkSpace from "./screens/WorkSpace";
 import SearchedProfile from "./screens/SearchedProfile";
@@ -36,7 +37,7 @@ function SocialStack() {
       <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
       <Stack.Screen name="FollowersList" component={FollowersList} />
       <Stack.Screen name="FollowingList" component={FollowingList} />
-      <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
+      <Stack.Screen name="SocialClotheDetails" component={SocialClotheDetails} />
     </Stack.Navigator>
   );
 }
