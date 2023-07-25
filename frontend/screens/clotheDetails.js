@@ -15,6 +15,8 @@ const windowWidth = Dimensions.get("window").width;
 function ClotheDetails({ route, navigation }) {
   const { item } = route.params;
 
+
+
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
   const [brand, setBrand] = useState(item.brand);
@@ -201,7 +203,7 @@ function ClotheDetails({ route, navigation }) {
             <Text style={styles.titleInput}>Tags:</Text>
             <Tags tags={tags} setTags={setTags} tagsArray={tagsArray} setTagsArray={setTagsArray} />
           </View>
-          <Text style={styles.titleInput}>Date de création: {format(new Date(item.date), "dd/MM/yyyy")}</Text>
+          {/* <Text style={styles.titleInput}>Date de création: {format(new Date(item.date), "dd/MM/yyyy")}</Text> */}
           {update ? (
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
               <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Enregistrer"}</Text>

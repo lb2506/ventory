@@ -39,7 +39,7 @@ const modalAddPicture = (props) => {
               uri: Platform.OS === 'android' ? image.assets[0].uri : image.assets[0].uri.replace('file://', ''),
             });
 
-            await fetch('https://api-removebg.onrender.com/remove-background', {
+            await fetch('http://192.168.0.25:5001/remove-background', {
               method: 'POST',
               body: data,
             })
@@ -99,7 +99,7 @@ const modalAddPicture = (props) => {
               uri: Platform.OS === 'android' ? result.assets[0].uri : result.assets[0].uri.replace('file://', ''),
             });
 
-            await fetch('https://api-removebg.onrender.com/remove-background', {
+            await fetch('http://192.168.0.25:5001/remove-background', {
               method: 'POST',
               body: data,
             })
