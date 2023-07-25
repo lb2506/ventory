@@ -41,11 +41,11 @@ const ProfileOutfits = ({ navigation }) => {
   const renderItem = ({ item }) => {
     const renderImages = () => {
       const imageSize = {
-        width: (windowWidth / 3 - 1.5) / 3,
-        height: (windowWidth / 3 - 1.5) / 3,
+        width: (windowWidth / 2 - 1.5) / 2,
+        height: 125
       };
       const vetements = item.vetements.map((vetement, index) => (
-        <View key={index}>
+        <View  key={index}>
           <Image source={{ uri: vetement.image }} style={imageSize} />
         </View>
       ));
@@ -55,9 +55,10 @@ const ProfileOutfits = ({ navigation }) => {
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",
-            width: windowWidth / 3 - 1.5,
-            height: windowWidth / 3 - 1.5,
+            width: windowWidth / 2 - 1.5,
+            height: 250,
             margin: 0.75,
+            overflow:'hidden'
           }}
         >
           {vetements}
@@ -72,7 +73,15 @@ const ProfileOutfits = ({ navigation }) => {
         }}
         style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}
       >
-        {item.image && item.image !== "" ? <Image source={{ uri: item.image }} style={styles.image} /> : renderImages()}
+        <View style={styles.imageContainer}>
+          {item.image && item.image !== "" ? <Image source={{ uri: item.image }} style={styles.image} /> : renderImages()}
+          <View style={styles.infosDetails}>
+            <Text style={[styles.infos, { fontWeight: 'bold' }]}>{item.name}</Text>
+            <Text style={styles.infos}>{item.category}</Text>
+            <Text style={styles.infos}>{item.season}</Text>
+          </View>
+        </View>
+
       </TouchableOpacity>
     );
   };
@@ -88,7 +97,7 @@ const ProfileOutfits = ({ navigation }) => {
         data={listOutfitsShowed}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
-        numColumns={3}
+        numColumns={2}
         style={styles.list}
         showsVerticalScrollIndicator={false}
       />
@@ -99,19 +108,33 @@ const ProfileOutfits = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
-    flex:1
+    flex: 1
   },
   selectContainer: {
     height: 400,
   },
   list: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#EFEFEF",
     height: "100%",
   },
-  image: {
-    width: windowWidth / 3 - 1.5,
-    height: windowWidth / 3 - 1.5,
+  imageContainer: {
+    width: windowWidth / 2 - 1.5,
     margin: 0.75,
+    backgroundColor: '#FFFFFF',
+
+  },
+  image: {
+    width: '100%',
+    height: 250,
+  },
+  infosDetails: {
+    paddingBottom: 30,
+    paddingHorizontal: 10,
+    width: windowWidth / 2 - 1.5,
+    height:100
+  },
+  infos: {
+    marginBottom: 10
   },
   selected: {
     borderWidth: 3,
