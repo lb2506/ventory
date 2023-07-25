@@ -69,7 +69,6 @@ const modalAddPicture = (props) => {
           if (props.isOutfitImage !== true) {
             navigation.navigate("AddClothe", { imageUri: result.assets[0].uri });
           }
-
           if (props.isProfilePicture === true) {
             navigation.navigate("InfosProfileSettings", { imageUri: result.assets[0].uri });
           }
