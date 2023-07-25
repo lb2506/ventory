@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     minHeight: 400,
     paddingBottom: 20,
-    maxHeight:'50%'
+    maxHeight: '50%'
   },
   barIcon: {
     width: 60,

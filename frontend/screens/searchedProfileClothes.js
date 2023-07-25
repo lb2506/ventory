@@ -27,11 +27,6 @@ const SearchedProfileClothes = ({ route }) => {
   const renderItem = ({ item }) => (
     <View style={styles.imageContainer}>
       <Image source={{ uri: item }} style={styles.image} />
-      <View style={styles.infosDetails}>
-        <Text style={[styles.infos, { fontWeight: "bold" }]}>{item.brand}</Text>
-        <Text style={styles.infos}>{item.category}</Text>
-        <Text style={styles.infos}>{item.season}</Text>
-      </View>
     </View>
   );
 

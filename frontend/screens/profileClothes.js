@@ -52,11 +52,6 @@ const ProfileClothes = ({ navigation, ...props }) => {
           source={{ uri: item.image }}
           style={props.isCreation && props.selectedClothe.some((clothe) => clothe._id === item._id) ? [styles.selected, styles.image] : styles.image}
         />
-        <View style={styles.infosDetails}>
-          <Text style={[styles.infos, {fontWeight:'bold'}]}>{item.brand}</Text>
-          <Text style={styles.infos}>{item.category}</Text>
-          <Text style={styles.infos}>{item.season}</Text>
-        </View>
       </View>
     </TouchableOpacity>
   );
@@ -112,15 +107,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 250,
-  },
-  infosDetails: {
-    paddingBottom: 30,
-    paddingHorizontal: 10,
-    width: windowWidth / 2 - 1.5,
-    height:100
-  },
-  infos: {
-    marginBottom: 10
   },
   selected: {
     borderWidth: 3,
