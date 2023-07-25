@@ -36,6 +36,7 @@ function SocialStack() {
       <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
       <Stack.Screen name="FollowersList" component={FollowersList} />
       <Stack.Screen name="FollowingList" component={FollowingList} />
+      <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
     </Stack.Navigator>
   );
 }
