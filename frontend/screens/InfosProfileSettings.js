@@ -11,9 +11,6 @@ import * as ImageManipulator from "expo-image-manipulator";
 import PhotoPseudo from "../components/photoPseudo";
 import ModalAddPicture from "../components/modalAddPicture";
 
-const InfosProfileSettings = ({ route }) => {
-  const navigation = useNavigation();
-
 
 const InfosProfileSettings = ({ route }) => {
     const navigation = useNavigation()
