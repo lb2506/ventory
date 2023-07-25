@@ -253,7 +253,7 @@ router.post("/updateOutfit/:id", authenticate, upload.single("image"), async (re
   }
 });
 
-router.post("/updateClothe/:id", authenticate, upload.single("image"), async (req, res) => {
+router.put("/updateClothe/:id", authenticate, upload.single("image"), async (req, res) => {
   try {
     const clotheId = req.params.id;
     const clothe = await Clothe.findById(clotheId);

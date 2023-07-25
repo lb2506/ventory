@@ -61,12 +61,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 250,
   },
-  infosDetails: {
-    paddingBottom: 30,
-    paddingHorizontal: 10,
-    width: windowWidth / 2 - 1.5,
-    height: 100,
-  },
   infos: {
     marginBottom: 10,
   },

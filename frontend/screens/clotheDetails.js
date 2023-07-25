@@ -145,7 +145,7 @@ function ClotheDetails({ route, navigation }) {
       formData.append("color", valueCouleur);
       formData.append("tags", tags);
 
-      await axios.post(`${url}/updateClothe/${item._id}`, formData, {
+      await axios.put(`${url}/updateClothe/${item._id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -170,7 +170,7 @@ function ClotheDetails({ route, navigation }) {
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
         <View style={{ position: "relative", marginTop: 90 }}>
-          <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
+          <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }}/>
           <View
             style={{
               position: "absolute",
@@ -211,7 +211,7 @@ function ClotheDetails({ route, navigation }) {
             <Text style={styles.titleInput}>Tags:</Text>
             <Tags tags={tags} setTags={setTags} tagsArray={tagsArray} setTagsArray={setTagsArray} />
           </View>
-          {/* <Text style={styles.titleInput}>Date de création: {format(new Date(item.date), "dd/MM/yyyy")}</Text> */}
+          <Text style={styles.titleInput}>Date de création: {format(new Date(item.date), "dd/MM/yyyy")}</Text>
           {update ? (
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
               <Text style={styles.submitText}>{isSubmitting ? "En cours..." : "Enregistrer"}</Text>

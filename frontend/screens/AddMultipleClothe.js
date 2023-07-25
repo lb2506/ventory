@@ -82,6 +82,7 @@ const AddMultipleClothe = ({ route, navigation }) => {
           </View>
           <View style={styles.ClothesContainer}>
             {image.map((clothe) => {
+              console.log(clothe);
               return <Image key={clothe._id} source={{ uri: clothe }} style={styles.Clothe} />;
             })}
           </View>

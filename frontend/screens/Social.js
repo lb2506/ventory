@@ -214,7 +214,7 @@ const Social = () => {
           ) : null}
           {newsFeed.length === 0 && isFetched ? (
             <Text style={styles.textNoFollowing}>
-              Il semble que vous ne suivez encore aucun compte. Commencez à suivre des comptes pour que leur dernières actualités apparaissent ici.
+              Rien à afficher ici, suiviez des comptes ou attendez qu'ils publient !
             </Text>
           ) : null}
 
