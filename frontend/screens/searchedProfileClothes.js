@@ -1,66 +1,62 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
-import { url } from '../api';
-import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity } from "react-native";
+import { url } from "../api";
+import { useNavigation } from "@react-navigation/native";
 
-
-
-const windowWidth = Dimensions.get('window').width;
+const windowWidth = Dimensions.get("window").width;
 
 const SearchedProfileClothes = ({ route }) => {
-    const navigation = useNavigation();
-    const [clothes, setClothes] = useState([]);
+  const navigation = useNavigation();
+  const [clothes, setClothes] = useState([]);
 
-    const fetchClothes = async () => {
+  const fetchClothes = async () => {
+    try {
+      const response = await axios.get(`${url}/user/clothes/${route.params.userId}`);
+      const sortedClothes = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setClothes(sortedClothes);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-        try {
-            const response = await axios.get(`${url}/user/clothes/${route.params.userId}`);
-            const sortedClothes = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-            setClothes(sortedClothes);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+  useEffect(() => {
+    fetchClothes();
+  }, []);
 
-    useEffect(() => {
-        fetchClothes();
-    }, []);
+  const renderItem = ({ item }) => (
+    <View>
+      <Image source={{ uri: item }} style={styles.image} />
+    </View>
+  );
 
-
-    const renderItem = ({ item }) => (
-            <View>
-                <Image source={{ uri: item }} style={styles.image} />
-            </View>
-    );
-
-    return (
-        <View style={styles.container}>
-            <FlatList
-                data={clothes}
-                renderItem={renderItem}
-                keyExtractor={item => item._id}
-                numColumns={3}
-                style={styles.list}
-                showsVerticalScrollIndicator={false}
-            />
-        </View>
-    )
-}
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={clothes}
+        renderItem={renderItem}
+        keyExtractor={(item) => item._id}
+        numColumns={3}
+        style={styles.list}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#FFFFFF',
-    },
-    list: {
-        backgroundColor: '#FFFFFF',
-        height: '100%',
-    },
-    image: {
-        width: windowWidth / 3 - 1.5,
-        height: windowWidth / 3 - 1.5,
-        margin: 0.75,
-    }
-})
+  container: {
+    backgroundColor: "#FFFFFF",
+  },
+  list: {
+    backgroundColor: "#FFFFFF",
+    height: "100%",
+  },
+  image: {
+    width: windowWidth / 3 - 1.5,
+    height: windowWidth / 3 - 1.5,
+    margin: 0.75,
+  },
+});
 
 export default SearchedProfileClothes;

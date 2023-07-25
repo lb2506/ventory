@@ -21,11 +21,15 @@ function SocialClotheDetails({ route, navigation }) {
   const [valueSeason, setValueSeason] = useState();
   const [valueTaille, setValueTaille] = useState();
   const [valueCouleur, setValueCouleur] = useState();
+  const [dateClothe, setDateClothe] = useState();
 
   useEffect(() => {
     const fetchClothe = async () => {
+      const token = await AsyncStorage.getItem("token");
       try {
-        const response = await axios.get(`${url}/clothe/${item.id}`);
+        const response = await axios.get(`${url}/clothe/${item}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setImage(response.data.image);
         setBrand(response.data.brand);
         setTags(response.data.tags);
@@ -33,6 +37,7 @@ function SocialClotheDetails({ route, navigation }) {
         setValueSeason(response.data.season);
         setValueTaille(response.data.size);
         setValueCouleur(response.data.color);
+        setDateClothe(response.data.date);
       } catch (error) {
         console.log(error);
       }
@@ -52,29 +57,29 @@ function SocialClotheDetails({ route, navigation }) {
         <View style={styles.containerInputs}>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Marque:</Text>
-            <Text style={{ height: 50, borderWidth: 1, paddingLeft: 15 }}>{brand}</Text>
+            <Text style={{ height: 50, borderWidth: 1, padding: 15 }}>{brand}</Text>
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Catégorie:</Text>
-            <Text style={{ height: 50, borderWidth: 1, paddingLeft: 15 }}>{valueCat}</Text>
+            <Text style={{ height: 50, borderWidth: 1, padding: 15 }}>{valueCat}</Text>
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Saison:</Text>
-            <Text style={{ height: 50, borderWidth: 1, paddingLeft: 15 }}>{valueSeason}</Text>
+            <Text style={{ height: 50, borderWidth: 1, padding: 15 }}>{valueSeason}</Text>
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Taille:</Text>
-            <Text style={{ height: 50, borderWidth: 1, paddingLeft: 15 }}>{valueTaille}</Text>
+            <Text style={{ height: 50, borderWidth: 1, padding: 15 }}>{valueTaille}</Text>
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Couleur:</Text>
-            <Text style={{ height: 50, borderWidth: 1, paddingLeft: 15 }}> {valueCouleur}</Text>
+            <Text style={{ height: 50, borderWidth: 1, padding: 15 }}> {valueCouleur}</Text>
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Tags:</Text>
-            <Text style={{ height: 50, borderWidth: 1, paddingLeft: 15 }}>{tags}</Text>
+            <Text style={{ height: 50, borderWidth: 1, padding: 15 }}>{tags}</Text>
           </View>
-          {/* <Text style={styles.titleInput}>Date de création: {format(new Date(item.date), "dd/MM/yyyy")}</Text> */}
+          {dateClothe && <Text style={styles.titleInput}>Date de création: {format(new Date(dateClothe), "dd/MM/yyyy")}</Text>}
         </View>
       </ScrollView>
     </View>
