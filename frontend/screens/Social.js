@@ -147,7 +147,9 @@ const Social = () => {
       <Text style={styles.newsFeedText} onPress={() => handleUserClick(item.userId)}>
         <PhotoPseudo pictureSize={40} pseudoSize={14} pseudoName={item.pseudo} pictureUrl={item.profilePicture} pseudoVisible={true} />
       </Text>
-      <Image style={styles.newsFeedImage} source={{ uri: item.image }} />
+      <TouchableOpacity onPress={() => navigation.navigate("ClotheDetails", { item: item.idClothe })}>
+        <Image style={styles.newsFeedImage} source={{ uri: item.image }} />
+      </TouchableOpacity>
       <Text style={styles.newsFeedTextDate}>{afficherDuree(item.date)}</Text>
     </View>
   );
