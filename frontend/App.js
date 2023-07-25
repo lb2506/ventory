@@ -13,7 +13,7 @@ import Social from "./screens/Social";
 import AddClothe from "./screens/AddClothe";
 import AddMultipleClothe from "./screens/AddMultipleClothe";
 import ClotheDetails from "./screens/ClotheDetails";
-import SocialClotheDetails from "./screens/ClotheDetails";
+import SocialClotheDetails from "./screens/SocialClotheDetails";
 import OutfitDetails from "./screens/OutfitDetails";
 import WorkSpace from "./screens/WorkSpace";
 import SearchedProfile from "./screens/SearchedProfile";

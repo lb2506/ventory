@@ -47,11 +47,16 @@ const ProfileClothes = ({ navigation, ...props }) => {
         props.isCreation == true ? selectClothe(item) : navigation.navigate("ClotheDetails", { item: item });
       }}
     >
-      <View>
+      <View style={styles.imageContainer}>
         <Image
           source={{ uri: item.image }}
           style={props.isCreation && props.selectedClothe.some((clothe) => clothe._id === item._id) ? [styles.selected, styles.image] : styles.image}
         />
+        <View style={styles.infosDetails}>
+          <Text style={[styles.infos, {fontWeight:'bold'}]}>{item.brand}</Text>
+          <Text style={styles.infos}>{item.category}</Text>
+          <Text style={styles.infos}>{item.season}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -79,7 +84,7 @@ const ProfileClothes = ({ navigation, ...props }) => {
         data={listClothesShowed}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
-        numColumns={3}
+        numColumns={2}
         style={styles.list}
         showsVerticalScrollIndicator={false}
       />
@@ -90,7 +95,7 @@ const ProfileClothes = ({ navigation, ...props }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
-    flex:1
+    flex: 1
   },
   selectContainer: {
     height: 400,
@@ -99,10 +104,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
     height: "100%",
   },
-  image: {
-    width: windowWidth / 3 - 1.5,
-    height: windowWidth / 3 - 1.5,
+  imageContainer: {
+    width: windowWidth / 2 - 1.5,
     margin: 0.75,
+    backgroundColor: '#FFFFFF'
+  },
+  image: {
+    width: '100%',
+    height: 250,
+  },
+  infosDetails: {
+    paddingBottom: 30,
+    paddingHorizontal: 10,
+    width: windowWidth / 2 - 1.5,
+    height:100
+  },
+  infos: {
+    marginBottom: 10
   },
   selected: {
     borderWidth: 3,
@@ -128,7 +146,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20,
     color: '#bbb',
-    fontStyle:'italic'
+    fontStyle: 'italic'
   },
 });
 

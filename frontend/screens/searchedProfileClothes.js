@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
+import { FlatList, Image, StyleSheet, View, Dimensions, TouchableOpacity , Text} from 'react-native';
 import { url } from '../api';
 import { useNavigation } from '@react-navigation/native';
 
@@ -29,9 +29,19 @@ const SearchedProfileClothes = ({ route }) => {
 
 
     const renderItem = ({ item }) => (
-            <View>
-                <Image source={{ uri: item }} style={styles.image} />
+
+
+        <View style={styles.imageContainer}>
+            <Image
+                source={{ uri: item }}
+                style={styles.image}
+            />
+            <View style={styles.infosDetails}>
+                <Text style={[styles.infos, { fontWeight: 'bold' }]}>{item.brand}</Text>
+                <Text style={styles.infos}>{item.category}</Text>
+                <Text style={styles.infos}>{item.season}</Text>
             </View>
+        </View>
     );
 
     return (
@@ -40,7 +50,7 @@ const SearchedProfileClothes = ({ route }) => {
                 data={clothes}
                 renderItem={renderItem}
                 keyExtractor={item => item._id}
-                numColumns={3}
+                numColumns={2}
                 style={styles.list}
                 showsVerticalScrollIndicator={false}
             />
@@ -53,14 +63,27 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     list: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#EFEFEF',
         height: '100%',
     },
-    image: {
-        width: windowWidth / 3 - 1.5,
-        height: windowWidth / 3 - 1.5,
-        margin: 0.75,
-    }
+    imageContainer: {
+    width: windowWidth / 2 - 1.5,
+    margin: 0.75,
+    backgroundColor: '#FFFFFF'
+  },
+  image: {
+    width: '100%',
+    height: 250,
+  },
+  infosDetails: {
+    paddingBottom: 30,
+    paddingHorizontal: 10,
+    width: windowWidth / 2 - 1.5,
+    height:100
+  },
+  infos: {
+    marginBottom: 10
+  },
 })
 
 export default SearchedProfileClothes;

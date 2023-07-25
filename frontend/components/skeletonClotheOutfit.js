@@ -3,7 +3,7 @@ import { Dimensions, View } from "react-native";
 const windowWidth = Dimensions.get("window").width;
 
 const SkeletonClotheOutfit = () => {
-  const numberOfSkeletons = 12;
+  const numberOfSkeletons = 4;
 
   const listSkeletons = () => {
     let skeletons = [];
@@ -12,8 +12,8 @@ const SkeletonClotheOutfit = () => {
         <Skeleton
           key={i}
           LinearGradientComponent={LinearGradient}
-          height={windowWidth / 3 - 4}
-          style={{ margin: 1, borderRadius: 0, width: windowWidth / 3 - 4 }}
+          height={350}
+          style={{ margin: 1, borderRadius: 0, width: windowWidth / 2 - 4 }}
         />
       );
     }

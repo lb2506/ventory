@@ -19,7 +19,7 @@ const clotheSchema = new mongoose.Schema({
   },
   public_id: {
     type: String,
-    required: true,
+    required: false,
   },
   size: {
     type: String,
