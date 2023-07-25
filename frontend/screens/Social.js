@@ -112,7 +112,6 @@ const Social = () => {
     );
   };
 
-  // Fonction pour afficher la durée entre deux dates
   const afficherDuree = (date) => {
     const dateActuelle = new Date(); // Date actuelle
     const dateDonnee = new Date(date); // Date donnée en argument
@@ -127,7 +126,12 @@ const Social = () => {
     const jours = Math.floor(heures / 24);
 
     // Affichage du résultat
-    if (jours > 0) {
+    if (jours > 7) {
+      // Formater la date exacte au format "jour mois année"
+      const options = { day: "numeric", month: "long", year: "numeric" };
+      const dateExacte = dateDonnee.toLocaleDateString("fr-FR", options);
+      return `${dateExacte}`;
+    } else if (jours > 0) {
       return `Il y a ${jours} jour${jours > 1 ? "s" : ""}`;
     } else if (heures > 0) {
       return `Il y a ${heures} heure${heures > 1 ? "s" : ""}`;

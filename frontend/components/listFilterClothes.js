@@ -78,6 +78,9 @@ const ListFilterClothes = (props) => {
     }
   };
 
+  // Triez le tableau des options par ordre alphabétique
+  const sortedOptions = options.sort((a, b) => a.label.localeCompare(b.label));
+
   return (
     <>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -148,7 +151,7 @@ const ListFilterClothes = (props) => {
             <Text style={styles.text}>Filtrer par {modalTitle.toLowerCase()}</Text>
           </View>
           <ScrollView style={{ flex: 1 }}>
-            {options.map((l, i) => (
+            {sortedOptions.map((l, i) => (
               <ListItem
                 key={i}
                 onPress={() => {
@@ -219,7 +222,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     minHeight: 400,
     paddingBottom: 20,
-    maxHeight:'50%'
+    maxHeight: "50%",
   },
   barIcon: {
     width: 60,

@@ -8,10 +8,11 @@ import axios from "axios";
 import { url } from "../api";
 import * as ImageManipulator from "expo-image-manipulator";
 
-
 import PhotoPseudo from "../components/photoPseudo";
 import ModalAddPicture from "../components/modalAddPicture";
 
+const InfosProfileSettings = ({ route }) => {
+  const navigation = useNavigation();
 
 
 const InfosProfileSettings = ({ route }) => {
@@ -35,41 +36,40 @@ const InfosProfileSettings = ({ route }) => {
         setBottomAddClotheSheetVisible(true);
     };
 
-    useEffect(() => {
-        if (route.params?.imageUri) {
-            setProfilePicture(route.params.imageUri);
-        }
-    }, [route.params?.imageUri]);
-
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = await AsyncStorage.getItem("token");
-                if (token) {
-                    const decoded = jwt_decode(token);
-                    const response = await axios.get(`${url}/user/${decoded._id}`);
-                    setUserData(response.data);
-                    setProfilePicture(response.data.profilePicture)
-                    setPseudo(response.data.pseudo);
-                    setLastName(response.data.lastName);
-                    setFirstName(response.data.firstName);
-                    setEmail(response.data.email);
-                    setPhone(response.data.phone);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchUserData()
-    }, [])
-
-    const handlePasswordChange = (text) => {
-        setPassword(text);
-        if (text === '') {
-            setConfirmPassword('');
-        }
+  useEffect(() => {
+    if (route.params?.imageUri) {
+      setProfilePicture(route.params.imageUri);
     }
+  }, [route.params?.imageUri]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (token) {
+          const decoded = jwt_decode(token);
+          const response = await axios.get(`${url}/user/${decoded._id}`);
+          setUserData(response.data);
+          setProfilePicture(response.data.profilePicture);
+          setPseudo(response.data.pseudo);
+          setLastName(response.data.lastName);
+          setFirstName(response.data.firstName);
+          setEmail(response.data.email);
+          setPhone(response.data.phone);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+    if (text === "") {
+      setConfirmPassword("");
+    }
+  };
 
     const handleSubmit = async () => {
         if (password !== confirmPassword) {
@@ -215,65 +215,65 @@ const InfosProfileSettings = ({ route }) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#FFFFFF",
-        flex: 1,
-    },
-    header: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        paddingTop: 60,
-        paddingBottom: 50,
-        justifyContent: 'center'
-    },
-    title: {
-        fontSize: 25,
-        fontWeight: "bold",
-    },
-    comeBack: {
-        position: "absolute",
-        top: 57,
-        left: 10,
-    },
-    photoPseudo: {
-        alignItems: 'center',
-    },
-    editIconContainer: {
-        position: "absolute",
-        bottom: 5,
-    },
-    editIcon: {
-        backgroundColor: "black",
-        borderRadius: 20,
-        width: 30,
-        height: 30,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    formContainer: {
-        padding: 20,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 20,
-        paddingLeft: 10,
-    },
-    submitButton: {
-        backgroundColor: "black",
-        padding: 15,
-        alignSelf: "center",
-        alignItems: "center",
-        width: "80%",
-        marginTop: 20,
-    },
-    submitText: {
-        color: "#FFFFFF",
-        fontSize: 20,
-        textAlign: "center",
-    },
-})
+  container: {
+    backgroundColor: "#FFFFFF",
+    flex: 1,
+  },
+  header: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 60,
+    paddingBottom: 50,
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+  comeBack: {
+    position: "absolute",
+    top: 57,
+    left: 10,
+  },
+  photoPseudo: {
+    alignItems: "center",
+  },
+  editIconContainer: {
+    position: "absolute",
+    bottom: 5,
+  },
+  editIcon: {
+    backgroundColor: "black",
+    borderRadius: 20,
+    width: 30,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  formContainer: {
+    padding: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingLeft: 10,
+  },
+  submitButton: {
+    backgroundColor: "black",
+    padding: 15,
+    alignSelf: "center",
+    alignItems: "center",
+    width: "80%",
+    marginTop: 20,
+  },
+  submitText: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    textAlign: "center",
+  },
+});
 
 export default InfosProfileSettings;
