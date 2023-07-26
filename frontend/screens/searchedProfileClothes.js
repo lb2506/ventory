@@ -13,8 +13,8 @@ const SearchedProfileClothes = ({ route }) => {
   const fetchClothes = async () => {
     try {
       const response = await axios.get(`${url}/user/clothes/${route.params.userId}`);
-      const sortedClothes = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-      setClothes(sortedClothes);
+      console.log(response.data);
+      setClothes(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -23,10 +23,11 @@ const SearchedProfileClothes = ({ route }) => {
   useEffect(() => {
     fetchClothes();
   }, []);
-
   const renderItem = ({ item }) => (
     <View style={styles.imageContainer}>
-      <Image source={{ uri: item }} style={styles.image} />
+      <TouchableOpacity onPress={() => navigation.navigate("SocialClotheDetails", { item: item.id })}>
+        <Image source={{ uri: item.image }} style={styles.image} />
+      </TouchableOpacity>
     </View>
   );
 

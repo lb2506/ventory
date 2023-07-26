@@ -35,6 +35,7 @@ function SocialStack() {
     <Stack.Navigator initialRouteName="SocialScreen" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="SocialScreen" component={Social} />
       <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
+      <Stack.Screen name="OutfitDetails" component={OutfitDetails} />
       <Stack.Screen name="FollowersList" component={FollowersList} />
       <Stack.Screen name="FollowingList" component={FollowingList} />
       <Stack.Screen name="SocialClotheDetails" component={SocialClotheDetails} />

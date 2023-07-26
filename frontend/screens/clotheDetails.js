@@ -170,7 +170,7 @@ function ClotheDetails({ route, navigation }) {
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
         <View style={{ position: "relative", marginTop: 90 }}>
-          <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }}/>
+          <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
           <View
             style={{
               position: "absolute",

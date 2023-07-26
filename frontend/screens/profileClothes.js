@@ -34,7 +34,6 @@ const ProfileClothes = ({ navigation, ...props }) => {
     }
   };
 
-
   useFocusEffect(
     useCallback(() => {
       fetchClothes();
@@ -73,16 +72,18 @@ const ProfileClothes = ({ navigation, ...props }) => {
       {listClothesShowed.length > 0 && (
         <ListFilterClothes listClothesShowed={listClothesShowed} clothes={clothes} setListClothesShowed={handleSetClothes} />
       )}
-      {listClothesShowed.length === 0 && <SkeletonClotheOutfit />}
+      {listClothesShowed.length === 0 && isFetched == false ? <SkeletonClotheOutfit /> : null}
       {listClothesShowed.length === 0 && isFetched && <Text style={styles.noClothesText}>Vous n'avez pas encore ajouté de vêtement.</Text>}
-      <FlatList
-        data={listClothesShowed}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        numColumns={2}
-        style={styles.list}
-        showsVerticalScrollIndicator={false}
-      />
+      {listClothesShowed.length > 0 && (
+        <FlatList
+          data={listClothesShowed}
+          renderItem={renderItem}
+          keyExtractor={(item) => item._id}
+          numColumns={2}
+          style={styles.list}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 };
@@ -90,7 +91,7 @@ const ProfileClothes = ({ navigation, ...props }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
-    flex: 1
+    flex: 1,
   },
   selectContainer: {
     height: 400,
@@ -102,10 +103,10 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: windowWidth / 2 - 1.5,
     margin: 0.75,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: "#FFFFFF",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 250,
   },
   selected: {
@@ -131,8 +132,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 20,
     marginLeft: 20,
-    color: '#bbb',
-    fontStyle: 'italic'
+    color: "#bbb",
+    fontStyle: "italic",
   },
 });
 

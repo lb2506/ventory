@@ -88,8 +88,13 @@ router.get("/user/clothes/:userId", async (req, res) => {
 
   try {
     const user = await User.findById(userId).populate({ path: "clothes", options: { sort: { date: -1 } } });
-    const clothesImages = user.clothes.map((clothe) => clothe.image);
-    res.send(clothesImages);
+
+    const clothesWithImageAndId = user.clothes.map((clothe) => ({
+      id: clothe._id,
+      image: clothe.image,
+    }));
+    console.log(clothesWithImageAndId);
+    res.send(clothesWithImageAndId);
   } catch (error) {
     res.status(500).send({ error: "Une erreur est survenue en récupérant les vêtements." });
   }
