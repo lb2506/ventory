@@ -10,12 +10,15 @@ import Tags from "../components/tags";
 import ModalAddPicture from "../components/modalAddPicture";
 import * as ImageManipulator from "expo-image-manipulator";
 import ConfirmDeleteModal from "../components/confirmDeleteModal";
+import RemoveBgModal from "../components/removeBgModal";
 const windowWidth = Dimensions.get("window").width;
 
 function ClotheDetails({ route, navigation }) {
   const { item } = route.params;
 
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [removeBgVisible, setRemoveBgVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
   const [brand, setBrand] = useState(item.brand);
   const [update, setUpdate] = useState(false);
@@ -105,6 +108,34 @@ function ClotheDetails({ route, navigation }) {
     }
   };
 
+  const removeBg = async () => {
+    const data = new FormData();
+    data.append("image", {
+      name: "image.jpg",
+      type: "image/jpeg",
+      uri: Platform.OS === "android" ? image : image.replace("file://", ""),
+    });
+    setLoading(true);
+    await fetch("http://ventory.pythonanywhere.com/remove-background", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        var reader = new FileReader();
+        reader.onload = () => {
+          const imageURI = reader.result;
+          setImage(imageURI);
+          setLoading(false);
+          setRemoveBgVisible(false);
+        };
+        reader.readAsDataURL(blob);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
     if (
       valueCat != item.category ||
@@ -169,8 +200,24 @@ function ClotheDetails({ route, navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
-        <View style={{ position: "relative", marginTop: 90 }}>
+        <View style={{ position: "relative", marginTop: 90, borderBottomWidth: 1 }}>
           <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
+          {image ? (
+            <View
+              style={{
+                position: "absolute",
+                bottom: -25,
+                right: 90,
+                backgroundColor: "white",
+                alignItems: "center",
+                borderRadius: 50,
+                padding: 5,
+                paddingLeft: 9,
+              }}
+            >
+              <Ionicons name="cut-sharp" size={35} color="#000000" onPress={() => setRemoveBgVisible(true)} />
+            </View>
+          ) : null}
           <View
             style={{
               position: "absolute",
@@ -229,6 +276,7 @@ function ClotheDetails({ route, navigation }) {
         setImage={handleImage}
       />
       <ConfirmDeleteModal visible={deleteModalVisible} onConfirm={deleteClothe} onCancel={() => setDeleteModalVisible(false)} />
+      <RemoveBgModal visible={removeBgVisible} onConfirm={removeBg} onCancel={() => setRemoveBgVisible(false)} loading={loading} />
     </View>
   );
 }

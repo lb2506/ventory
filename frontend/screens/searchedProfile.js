@@ -20,6 +20,7 @@ const SearchedProfile = () => {
 
   const [userData, setUserData] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [nb, setNb] = useState();
 
   useEffect(() => {
     fetchUserData();
@@ -29,6 +30,8 @@ const SearchedProfile = () => {
   const fetchUserData = async () => {
     try {
       const response = await axios.get(`${url}/user/${route.params.userId}`);
+      const response2 = await axios.get(`${url}/user/${route.params.userId}/nbClothesOutfits`);
+      setNb(response2.data);
       setUserData(response.data);
     } catch (error) {
       console.log(error);
@@ -66,15 +69,27 @@ const SearchedProfile = () => {
         <Text style={styles.title}>{userData && userData.pseudo}</Text>
         <View style={styles.pseudoFollowContainer}>
           <PhotoPseudo pictureSize={70} pseudoSize={20} pseudoName={userData?.pseudo} pictureUrl={userData?.profilePicture} pseudoVisible={false} />
-          <View style={styles.followersFollowingContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowersList", { userId: userData._id })}>
-              <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
-              <Text style={styles.text}>follower(s)</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowingList", { userId: userData._id })}>
-              <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
-              <Text style={styles.text}>suivie(s)</Text>
-            </TouchableOpacity>
+          <View>
+            <View style={styles.followersFollowingContainer}>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowersList", { userId: userData._id })}>
+                <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
+                <Text style={styles.text}>follower(s)</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowingList", { userId: userData._id })}>
+                <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
+                <Text style={styles.text}>suivie(s)</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.followersFollowingContainer}>
+              <View style={styles.button}>
+                <Text style={styles.number}>{nb && nb.nbClothes ? nb.nbClothes : 0} </Text>
+                <Text style={styles.text}>vêtement(s)</Text>
+              </View>
+              <View style={styles.button}>
+                <Text style={styles.number}>{nb && nb.nbOutfits ? nb.nbOutfits : 0} </Text>
+                <Text style={styles.text}>outfit(s)</Text>
+              </View>
+            </View>
           </View>
         </View>
         <TouchableOpacity style={styles.followButton} onPress={handleFollow}>

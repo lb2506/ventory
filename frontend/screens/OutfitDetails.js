@@ -12,6 +12,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 import ProfileClothes from "./ProfileClothes";
 import { BottomSheet } from "react-native-btr";
 import ConfirmDeleteModal from "../components/confirmDeleteModal";
+import RemoveBgModal from "../components/removeBgModal";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -19,6 +20,8 @@ function OutfitDetails({ route, navigation }) {
   const { item } = route.params;
 
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [removeBgVisible, setRemoveBgVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [bottomAddClotheSheetVisible, setBottomAddClotheSheetVisible] = useState(false);
   const [visibleBottomSheet, setVisibleBottomSheet] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -30,7 +33,7 @@ function OutfitDetails({ route, navigation }) {
   const [tagsArray, setTagsArray] = useState([item.tags]);
   const [valueCat, setValueCat] = useState(item.category);
   const [valueSeason, setValueSeason] = useState(item.season);
-  
+
   const itemsCat = [
     { label: "Casual", value: "Casual" },
     { label: "Sport", value: "Sport" },
@@ -39,7 +42,7 @@ function OutfitDetails({ route, navigation }) {
     { label: "Travail", value: "Travail" },
     { label: "Autre", value: "Autre" },
   ];
-  
+
   const itemsSeason = [
     { label: "Hiver", value: "Hiver" },
     { label: "Printemps", value: "Printemps" },
@@ -130,8 +133,8 @@ function OutfitDetails({ route, navigation }) {
         },
       });
       navigation.navigate("Home", {
-        screen: 'ProfileTab',
-        params: { screen: 'ProfileScreen' },
+        screen: "ProfileTab",
+        params: { screen: "ProfileScreen" },
       });
     } catch (error) {
       console.error(error.response);
@@ -140,13 +143,41 @@ function OutfitDetails({ route, navigation }) {
     }
   };
 
+  const removeBg = async () => {
+    const data = new FormData();
+    data.append("image", {
+      name: "image.jpg",
+      type: "image/jpeg",
+      uri: Platform.OS === "android" ? image : image.replace("file://", ""),
+    });
+    setLoading(true);
+    await fetch("http://ventory.pythonanywhere.com/remove-background", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        var reader = new FileReader();
+        reader.onload = () => {
+          const imageURI = reader.result;
+          setImage(imageURI);
+          setLoading(false);
+          setRemoveBgVisible(false);
+        };
+        reader.readAsDataURL(blob);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
-        <View style={{ position: "relative", marginTop: 90 }}>
+        <View style={{ position: "relative", marginTop: 90, borderBottomWidth: 1 }}>
           {image === "" || !image ? (
             <View style={{ width: windowWidth, height: 500, justifyContent: "center", alignItems: "center" }}>
               <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>Aucune image</Text>
@@ -154,7 +185,34 @@ function OutfitDetails({ route, navigation }) {
           ) : (
             <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
           )}
-          <View style={{ position: "absolute", bottom: -25, right: 20, backgroundColor: 'white', alignItems: 'center', borderRadius: 50, padding: 5, paddingLeft: 9 }}>
+          {image ? (
+            <View
+              style={{
+                position: "absolute",
+                bottom: -25,
+                right: 90,
+                backgroundColor: "white",
+                alignItems: "center",
+                borderRadius: 50,
+                padding: 5,
+                paddingLeft: 9,
+              }}
+            >
+              <Ionicons name="cut-sharp" size={35} color="#000000" onPress={() => setRemoveBgVisible(true)} />
+            </View>
+          ) : null}
+          <View
+            style={{
+              position: "absolute",
+              bottom: -25,
+              right: 20,
+              backgroundColor: "white",
+              alignItems: "center",
+              borderRadius: 50,
+              padding: 5,
+              paddingLeft: 9,
+            }}
+          >
             <Ionicons name="create-sharp" size={35} color="#000000" onPress={openBottomAddClotheSheet} />
           </View>
         </View>
@@ -221,6 +279,7 @@ function OutfitDetails({ route, navigation }) {
         setImage={handleImage}
       />
       <ConfirmDeleteModal visible={deleteModalVisible} onConfirm={deleteOutfit} onCancel={() => setDeleteModalVisible(false)} />
+      <RemoveBgModal visible={removeBgVisible} onConfirm={removeBg} onCancel={() => setRemoveBgVisible(false)} loading={loading} />
     </View>
   );
 }

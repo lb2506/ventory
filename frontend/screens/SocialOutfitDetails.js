@@ -9,43 +9,22 @@ import List from "../components/list";
 import Tags from "../components/tags";
 import ModalAddPicture from "../components/modalAddPicture";
 import * as ImageManipulator from "expo-image-manipulator";
+import ProfileClothes from "./ProfileClothes";
+import { BottomSheet } from "react-native-btr";
 import ConfirmDeleteModal from "../components/confirmDeleteModal";
+
 const windowWidth = Dimensions.get("window").width;
 
-function SocialClotheDetails({ route, navigation }) {
+function OutfitDetails({ route, navigation }) {
   const { item } = route.params;
+
   const [image, setImage] = useState(item.image);
-  const [brand, setBrand] = useState(item.brand);
+  const [clothes, setClothes] = useState(item.vetements);
+  const [outfitName, setOutfitName] = useState(item.name);
   const [tags, setTags] = useState(item.tags);
+  const [tagsArray, setTagsArray] = useState([item.tags]);
   const [valueCat, setValueCat] = useState(item.category);
   const [valueSeason, setValueSeason] = useState(item.season);
-  const [valueTaille, setValueTaille] = useState(item.size);
-  const [valueCouleur, setValueCouleur] = useState(item.color);
-  const [dateClothe, setDateClothe] = useState(item.date);
-
-  useEffect(() => {
-    if (item.image == null) {
-      const fetchClothe = async () => {
-        const token = await AsyncStorage.getItem("token");
-        try {
-          const response = await axios.get(`${url}/clothe/${item}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setImage(response.data.image);
-          setBrand(response.data.brand);
-          setTags(response.data.tags);
-          setValueCat(response.data.category);
-          setValueSeason(response.data.season);
-          setValueTaille(response.data.size);
-          setValueCouleur(response.data.color);
-          setDateClothe(response.data.date);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchClothe();
-    }
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -54,12 +33,26 @@ function SocialClotheDetails({ route, navigation }) {
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
         <View style={{ position: "relative", marginTop: 90, borderBottomWidth: 1 }}>
-          <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
+          {image === "" || !image ? (
+            <View style={{ width: windowWidth, height: 500, justifyContent: "center", alignItems: "center" }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>Aucune image</Text>
+            </View>
+          ) : (
+            <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
+          )}
         </View>
         <View style={styles.containerInputs}>
           <View style={styles.inputs}>
-            <Text style={styles.titleInput}>Marque:</Text>
-            <Text style={{ marginLeft: 10 }}>{brand}</Text>
+            <Text style={styles.titleInput}>Vêtements:</Text>
+            <View style={styles.ClothesContainer}>
+              {clothes.map((clothe) => {
+                return <Image key={clothe._id} source={{ uri: clothe.image }} style={styles.Clothe} />;
+              })}
+            </View>
+          </View>
+          <View style={styles.inputs}>
+            <Text style={styles.titleInput}>Nom de l'outfit:</Text>
+            <Text style={{ marginLeft: 10 }}>{outfitName}</Text>
           </View>
           <View style={styles.inputs}>
             <Text style={styles.titleInput}>Catégorie:</Text>
@@ -70,18 +63,10 @@ function SocialClotheDetails({ route, navigation }) {
             <Text style={{ marginLeft: 10 }}>{valueSeason}</Text>
           </View>
           <View style={styles.inputs}>
-            <Text style={styles.titleInput}>Taille:</Text>
-            <Text style={{ marginLeft: 10 }}>{valueTaille}</Text>
-          </View>
-          <View style={styles.inputs}>
-            <Text style={styles.titleInput}>Couleur:</Text>
-            <Text style={{ marginLeft: 10 }}> {valueCouleur}</Text>
-          </View>
-          <View style={styles.inputs}>
             <Text style={styles.titleInput}>Tags:</Text>
             <Text style={{ marginLeft: 10 }}>{tags}</Text>
           </View>
-          {dateClothe && <Text style={styles.titleInput}>Date de création: {format(new Date(dateClothe), "dd/MM/yyyy")}</Text>}
+          <Text style={styles.titleInput}>Date de création: {format(new Date(item.date), "dd/MM/yyyy")}</Text>
         </View>
       </ScrollView>
     </View>
@@ -98,8 +83,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     marginBottom: 50,
-    flexDirection: "row",
-    flexWrap: "wrap",
   },
   comeBack: {
     position: "absolute",
@@ -126,6 +109,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
   },
+  ModifyClothe: {
+    width: 80,
+    height: 30,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   titleInput: {
     fontSize: 15,
     fontWeight: "bold",
@@ -137,4 +127,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SocialClotheDetails;
+export default OutfitDetails;

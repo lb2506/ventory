@@ -1,12 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Modal from "react-native-modal";
 
 const modalAddPicture = (props) => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const toggleBottomNavigationView = () => {
     props.setVisible(!props.visible);
@@ -27,58 +28,63 @@ const modalAddPicture = (props) => {
           quality: 1,
           exif: true,
         });
-
+        toggleBottomNavigationView();
         if (!image.canceled && image.assets && image.assets.length > 0) {
           if (props.isProfilePicture === true) {
             navigation.navigate("InfosProfileSettings", { imageUri: image.assets[0].uri });
-          } else {
-            const data = new FormData();
-            data.append('image', {
-              name: 'image.jpg',
-              type: 'image/jpeg',
-              uri: Platform.OS === 'android' ? image.assets[0].uri : image.assets[0].uri.replace('file://', ''),
-            });
-
-            await fetch('http://ventory.pythonanywhere.com/remove-background', {
-              method: 'POST',
-              body: data,
-            })
-              .then((response) => response.blob())
-              .then((blob) => {
-                var reader = new FileReader();
-                reader.onload = () => {
-                  const imageURI = reader.result;
-
-                  if (props.isOutfitImage === true) {
-                    props.setImage(imageURI);
-                  }
-
-                  if (props.isOutfitImage === false) {
-                    navigation.navigate("AddClothe", { imageUri: imageURI });
-                  }
-                };
-                reader.readAsDataURL(blob);
-              })
-              .catch((error) => {
-                console.error(error);
-              });
+          }
+          if (props.isOutfitImage === true) {
+            props.setImage(image.assets[0].uri);
+          }
+          if (props.isOutfitImage !== true) {
+            navigation.navigate("AddClothe", { imageUri: image.assets[0].uri });
           }
         }
-        toggleBottomNavigationView();
+        //else {
+        //   const data = new FormData();
+        //   data.append('image', {
+        //     name: 'image.jpg',
+        //     type: 'image/jpeg',
+        //     uri: Platform.OS === 'android' ? image.assets[0].uri : image.assets[0].uri.replace('file://', ''),
+        //   });
+
+        // await fetch('http://ventory.pythonanywhere.com/remove-background', {
+        //   method: 'POST',
+        //   body: data,
+        // })
+        //   .then((response) => response.blob())
+        //   .then((blob) => {
+        //     var reader = new FileReader();
+        //     reader.onload = () => {
+        //       const imageURI = reader.result;
+
+        //       if (props.isOutfitImage === true) {
+        //         props.setImage(imageURI);
+        //       }
+
+        //       if (props.isOutfitImage === false) {
+        //         navigation.navigate("AddClothe", { imageUri: imageURI });
+        //       }
+        //     };
+        //     reader.readAsDataURL(blob);
+        //   })
+        //   .catch((error) => {
+        //     console.error(error);
+        //   });
       } else {
         console.log("La permission d'accès à la caméra a été refusée");
       }
-    } catch (error) {
-      console.log("Erreur lors de l'ouverture de la caméra :", error);
+    } catch {
+      console.log("La permission d'accès à la caméra a été refusée");
     }
   };
-
 
   const pickImage = async (multiple) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       alert("Désolé, nous avons besoin de la permission d'accès à la galerie pour fonctionner!");
     } else {
+      setLoading(true);
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
@@ -86,52 +92,61 @@ const modalAddPicture = (props) => {
         quality: 1,
         allowsMultipleSelection: multiple === true ? true : false,
       });
-
+      toggleBottomNavigationView();
       if (!result.canceled) {
         if (multiple !== true && result.assets.length > 0) {
           if (props.isProfilePicture === true) {
             navigation.navigate("InfosProfileSettings", { imageUri: result.assets[0].uri });
-          } else {
-            const data = new FormData();
-            data.append('image', {
-              name: 'image.jpg',
-              type: 'image/jpeg',
-              uri: Platform.OS === 'android' ? result.assets[0].uri : result.assets[0].uri.replace('file://', ''),
-            });
-
-            await fetch('http://ventory.pythonanywhere.com/remove-background', {
-              method: 'POST',
-              body: data,
-            })
-              .then((response) => response.blob())
-              .then((blob) => {
-                var reader = new FileReader();
-                reader.onload = () => {
-                  const imageURI = reader.result;
-
-                  if (props.isOutfitImage === true) {
-                    props.setImage(imageURI);
-                  }
-
-                  if (props.isOutfitImage === false) {
-                    navigation.navigate("AddClothe", { imageUri: imageURI });
-                  }
-                };
-                reader.readAsDataURL(blob);
-              })
-              .catch((error) => {
-                console.error(error);
-              });
           }
+          if (result.assets.length > 0 && props.isOutfitImage === true) {
+            props.setImage(result.assets[0].uri);
+          }
+          if (props.isOutfitImage !== true) {
+            navigation.navigate("AddClothe", { imageUri: result.assets[0].uri });
+          }
+          // else {
+          //   const data = new FormData();
+          //   data.append("image", {
+          //     name: "image.jpg",
+          //     type: "image/jpeg",
+          //     uri: Platform.OS === "android" ? result.assets[0].uri : result.assets[0].uri.replace("file://", ""),
+          //   });
+
+          //   await fetch("http://ventory.pythonanywhere.com/remove-background", {
+          //     method: "POST",
+          //     body: data,
+          //   })
+          //     .then((response) => response.blob())
+          //     .then((blob) => {
+          //       var reader = new FileReader();
+          //       reader.onload = () => {
+          //         const imageURI = reader.result;
+
+          //         if (props.isOutfitImage === true) {
+          //           props.setImage(imageURI);
+          //         }
+
+          //         if (props.isOutfitImage === false) {
+          //           navigation.navigate("AddClothe", { imageUri: imageURI });
+          //         }
+          //       };
+          //       reader.readAsDataURL(blob);
+          //     })
+          //     .catch((error) => {
+          //       console.error(error);
+          //     });
+          // }
         } else if (multiple === true) {
           const images = [];
           result.assets.map((image) => {
             images.push(image.uri);
           });
           navigation.navigate("AddMultipleClothe", { images: images });
+          setLoading(false);
         }
+      } else {
+        setLoading(false);
       }
-      toggleBottomNavigationView();
     }
   };
 
@@ -162,8 +177,13 @@ const modalAddPicture = (props) => {
         {props.isMultiple === true && (
           <>
             <View style={styles.line} />
-            <TouchableOpacity style={styles.textContainer} onPress={() => pickImage(true)}>
-              <Text style={styles.text}>Ajout multiple</Text>
+            <TouchableOpacity
+              style={styles.textContainer}
+              onPress={() => {
+                pickImage(true);
+              }}
+            >
+              <Text style={styles.text}>{loading ? "En cours..." : "Ajout multiple"}</Text>
             </TouchableOpacity>
           </>
         )}

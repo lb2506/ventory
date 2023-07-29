@@ -20,6 +20,7 @@ const Profile = () => {
   const navigation = useNavigation();
 
   const [userData, setUserData] = useState({});
+  const [nb, setNb] = useState();
   const [bottomSettingsSheetVisible, setBottomSettingsSheetVisible] = useState(false);
 
   const openBottomSettingslotheSheet = () => {
@@ -32,6 +33,8 @@ const Profile = () => {
       if (token) {
         const decoded = jwt_decode(token);
         const response = await axios.get(`${url}/user/${decoded._id}`);
+        const response2 = await axios.get(`${url}/user/${decoded._id}/nbClothesOutfits`);
+        setNb(response2.data);
         setUserData(response.data);
       }
     } catch (error) {
@@ -48,22 +51,28 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <PhotoPseudo
-          pictureSize={70}
-          pseudoSize={20}
-          pseudoName={userData.pseudo}
-          pictureUrl={userData.profilePicture}
-          pseudoVisible={true}
-        />
-        <View style={styles.followersFollowingContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowersList", { userId: userData._id })}>
-            <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
-            <Text style={styles.text}>follower(s)</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowingList", { userId: userData._id })}>
-            <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
-            <Text style={styles.text}>suivie(s)</Text>
-          </TouchableOpacity>
+        <PhotoPseudo pictureSize={70} pseudoSize={20} pseudoName={userData.pseudo} pictureUrl={userData.profilePicture} pseudoVisible={true} />
+        <View>
+          <View style={styles.followersFollowingContainer}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowersList", { userId: userData._id })}>
+              <Text style={styles.number}>{userData && userData.followers ? userData.followers.length : 0}</Text>
+              <Text style={styles.text}>follower(s)</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.push("FollowingList", { userId: userData._id })}>
+              <Text style={styles.number}>{userData && userData.following ? userData.following.length : 0}</Text>
+              <Text style={styles.text}>suivie(s)</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.followersFollowingContainer}>
+            <View style={styles.button}>
+              <Text style={styles.number}>{nb && nb.nbClothes ? nb.nbClothes : 0} </Text>
+              <Text style={styles.text}>vêtement(s)</Text>
+            </View>
+            <View style={styles.button}>
+              <Text style={styles.number}>{nb && nb.nbOutfits ? nb.nbOutfits : 0} </Text>
+              <Text style={styles.text}>outfit(s)</Text>
+            </View>
+          </View>
         </View>
         <TouchableOpacity onPress={openBottomSettingslotheSheet} style={styles.settingButton}>
           <Ionicons name="settings-sharp" size={24} color="black" />
@@ -107,13 +116,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: 10,
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center",
   },
   number: {
     fontSize: 17,
     marginHorizontal: 4,
-    fontWeight: '500'
+    fontWeight: "500",
   },
   text: {
     fontSize: 15,
@@ -127,9 +136,10 @@ const styles = StyleSheet.create({
   },
   followersFollowingContainer: {
     flexDirection: "row",
-    width: '100%',
+    flexWrap: "wrap",
+    width: "100%",
     marginTop: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   settingButton: {
     display: "flex",

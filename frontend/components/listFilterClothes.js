@@ -14,6 +14,8 @@ const ListFilterClothes = (props) => {
   const [isBrandFilter, setIsBrandFilter] = useState(false);
   const [isSeasonFilter, setIsSeasonFilter] = useState(false);
   const [isTagFilter, setIsTagFilter] = useState(false);
+  const [isColorFilter, setIsColorFilter] = useState(false);
+  const [isSizeFilter, setIsSizeFilter] = useState(false);
 
   const filter = (type, value) => {
     switch (type) {
@@ -33,6 +35,14 @@ const ListFilterClothes = (props) => {
         props.setListClothesShowed(props.listClothesShowed.filter((c) => c.category === value));
         setIsCategoryFilter(true);
         break;
+      case "colors":
+        props.setListClothesShowed(props.listClothesShowed.filter((c) => c.color === value));
+        setIsColorFilter(true);
+        break;
+      case "sizes":
+        props.setListClothesShowed(props.listClothesShowed.filter((c) => c.size === value));
+        setIsSizeFilter(true);
+        break;
       default:
         break;
     }
@@ -46,6 +56,10 @@ const ListFilterClothes = (props) => {
   var listSeasons = listUniqueSeasons.map((s) => ({ key: s.toLowerCase(), label: s }));
   var listUniqueCategories = [...new Set(props.listClothesShowed.map((c) => c.category))].filter((category) => category.trim() !== "");
   var listCategories = listUniqueCategories.map((c) => ({ key: c.toLowerCase(), label: c }));
+  var listUniqueColors = [...new Set(props.listClothesShowed.map((c) => c.category))].filter((category) => category.trim() !== "");
+  var listColors = listUniqueColors.map((c) => ({ key: c.toLowerCase(), label: c }));
+  var listUniqueSizes = [...new Set(props.listClothesShowed.map((c) => c.category))].filter((category) => category.trim() !== "");
+  var listSizes = listUniqueSizes.map((c) => ({ key: c.toLowerCase(), label: c }));
 
   const openModal = () => {
     setVisible(!visible);
@@ -72,6 +86,16 @@ const ListFilterClothes = (props) => {
         setModalTitle("Catégories");
         setOptions(listCategories);
         setType("categories");
+        break;
+      case "colors":
+        setModalTitle("Couleurs");
+        setOptions(listColors);
+        setType("colors");
+        break;
+      case "sizes":
+        setModalTitle("Tailles");
+        setOptions(listSizes);
+        setType("sizes");
         break;
       default:
         break;
@@ -113,12 +137,28 @@ const ListFilterClothes = (props) => {
           <TouchableOpacity
             style={isTagFilter ? styles.filtersButtonSelected : styles.filtersButton}
             onPress={() => {
+              toggleModal("colors"), openModal();
+            }}
+          >
+            <Text style={isTagFilter ? styles.filtersTextSelected : styles.filtersText}>Couleurs</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={isTagFilter ? styles.filtersButtonSelected : styles.filtersButton}
+            onPress={() => {
+              toggleModal("sizes"), openModal();
+            }}
+          >
+            <Text style={isTagFilter ? styles.filtersTextSelected : styles.filtersText}>Tailles</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={isTagFilter ? styles.filtersButtonSelected : styles.filtersButton}
+            onPress={() => {
               toggleModal("tags"), openModal();
             }}
           >
             <Text style={isTagFilter ? styles.filtersTextSelected : styles.filtersText}>Tags</Text>
           </TouchableOpacity>
-          {isCategoryFilter || isBrandFilter || isSeasonFilter || isTagFilter ? (
+          {isCategoryFilter || isBrandFilter || isSeasonFilter || isTagFilter || isColorFilter || isSizeFilter ? (
             <TouchableOpacity
               style={styles.filtersButton}
               onPress={() => {
@@ -127,6 +167,8 @@ const ListFilterClothes = (props) => {
                 setIsBrandFilter(false);
                 setIsSeasonFilter(false);
                 setIsTagFilter(false);
+                setIsColorFilter(false);
+                setIsSizeFilter(false);
               }}
             >
               <Ionicons name="close" size={20} color="black" />
@@ -173,6 +215,7 @@ const ListFilterClothes = (props) => {
 
 const styles = StyleSheet.create({
   filtersContainer: {
+    marginRight: 30,
     flexDirection: "row",
   },
   filtersContainerSkeleton: {

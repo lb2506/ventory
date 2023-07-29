@@ -93,7 +93,7 @@ const AddClothe = ({ route, navigation }) => {
     const token = await AsyncStorage.getItem("token");
 
     try {
-      const manipResult = await ImageManipulator.manipulateAsync(image, [{ resize: { width: 720, height: 960 } }], {
+      const manipResult = await ImageManipulator.manipulateAsync(image, [{ resize: { width: 720 } }], {
         compress: 0.5,
         format: ImageManipulator.SaveFormat.JPEG,
       });
@@ -119,8 +119,8 @@ const AddClothe = ({ route, navigation }) => {
       });
 
       navigation.navigate("Home", {
-        screen: 'ProfileTab',
-        params: { screen: 'ProfileScreen' },
+        screen: "ProfileTab",
+        params: { screen: "ProfileScreen" },
       });
     } catch (error) {
       console.error(error.response.data);
@@ -143,9 +143,20 @@ const AddClothe = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.comeBack}>
           <Ionicons name="chevron-back-outline" size={35} color="#000000" />
         </TouchableOpacity>
-        <View style={{ position: "relative", marginTop: 90 }}>
+        <View style={{ position: "relative", marginTop: 90, borderBottomWidth: 1 }}>
           <Image source={{ uri: image }} style={{ width: windowWidth, height: 400 }} />
-          <View style={{ position: "absolute", bottom: -25, right: 20, backgroundColor: 'white', alignItems: 'center', borderRadius: 50, padding: 5, paddingLeft: 9 }}>
+          <View
+            style={{
+              position: "absolute",
+              bottom: -25,
+              right: 20,
+              backgroundColor: "white",
+              alignItems: "center",
+              borderRadius: 50,
+              padding: 5,
+              paddingLeft: 9,
+            }}
+          >
             <Ionicons name="create-sharp" size={35} color="#000000" onPress={openBottomAddClotheSheet} />
           </View>
         </View>

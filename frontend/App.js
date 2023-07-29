@@ -14,6 +14,7 @@ import AddClothe from "./screens/AddClothe";
 import AddMultipleClothe from "./screens/AddMultipleClothe";
 import ClotheDetails from "./screens/ClotheDetails";
 import SocialClotheDetails from "./screens/SocialClotheDetails";
+import SocialOutfitDetails from "./screens/SocialOutfitDetails";
 import OutfitDetails from "./screens/OutfitDetails";
 import WorkSpace from "./screens/WorkSpace";
 import SearchedProfile from "./screens/SearchedProfile";
@@ -25,6 +26,7 @@ import InfosProfileSettings from "./screens/InfosProfileSettings";
 import ContactUs from "./screens/ContactUs";
 import ReportBug from "./screens/ReportBug";
 import AboutUs from "./screens/AboutUs";
+import Terms from "./screens/Terms";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +41,7 @@ function SocialStack() {
       <Stack.Screen name="FollowersList" component={FollowersList} />
       <Stack.Screen name="FollowingList" component={FollowingList} />
       <Stack.Screen name="SocialClotheDetails" component={SocialClotheDetails} />
+      <Stack.Screen name="SocialOutfitDetails" component={SocialOutfitDetails} />
     </Stack.Navigator>
   );
 }
@@ -60,6 +63,8 @@ function ProfileStack() {
       <Stack.Screen name="ProfileScreen" component={Profile} />
       <Stack.Screen name="ClotheDetails" component={ClotheDetails} />
       <Stack.Screen name="OutfitDetails" component={OutfitDetails} />
+      <Stack.Screen name="SocialClotheDetails" component={SocialClotheDetails} />
+      <Stack.Screen name="SocialOutfitDetails" component={SocialOutfitDetails} />
       <Stack.Screen name="SearchedProfile" component={SearchedProfile} />
       <Stack.Screen name="FollowersList" component={FollowersList} />
       <Stack.Screen name="FollowingList" component={FollowingList} />
@@ -68,6 +73,7 @@ function ProfileStack() {
       <Stack.Screen name="ContactUs" component={ContactUs} />
       <Stack.Screen name="ReportBug" component={ReportBug} />
       <Stack.Screen name="AboutUs" component={AboutUs} />
+      <Stack.Screen name="Terms" component={Terms} />
     </Stack.Navigator>
   );
 }

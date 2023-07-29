@@ -69,6 +69,26 @@ router.get("/user/:userId/followers", async (req, res) => {
   }
 });
 
+// Obtenir les followers d'un utilisateur
+router.get("/user/:userId/nbClothesOutfits", async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findById(userId);
+    // Compter le nombre de clothes et outfits
+    const numberOfClothes = user.clothes.length;
+    const numberOfOutfits = user.outfits.length;
+    const response = {
+      nbClothes: numberOfClothes,
+      nbOutfits: numberOfOutfits,
+    };
+    // Renvoyer la réponse avec le nombre de clothes et outfits
+    res.send(response);
+  } catch (error) {
+    res.status(500).send({ error: "Une erreur est survenue en récupérant les nombres de vêtements et d'outfits." });
+  }
+});
+
 // Obtenir les abonnement profil d'un utilisateur
 router.get("/user/:userId/following", async (req, res) => {
   const userId = req.params.userId;
@@ -88,13 +108,7 @@ router.get("/user/clothes/:userId", async (req, res) => {
 
   try {
     const user = await User.findById(userId).populate({ path: "clothes", options: { sort: { date: -1 } } });
-
-    const clothesWithImageAndId = user.clothes.map((clothe) => ({
-      id: clothe._id,
-      image: clothe.image,
-    }));
-    console.log(clothesWithImageAndId);
-    res.send(clothesWithImageAndId);
+    res.send(user.clothes);
   } catch (error) {
     res.status(500).send({ error: "Une erreur est survenue en récupérant les vêtements." });
   }
@@ -106,10 +120,19 @@ router.get("/user/outfits/:userId", async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    const user = await User.findById(userId).populate("outfits");
-    res.send(user.outfits.image);
+    const user = await User.findById(userId).populate({
+      path: "outfits",
+      populate: {
+        path: "vetements",
+        model: "Clothe",
+      },
+      options: {
+        sort: { date: -1 }, // Trie les outfits par date décroissante
+      },
+    });
+    res.send(user.outfits);
   } catch (error) {
-    res.status(500).send({ error: "Une erreur est survenue en récupérant les vêtements." });
+    res.status(500).send({ error: "Une erreur est survenue en récupérant les outfits." });
   }
 });
 

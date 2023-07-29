@@ -26,7 +26,7 @@ const CreateOutfit = () => {
   const [valueCat, setValueCat] = useState("");
   const [valueSeason, setValueSeason] = useState("");
   const [visibleBottomSheet, setVisibleBottomSheet] = useState(false);
-  
+
   const itemsCat = [
     { label: "Casual", value: "Casual" },
     { label: "Sport", value: "Sport" },
@@ -35,7 +35,7 @@ const CreateOutfit = () => {
     { label: "Travail", value: "Travail" },
     { label: "Autre", value: "Autre" },
   ];
-  
+
   const itemsSeason = [
     { label: "Hiver", value: "Hiver" },
     { label: "Printemps", value: "Printemps" },
@@ -125,7 +125,7 @@ const CreateOutfit = () => {
     try {
       let formData = new FormData();
       if (imageUri) {
-        const manipResult = await ImageManipulator.manipulateAsync(imageUri, [{ resize: { width: 720, height: 960 } }], {
+        const manipResult = await ImageManipulator.manipulateAsync(imageUri, [{ resize: { width: 720 } }], {
           compress: 0.5,
           format: ImageManipulator.SaveFormat.JPEG,
         });
@@ -155,8 +155,8 @@ const CreateOutfit = () => {
       });
 
       navigation.navigate("Home", {
-        screen: 'ProfileTab',
-        params: { screen: 'ProfileScreen' },
+        screen: "ProfileTab",
+        params: { screen: "ProfileOutfits" },
       });
     } catch (error) {
       console.error(error.response);
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
   bottomNavigationView: {
     backgroundColor: "white",
     width: "100%",
-    height: '70%',
+    height: "70%",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingBottom: 50,

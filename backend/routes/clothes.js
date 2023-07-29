@@ -205,7 +205,7 @@ router.post("/addOutfit", authenticate, upload.single("image"), async (req, res)
 router.post("/updateOutfit/:id", authenticate, upload.single("image"), async (req, res) => {
   try {
     const outfitId = req.params.id;
-    const outfit = await Outfit.findById(outfitId);
+    let outfit = await Outfit.findById(outfitId);
 
     if (!outfit) {
       return res.status(404).json({ message: "Outfit not found" });
@@ -230,7 +230,8 @@ router.post("/updateOutfit/:id", authenticate, upload.single("image"), async (re
       outfit.vetements = clotheIds;
     }
 
-    await outfit.save();
+    outfit = await outfit.save();
+
     req.user.outfits.push(outfit._id);
     await req.user.save();
 

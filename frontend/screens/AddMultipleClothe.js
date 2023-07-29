@@ -44,8 +44,8 @@ const AddMultipleClothe = ({ route, navigation }) => {
       }
 
       navigation.navigate("Home", {
-        screen: 'ProfileTab',
-        params: { screen: 'ProfileScreen' },
+        screen: "ProfileTab",
+        params: { screen: "ProfileScreen" },
       });
     } catch (error) {
       console.error(error.response.data);
@@ -73,17 +73,12 @@ const AddMultipleClothe = ({ route, navigation }) => {
         </View>
         <View style={styles.containerInputs}>
           <View style={styles.inputs}>
-            <Text style={styles.Text}>
-              En utilisant l'ajout multiple, vous pouvez créer un vêtement pour chaque image importée.
-            </Text>
-            <Text style={styles.Text}>
-              Une fois que vous avez enregistré, vous pourrez modifier les informations du vêtement dans votre profil.
-            </Text>
+            <Text style={styles.Text}>En utilisant l'ajout multiple, vous pouvez créer un vêtement pour chaque image importée.</Text>
+            <Text style={styles.Text}>Une fois que vous avez enregistré, vous pourrez modifier les informations du vêtement dans votre profil.</Text>
           </View>
           <View style={styles.ClothesContainer}>
-            {image.map((clothe) => {
-              console.log(clothe);
-              return <Image key={clothe._id} source={{ uri: clothe }} style={styles.Clothe} />;
+            {image.map((clothe, i) => {
+              return <Image key={i} source={{ uri: clothe }} style={styles.Clothe} />;
             })}
           </View>
           {isValid ? (
@@ -148,7 +143,7 @@ const styles = StyleSheet.create({
   Text: {
     color: "black",
     fontSize: 15,
-    marginBottom:5
+    marginBottom: 5,
   },
   disabledSubmitText: {
     color: "black",
